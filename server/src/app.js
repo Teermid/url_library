@@ -13,6 +13,6 @@ app.listen(process.env.PORT || 8081, function(){
     console.log('server running..');
 });
 
-app.get('/status', (req, res) => {
-    res.send({message: "hellow world"});
+app.post('/register', (req, res) => {
+    res.send({message: req.body.email + " was registered!"});
 });
