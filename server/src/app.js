@@ -14,5 +14,5 @@ app.listen(process.env.PORT || 8081, function(){
 });
 
 app.post('/register', (req, res) => {
-    res.send({message: req.body.email + " was registered!"});
+    res.send({message: `${req.body.email} was registered`});
 });
