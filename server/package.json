@@ -19,6 +19,7 @@
     "lint": "node node_modules/.bin/eslint **.*.js"
   },
   "dependencies": {
+    "asyncawait": "^1.0.6",
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "morgan": "^1.9.0",
