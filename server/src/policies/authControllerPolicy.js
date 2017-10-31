@@ -24,7 +24,7 @@ module.exports = {
           break;
         default:
           res.status(400).send({
-            error: 'Unexpected error'
+            error: 'Unexpected error (authControllerPolicy)'
           })
       }
 

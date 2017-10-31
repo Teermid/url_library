@@ -23,7 +23,7 @@
 </template>
 
 <script>
-// import auth from '@/services/Auth'
+import auth from '@/services/Auth'
 export default {
   data () {
     return {
@@ -36,14 +36,14 @@ export default {
 
   methods: {
     async Login () {
-      // try {
-      //   await auth.Login({
-      //     email: this.email,
-      //     password: this.password
-      //   })
-      // } catch (e) {
-      //   this.error = e.response.data.error
-      // }
+      try {
+        await auth.Login({
+          email: this.email,
+          password: this.password
+        })
+      } catch (e) {
+        this.error = e.response.data.error
+      }
     }
 
   },
