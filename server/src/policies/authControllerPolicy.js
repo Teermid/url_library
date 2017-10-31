@@ -8,8 +8,7 @@ module.exports = {
     }
 
     const {error, value} = Joi.validate(req.body, schema)
-    console.log(error);
-    console.log(value);
+    console.log(`Policy error: ${error}`);
 
     if (error) {
       switch (error.details[0].context.key) {

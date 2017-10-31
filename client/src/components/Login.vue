@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <h1>Register</h1>
+        <h1>Login</h1>
 
         <input
           v-model="email"
@@ -14,8 +14,8 @@
           name="password"
           value="password">
         <br>
-        <button @click="register">
-          Register
+        <button @click="Login">
+          Login
         </button>
         <p v-html="error" />
     </div>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import auth from '@/services/Auth'
+// import auth from '@/services/Auth'
 export default {
   data () {
     return {
@@ -35,15 +35,15 @@ export default {
   },
 
   methods: {
-    async register () {
-      try {
-        await auth.register({
-          email: this.email,
-          password: this.password
-        })
-      } catch (e) {
-        this.error = e.response.data.error
-      }
+    async Login () {
+      // try {
+      //   await auth.Login({
+      //     email: this.email,
+      //     password: this.password
+      //   })
+      // } catch (e) {
+      //   this.error = e.response.data.error
+      // }
     }
 
   },
