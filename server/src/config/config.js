@@ -1,3 +1,4 @@
+console.log('inside config.js/authentication');
 module.exports = {
   port: process.env.PORT || 8081,
 
@@ -10,5 +11,9 @@ module.exports = {
       host: process.env.HOST || 'localhost',
       storage: process.env.HOST || './savify_db.sqlite'
     }
+  },
+  
+  authentication: {
+    jwtSecret: process.env.JWT_SECRET || '8AKwR20E7G6gD5qLAXml'
   }
 };
