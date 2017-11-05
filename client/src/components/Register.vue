@@ -37,10 +37,13 @@ export default {
   methods: {
     async register () {
       try {
-        await auth.register({
+        const response = await auth.register({
           email: this.email,
           password: this.password
         })
+        console.log(response)
+        this.$store.dispatch('setToken', response.token)
+        this.$store.dispatch('setUser', response.data.user)
       } catch (e) {
         this.error = e.response.data.error
       }

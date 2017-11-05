@@ -36,11 +36,16 @@ export default {
 
   methods: {
     async Login () {
+      console.log('VUE --> Login')
       try {
-        await auth.Login({
+        console.log('VUE --> login --> try')
+        const response = await auth.login({
           email: this.email,
           password: this.password
         })
+        console.log('RESPONSE => ' + response.data.token)
+        this.$store.dispatch('setToken', response.data.token)
+        this.$store.dispatch('setUser', response.data.user)
       } catch (e) {
         this.error = e.response.data.error
       }

@@ -1,17 +1,18 @@
 <template>
     <div class="header">
-      <button v-on:click="navigateTo('Register')">Register</button>
-      <button v-on:click="navigateTo('Login')">Login</button>
+      <router-link to="register" v-if="!$store.state.userLogged">Register</router-link>
+      <router-link to="login" v-if="!$store.state.userLogged">Login</router-link>
     </div>
 </template>
 
 <script>
   export default {
-
     methods: {
+      /*
       navigateTo (route) {
         this.$router.push(route)
       }
+      */
     }
 
   }
