@@ -14,7 +14,7 @@ app.use(cors());
 
 routing(app);
 
-sequelize.sync(/*{force:true}*/)
+sequelize.sync({force:false})
   .then(() => {
     app.listen(config.port, () => {
         console.log('server running..');

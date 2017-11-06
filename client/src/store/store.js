@@ -19,6 +19,10 @@ export default new Vuex.Store({
     },
     setUser (state, user) {
       state.user = user
+    },
+    userLogOut (state) {
+      console.log('inside set state: ' + state.userLogged)
+      state.userLogged = false
     }
   },
   actions: {
@@ -27,6 +31,10 @@ export default new Vuex.Store({
     },
     setUser ({commit}, user) {
       commit('setUser', user)
+    },
+    userLogOut ({commit}) {
+      console.log('inside userLogOut')
+      commit('userLogOut')
     }
 
   }
