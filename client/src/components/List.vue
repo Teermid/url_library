@@ -7,6 +7,13 @@
             <li><a v-bind:href="el.link" target="_blank"><strong>{{el.title}}</strong></a></li>
             <li>{{el.description}}</li>
             <li>#{{el.category}}</li>
+            <li @click="navigateTo({
+                name: 'edit',
+                params: {
+                  element_id: el.id
+                }
+              })">edit</li>
+
           </ul>
 
         </div>
@@ -30,6 +37,13 @@
       }
     },
 
+    methods: {
+      navigateTo (route) {
+        this.$router.push(route)
+      }
+
+    },
+
     async mounted () {
       this.elements = (await Elements.getElements()).data
     }
@@ -47,5 +61,9 @@
   ul li:nth-child(3) {
     font-size: 12px;
     font-weight: bold;
+  }
+
+  ul li:nth-child(4) {
+    cursor: pointer;
   }
 </style>

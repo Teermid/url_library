@@ -21,5 +21,29 @@ module.exports = {
     } catch (e) {
       res.status(500).send({error: 'error adding element (elementsController)'});
     }
+  },
+
+  async getElementById (req, res) {
+    try {
+      const element = await Element.findById(req.params.id)
+      res.send(element)
+    } catch (e) {
+      res.status(500).send({error: 'error geting element by id (elementsController)'});
+    }
+  },
+
+  async editElement (req, res) {
+    console.log(`editElement req.params => ${req.params.id}`);
+    console.log(`editElement req.body.title => ${req.body.title}`);
+    try {
+      const element = await Element.update(req.body, {
+        where: {
+          id: req.params.id
+        }
+      })
+      console.log(`element after updated => ${element.title}`);
+    } catch (e) {
+      res.status(500).send({error: 'error geting element by id (elementsController)'});
+    }
   }
 }

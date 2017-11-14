@@ -1,8 +1,8 @@
 <template>
     <div class="header">
       <div class="left">
-        <router-link to="list" v-if="$store.state.userLogged">List</router-link>
-        <router-link to="add" v-if="$store.state.userLogged">Add</router-link>
+        <router-link to="/list" v-if="$store.state.userLogged">List</router-link>
+        <router-link to="/list/add" v-if="$store.state.userLogged">Add</router-link>
       </div>
       <div class="right">
         <router-link to="register" v-if="!$store.state.userLogged">Register</router-link>

@@ -5,6 +5,7 @@ import Register from '@/components/Register'
 import Login from '@/components/Login'
 import List from '@/components/List'
 import CreateElement from '@/components/createElement'
+import EditElement from '@/components/editElement'
 
 Vue.use(Router)
 
@@ -31,9 +32,14 @@ export default new Router({
       component: List
     },
     {
-      path: '/add',
+      path: '/list/add',
       name: 'add',
       component: CreateElement
+    },
+    {
+      path: '/list/edit/:element_id',
+      name: 'edit',
+      component: EditElement
     }
   ]
 })

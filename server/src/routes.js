@@ -19,4 +19,12 @@ module.exports = (app) => {
   app.get('/elements',
     elementsController.getElements
   );
+
+  app.get('/elements/:id',
+    elementsController.getElementById
+  );
+
+  app.put('/elements/:id',
+    elementsController.editElement
+  );
 };
