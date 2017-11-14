@@ -12,7 +12,7 @@ function jwtSingUser(user) {
 module.exports = {
   async register(req, res) {
     try {
-      console.log('inside REGISTER');
+      console.log('inside REGISTER => ' + req.body.email);
       const user = await User.create(req.body);
       const userJson = user.toJSON();
       /*Loging automàtic al registrar-se:*/

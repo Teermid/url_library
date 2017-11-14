@@ -1,8 +1,12 @@
 import api from '@/services/Api'
 
 export default{
-  getElements () {
-    return api().get('elements')
+  getElements (search) {
+    return api().get('elements', {
+      params: {
+        search: search
+      }
+    })
   },
 
   addElements (content) {

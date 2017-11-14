@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     token: null,
     user: null,
-    userLogged: false
+    userLogged: false,
+    searchString: null
   },
   mutations: {
     setToken (state, token) {
@@ -23,7 +24,11 @@ export default new Vuex.Store({
     userLogOut (state) {
       console.log('inside set state: ' + state.userLogged)
       state.userLogged = false
+    },
+    setSearchString (state, searchString) {
+      state.searchString = searchString
     }
+
   },
   actions: {
     setToken ({commit}, token) {
@@ -35,6 +40,9 @@ export default new Vuex.Store({
     userLogOut ({commit}) {
       console.log('inside userLogOut')
       commit('userLogOut')
+    },
+    setSearchString ({commit}, searchString) {
+      commit('setSearchString', searchString)
     }
 
   }

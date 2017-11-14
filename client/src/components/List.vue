@@ -1,34 +1,40 @@
 <template>
-  <panel title="Llistat">
-      <p slot="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-      <div slot="subcontent">
-        <div class="llistat" v-for="el in elements" :key="el.id">
-          <ul>
-            <li><a v-bind:href="el.link" target="_blank"><strong>{{el.title}}</strong></a></li>
-            <li>{{el.description}}</li>
-            <li>#{{el.category}}</li>
-            <li @click="navigateTo({
-                name: 'edit',
-                params: {
-                  element_id: el.id
-                }
-              })">edit</li>
+  <div>
+    <search-link></search-link>
+    <panel title="Llistat">
+        <div slot="subcontent">
+          <div class="llistat" v-for="el in elements" :key="el.id">
+            <ul>
+              <li><a v-bind:href="el.link" target="_blank"><strong>{{el.title}}</strong></a></li>
+              <li>{{el.description}}</li>
+              <li>#{{el.category}}</li>
+              <router-link
+                tag="li"
+                :to="{
+                  name: 'edit',
+                  params: {
+                    element_id: el.id
+                  }
+                }">edit</router-link>
 
-          </ul>
+            </ul>
+
+          </div>
 
         </div>
-
-      </div>
-  </panel>
+    </panel>
+</div>
 </template>
 
 
 <script>
   import Panel from '@/components/Panel.vue'
   import Elements from '@/services/Elements'
+  import SearchLink from '@/components/Search.vue'
   export default {
     components: {
-      Panel
+      Panel,
+      SearchLink
     },
 
     data () {
@@ -41,11 +47,16 @@
       navigateTo (route) {
         this.$router.push(route)
       }
-
     },
 
-    async mounted () {
-      this.elements = (await Elements.getElements()).data
+    watch: {
+      '$store.state.searchString': {
+        immediate: true,
+        async handler (value) {
+          this.elements = (await Elements.getElements(value)).data
+        }
+
+      }
     }
   }
 </script>
