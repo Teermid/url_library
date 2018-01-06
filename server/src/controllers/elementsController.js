@@ -1,37 +1,91 @@
 const { Element } = require('../models');
+const db = require('../models/index');
+const Op = db.Op;
+category = null;
 
 module.exports = {
   async getElements (req, res) {
-    console.log('req.query.search => ' + req.query.search);
-    if (req.query.search != null) {
-      const search = req.query.search
-      try {
-        const element = await Element.findAll({
-          where: {
-            $or: [
-              'title', 'category'
-            ].map(key => ({
-              [key]: {
-                $like: `%${search}%`
-              }
-            }))
-          }
-        })
-        res.send(element)
-      } catch (e) {
-        res.status(500).send({error: 'error getting elements by search'});
-      }
-    } else {
-      console.log('inside else req.body');
-      try {
-        const element = await Element.findAll({
-        })
-        res.send(element)
-      } catch (e) {
-        res.status(500).send({error: 'Error fetching elements (elementsController)'});
-      }
-    }
 
+    if(req.query.categoryValue !== undefined) {
+      console.log('inside category not undefined');
+      category = req.query.categoryValue
+    }
+    const searchValue = req.query.searchValue
+    const isSearch = req.query.isSearch
+
+
+    if (isSearch === 'true') {
+
+      console.log('inside search is true');
+      if (searchValue !== '') {
+        console.log('inside search is not null');
+        console.log('current category = ' + category);
+        try {
+          const element = await Element.findAll({
+            where: {
+              category : category,
+              [Op.and]:
+              {
+                title: {
+                  [Op.like]: `%${searchValue}%`
+                }
+              }
+              //category: category,
+              // $or: [
+              //   'title', 'category'
+              // ].map(key => ({
+              //   [key]: {
+              //     $like: `%${searchValue}%`
+              //   }
+              // }))
+            }
+          })
+          res.send(element)
+        } catch (e) {
+          res.status(500).send({error: 'error getting elements by search'});
+        }
+
+      } else {
+        console.log('Inside searchValue is empty');
+        try {
+          const element = await Element.findAll({
+            where: {
+              category: category
+            }
+          })
+          res.send(element)
+        } catch (e) {
+          res.status(500).send({error: 'Error fetching elements (elementsController)'});
+        }
+      }
+
+    } else {
+      console.log('Inside seacrh is false');
+      if (category === 'All') {
+        console.log('Inside category is all');
+        try {
+          const element = await Element.findAll({
+          })
+        res.send(element)
+        } catch (e) {
+          res.status(500).send({error: 'error getting all elements'});
+        }
+
+      } else {
+        console.log('Inside category is defined');
+        try {
+          const element = await Element.findAll({
+            where: {
+              category: category
+            }
+          })
+        res.send(element)
+        } catch (e) {
+          res.status(500).send({error: 'error getting elements by category'});
+        }
+      }
+
+    }
   },
 
   async addElements (req, res) {

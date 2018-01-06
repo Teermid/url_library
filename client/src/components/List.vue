@@ -1,40 +1,51 @@
 <template>
   <div>
     <search-link></search-link>
-    <panel title="Llistat">
-        <div slot="subcontent">
-          <div class="llistat" v-for="el in elements" :key="el.id">
-            <ul>
-              <li><a v-bind:href="el.link" target="_blank"><strong>{{el.title}}</strong></a></li>
-              <li>{{el.description}}</li>
-              <li>#{{el.category}}</li>
-              <router-link
-                tag="li"
-                :to="{
-                  name: 'edit',
-                  params: {
-                    element_id: el.id
-                  }
-                }">edit</router-link>
+    <div class="left">
+      <sidebar>
 
-            </ul>
+      </sidebar>
+    </div>
+    <div class="right">
+      <panel title="Llistat">
+          <div slot="subcontent">
+            <div class="llistat" v-for="el in elements" :key="el.id">
+              <ul>
+                <li><a v-bind:href="el.link" target="_blank"><strong>{{el.title}}</strong></a></li>
+                <li>{{el.description}}</li>
+                <li>#{{el.category}}</li>
+                <router-link
+                  tag="li"
+                  :to="{
+                    name: 'edit',
+                    params: {
+                      element_id: el.id
+                    }
+                  }">edit</router-link>
+
+              </ul>
+
+            </div>
 
           </div>
+      </panel>
 
-        </div>
-    </panel>
+    </div>
+
+
 </div>
 </template>
-
 
 <script>
   import Panel from '@/components/Panel.vue'
   import Elements from '@/services/Elements'
   import SearchLink from '@/components/Search.vue'
+  import Sidebar from '@/components/Sidebar.vue'
   export default {
     components: {
       Panel,
-      SearchLink
+      SearchLink,
+      Sidebar
     },
 
     data () {
@@ -49,20 +60,39 @@
       }
     },
 
+    async beforeMount () {
+      this.elements = (await Elements.getElements('All', false, null)).data
+    },
+
     watch: {
       '$store.state.searchString': {
-        immediate: true,
-        async handler (value) {
-          this.elements = (await Elements.getElements(value)).data
+        // immediate: true,
+        async handler (searchValue) {
+          this.elements = (await Elements.getElements(null, 'true', searchValue)).data
         }
+      },
 
+      '$store.state.categoryFilter': {
+        // immediate: true,
+        async handler (categoryValue) {
+          this.elements = (await Elements.getElements(categoryValue, 'false', null)).data
+        }
       }
     }
   }
 </script>
 
-
 <style scoped>
+
+  .left {
+    float:left;
+    width: 30%;
+  }
+
+  .right {
+    float:left;
+    width: 70%;
+  }
 
   ul {
     list-style: none;

@@ -9,7 +9,8 @@ export default new Vuex.Store({
     token: null,
     user: null,
     userLogged: false,
-    searchString: null
+    searchString: null,
+    categoryFilter: null
   },
   mutations: {
     setToken (state, token) {
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     },
     setSearchString (state, searchString) {
       state.searchString = searchString
+    },
+    setCategoryFilter (state, categoryFilter) {
+      state.categoryFilter = categoryFilter
     }
 
   },
@@ -43,6 +47,9 @@ export default new Vuex.Store({
     },
     setSearchString ({commit}, searchString) {
       commit('setSearchString', searchString)
+    },
+    setCategoryFilter ({commit}, categoryFilter) {
+      commit('setCategoryFilter', categoryFilter)
     }
 
   }
