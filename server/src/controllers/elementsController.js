@@ -1,7 +1,17 @@
 const { Element } = require('../models');
+const metascraper = require('metascraper');
+const got = require('got')
 const db = require('../models/index');
 const Op = db.Op;
 category = null;
+
+  async function getMetadata(targetUrl) {
+    console.log('inside getMetadata')
+    const {body: html, url} = await got(targetUrl)
+    return await metascraper({html, url})
+    //return metadata
+    //console.log(`title => ${title}, description =>${description}, logo =>${logo}`);
+  };
 
 module.exports = {
   async getElements (req, res) {
@@ -10,6 +20,7 @@ module.exports = {
       console.log('inside category not undefined');
       category = req.query.categoryValue
     }
+    console.log('category before function => ' + category);
     const searchValue = req.query.searchValue
     const isSearch = req.query.isSearch
 
@@ -18,44 +29,69 @@ module.exports = {
 
       console.log('inside search is true');
       if (searchValue !== '') {
-        console.log('inside search is not null');
-        console.log('current category = ' + category);
-        try {
-          const element = await Element.findAll({
-            where: {
-              category : category,
-              [Op.and]:
-              {
+        if(category == 'All') {
+          try {
+            const element = await Element.findAll({
+              where: {
                 title: {
-                  [Op.like]: `%${searchValue}%`
+                    [Op.like]: `%${searchValue}%`
+                  }
                 }
+
+            })
+            res.send(element)
+          } catch (e) {
+            res.status(500).send({error: 'error getting elements by search'});
+          }
+
+        } else {
+          try {
+            const element = await Element.findAll({
+              where: {
+                category : category,
+                [Op.and]:
+                {
+                  title: {
+                    [Op.like]: `%${searchValue}%`
+                  }
+                }
+                //category: category,
+                // $or: [
+                //   'title', 'category'
+                // ].map(key => ({
+                //   [key]: {
+                //     $like: `%${searchValue}%`
+                //   }
+                // }))
               }
-              //category: category,
-              // $or: [
-              //   'title', 'category'
-              // ].map(key => ({
-              //   [key]: {
-              //     $like: `%${searchValue}%`
-              //   }
-              // }))
-            }
-          })
-          res.send(element)
-        } catch (e) {
-          res.status(500).send({error: 'error getting elements by search'});
+            })
+            res.send(element)
+          } catch (e) {
+            res.status(500).send({error: 'error getting elements by search'});
+          }
         }
 
       } else {
         console.log('Inside searchValue is empty');
-        try {
-          const element = await Element.findAll({
-            where: {
-              category: category
-            }
-          })
-          res.send(element)
-        } catch (e) {
-          res.status(500).send({error: 'Error fetching elements (elementsController)'});
+        if(category == 'All') {
+          try {
+            const element = await Element.findAll({})
+            res.send(element)
+          } catch (e) {
+            res.status(500).send({error: 'Error fetching elements (elementsController)'});
+          }
+
+        } else {
+          try {
+            const element = await Element.findAll({
+              where: {
+                category: category
+              }
+            })
+            res.send(element)
+          } catch (e) {
+            res.status(500).send({error: 'Error fetching elements (elementsController)'});
+          }
         }
       }
 
@@ -64,8 +100,7 @@ module.exports = {
       if (category === 'All') {
         console.log('Inside category is all');
         try {
-          const element = await Element.findAll({
-          })
+          const element = await Element.findAll({})
         res.send(element)
         } catch (e) {
           res.status(500).send({error: 'error getting all elements'});
@@ -89,10 +124,16 @@ module.exports = {
   },
 
   async addElements (req, res) {
-    console.log(`req.body =>${req.body.title}`);
+    console.log(`req.body =>${req.body.link}`)
+    const {title, description } = await getMetadata(req.body.link)
     try {
-      const element = await Element.create(req.body);
-      console.log(`element create =>${element}`);
+      const element = await Element.create(
+        { title: title,
+          link: req.body.link,
+          description: description,
+          category: req.body.category
+        });
+
       res.send(element)
     } catch (e) {
       res.status(500).send({error: 'error adding element (elementsController)'});
@@ -122,4 +163,5 @@ module.exports = {
       res.status(500).send({error: 'error geting element by id (elementsController)'});
     }
   },
+
 }
