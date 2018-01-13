@@ -7,7 +7,8 @@ export default new Vuex.Store({
   strict: true,
   state: {
     token: null,
-    user: null,
+    userName: null,
+    userId: null,
     userLogged: false,
     searchString: null,
     categoryFilter: null
@@ -17,12 +18,17 @@ export default new Vuex.Store({
       state.token = token
       if (token) {
         state.userLogged = true
+      } else {
+        state.userLogged = false
       }
     },
-    setUser (state, user) {
-      state.user = user
+    setuserName (state, userName) {
+      state.userName = userName
     },
-    userLogOut (state) {
+    setuserId (state, userId) {
+      state.userId = userId
+    },
+    userNameLogOut (state) {
       console.log('inside set state: ' + state.userLogged)
       state.userLogged = false
     },
@@ -38,12 +44,15 @@ export default new Vuex.Store({
     setToken ({commit}, token) {
       commit('setToken', token)
     },
-    setUser ({commit}, user) {
-      commit('setUser', user)
+    setuserName ({commit}, userName) {
+      commit('setuserName', userName)
     },
-    userLogOut ({commit}) {
-      console.log('inside userLogOut')
-      commit('userLogOut')
+    setuserId ({commit}, userId) {
+      commit('setuserId', userId)
+    },
+    userNameLogOut ({commit}) {
+      console.log('inside userNameLogOut')
+      commit('userNameLogOut')
     },
     setSearchString ({commit}, searchString) {
       commit('setSearchString', searchString)

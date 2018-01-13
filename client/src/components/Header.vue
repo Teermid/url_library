@@ -25,7 +25,7 @@
         this.$store.dispatch('setToken', null)
         this.$store.dispatch('setUser', null)
         this.$store.dispatch('userLogOut', false)
-        this.$router.push({name: 'root'})
+        this.$router.push('/')
       }
 
     }

@@ -6,6 +6,7 @@ import Login from '@/components/Login'
 import List from '@/components/List'
 import CreateElement from '@/components/createElement'
 import EditElement from '@/components/editElement'
+import guard from '@/router/middleware'
 
 Vue.use(Router)
 
@@ -19,27 +20,32 @@ export default new Router({
     {
       path: '/register',
       name: 'register',
-      component: Register
+      component: Register,
+      beforeEnter: guard.userNotLogged
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      beforeEnter: guard.userNotLogged
     },
     {
       path: '/list',
       name: 'list',
-      component: List
+      component: List,
+      beforeEnter: guard.userLogged
     },
     {
       path: '/list/add',
       name: 'add',
-      component: CreateElement
+      component: CreateElement,
+      beforeEnter: guard.userLogged
     },
     {
       path: '/list/edit/:element_id',
       name: 'edit',
-      component: EditElement
+      component: EditElement,
+      beforeEnter: guard.userLogged
     }
   ]
 })

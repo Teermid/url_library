@@ -43,9 +43,9 @@ export default {
           email: this.email,
           password: this.password
         })
-        console.log('RESPONSE => ' + response.data.token)
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
+        this.$router.push('/list')
       } catch (e) {
         this.error = e.response.data.error
       }
