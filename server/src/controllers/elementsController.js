@@ -23,7 +23,8 @@ module.exports = {
     console.log('category before function => ' + category);
     const searchValue = req.query.searchValue
     const isSearch = req.query.isSearch
-
+    const userID = req.query.userID
+    console.log('userID const -> ' + userID);
 
     if (isSearch === 'true') {
 
@@ -33,6 +34,7 @@ module.exports = {
           try {
             const element = await Element.findAll({
               where: {
+                userID: userID,
                 title: {
                     [Op.like]: `%${searchValue}%`
                   }
@@ -48,6 +50,7 @@ module.exports = {
           try {
             const element = await Element.findAll({
               where: {
+                userID: userID,
                 category : category,
                 [Op.and]:
                 {
@@ -75,7 +78,11 @@ module.exports = {
         console.log('Inside searchValue is empty');
         if(category == 'All') {
           try {
-            const element = await Element.findAll({})
+            const element = await Element.findAll({
+              where: {
+                userID: userID
+              }
+            })
             res.send(element)
           } catch (e) {
             res.status(500).send({error: 'Error fetching elements (elementsController)'});
@@ -85,6 +92,7 @@ module.exports = {
           try {
             const element = await Element.findAll({
               where: {
+                userID: userID,
                 category: category
               }
             })
@@ -100,7 +108,11 @@ module.exports = {
       if (category === 'All') {
         console.log('Inside category is all');
         try {
-          const element = await Element.findAll({})
+          const element = await Element.findAll({
+            where: {
+              userID: userID
+            }
+          })
         res.send(element)
         } catch (e) {
           res.status(500).send({error: 'error getting all elements'});
@@ -111,6 +123,7 @@ module.exports = {
         try {
           const element = await Element.findAll({
             where: {
+              userID: userID,
               category: category
             }
           })
@@ -131,7 +144,8 @@ module.exports = {
         { title: title,
           link: req.body.link,
           description: description,
-          category: req.body.category
+          category: req.body.category,
+          userID: req.body.userID
         });
 
       res.send(element)

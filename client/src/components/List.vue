@@ -50,7 +50,8 @@
 
     data () {
       return {
-        elements: [{}]
+        elements: [{}],
+        userID: this.$store.state.userID
       }
     },
 
@@ -61,21 +62,21 @@
     },
 
     async beforeMount () {
-      this.elements = (await Elements.getElements('All', false, null)).data
+      this.elements = (await Elements.getElements('All', false, null, this.userID)).data
     },
 
     watch: {
       '$store.state.searchString': {
         // immediate: true,
         async handler (searchValue) {
-          this.elements = (await Elements.getElements(null, 'true', searchValue)).data
+          this.elements = (await Elements.getElements(null, 'true', searchValue, this.userID)).data
         }
       },
 
       '$store.state.categoryFilter': {
         // immediate: true,
         async handler (categoryValue) {
-          this.elements = (await Elements.getElements(categoryValue, 'false', null)).data
+          this.elements = (await Elements.getElements(categoryValue, 'false', null, this.userID)).data
         }
       }
     }

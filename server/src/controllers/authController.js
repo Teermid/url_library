@@ -6,7 +6,10 @@ const config = require('../config/config');
 function jwtSingUser(user) {
   console.log('inside jwtSingUser');
   const ONE_WEEK = 60 * 60 * 24 * 7;
-  return jwt.sign(user, config.authentication.jwtSecret, {expiresIn: ONE_WEEK})
+  return jwt.sign(user, config.authentication.jwtSecret,
+  {
+    expiresIn: '1h'
+  })
 }
 
 module.exports = {

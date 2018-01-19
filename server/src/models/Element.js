@@ -4,7 +4,8 @@ module.exports = function (sequelize, DataTypes) {
     title: DataTypes.STRING,
     category: DataTypes.STRING,
     link: DataTypes.STRING,
-    description: DataTypes.TEXT
+    description: DataTypes.TEXT,
+    userID: DataTypes.STRING
   });
 
   return Element

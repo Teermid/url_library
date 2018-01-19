@@ -7,8 +7,8 @@ export default new Vuex.Store({
   strict: true,
   state: {
     token: null,
-    userName: null,
-    userId: null,
+    user: null,
+    userID: null,
     userLogged: false,
     searchString: null,
     categoryFilter: null
@@ -22,11 +22,11 @@ export default new Vuex.Store({
         state.userLogged = false
       }
     },
-    setuserName (state, userName) {
-      state.userName = userName
+    setUser (state, user) {
+      state.user = user
     },
-    setuserId (state, userId) {
-      state.userId = userId
+    setUserID (state, userID) {
+      state.userID = userID
     },
     userNameLogOut (state) {
       console.log('inside set state: ' + state.userLogged)
@@ -44,11 +44,11 @@ export default new Vuex.Store({
     setToken ({commit}, token) {
       commit('setToken', token)
     },
-    setuserName ({commit}, userName) {
-      commit('setuserName', userName)
+    setUser ({commit}, userName) {
+      commit('setUser', userName)
     },
-    setuserId ({commit}, userId) {
-      commit('setuserId', userId)
+    setUserID ({commit}, userID) {
+      commit('setUserID', userID)
     },
     userNameLogOut ({commit}) {
       console.log('inside userNameLogOut')

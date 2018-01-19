@@ -45,6 +45,7 @@ export default {
         })
         this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setUser', response.data.user)
+        this.$store.dispatch('setUserID', response.data.user.id)
         this.$router.push('/list')
       } catch (e) {
         this.error = e.response.data.error

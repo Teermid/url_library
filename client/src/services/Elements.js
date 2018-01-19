@@ -1,12 +1,13 @@
 import api from '@/services/Api'
 
 export default{
-  getElements (categoryValue, isSearch, searchValue) {
+  getElements (categoryValue, isSearch, searchValue, userID) {
     return api().get('elements', {
       params: {
         categoryValue: categoryValue,
         isSearch: isSearch,
-        searchValue: searchValue
+        searchValue: searchValue,
+        userID: userID
       }
     })
   },
