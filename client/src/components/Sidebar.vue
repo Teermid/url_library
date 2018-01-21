@@ -2,28 +2,28 @@
   <nav class="menu">
   <ul>
     <li v-model="category" @click="displayCategory" value="All">all</li>
-    <li v-model="category" @click="displayCategory" value="Technology">Technology</li>
-    <li v-model="category" @click="displayCategory" value="Cooking">Cooking
-      <!-- <ul v-if="displayed">
-        <li><a href="#">sub-category 1</a></li>
-        <li><a href="#">sub-category 2</a></li>
-        <li><a href="#">sub-category 3</a></li>
-      </ul> -->
-    </li>
-    <li v-model="category" @click="displayCategory" value="Employment">Employment</li>
-    <li v-model="category" @click="displayCategory" value="Fails">Fails</li>
+    <span v-for="ca in categories" :key="ca.id">
+      <li v-model="category" @click="displayCategory" v-bind:value="ca.name">{{ ca.name }}</li>
+    </span>
   </ul>
 </nav>
 </template>
 
 
 <script>
+  import Category from '@/services/Category'
   export default {
     data () {
       return {
         displayed: false,
-        category: ''
+        category: '',
+        categories: [{}],
+        userID: this.$store.state.userID
       }
+    },
+
+    async beforeMount () {
+      this.categories = (await Category.getCategory(this.userID)).data
     },
 
     methods: {

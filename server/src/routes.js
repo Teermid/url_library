@@ -1,6 +1,7 @@
 const authController = require('./controllers/authController');
 const authControllerPolicy = require('./policies/authControllerPolicy');
 const elementsController = require('./controllers/elementsController');
+const categoryController = require('./controllers/categoryController');
 
 module.exports = (app) => {
   app.post('/register',
@@ -26,5 +27,13 @@ module.exports = (app) => {
 
   app.put('/elements/:id',
     elementsController.editElement
+  );
+
+  app.post('/category',
+    categoryController.addCategory
+  );
+
+  app.get('/category',
+    categoryController.getCategories
   );
 };

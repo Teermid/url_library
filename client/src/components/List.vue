@@ -2,9 +2,8 @@
   <div>
     <search-link></search-link>
     <div class="left">
-      <sidebar>
-
-      </sidebar>
+      <sidebar></sidebar>
+      <addCategory></addCategory>
     </div>
     <div class="right">
       <panel title="Llistat">
@@ -39,18 +38,23 @@
 <script>
   import Panel from '@/components/Panel.vue'
   import Elements from '@/services/Elements'
+  // import Category from '@/services/Category'
   import SearchLink from '@/components/Search.vue'
   import Sidebar from '@/components/Sidebar.vue'
+  import addCategory from '@/components/addCategory.vue'
+
   export default {
     components: {
       Panel,
       SearchLink,
-      Sidebar
+      Sidebar,
+      addCategory
     },
 
     data () {
       return {
         elements: [{}],
+        categories: [{}],
         userID: this.$store.state.userID
       }
     },
@@ -63,6 +67,7 @@
 
     async beforeMount () {
       this.elements = (await Elements.getElements('All', false, null, this.userID)).data
+      // this.categories = (await Category.getCategory(this.userID)).data
     },
 
     watch: {
