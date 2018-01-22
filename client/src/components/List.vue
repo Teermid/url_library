@@ -3,7 +3,6 @@
     <search-link></search-link>
     <div class="left">
       <sidebar></sidebar>
-      <addCategory></addCategory>
     </div>
     <div class="right">
       <panel title="Llistat">
@@ -38,17 +37,14 @@
 <script>
   import Panel from '@/components/Panel.vue'
   import Elements from '@/services/Elements'
-  // import Category from '@/services/Category'
   import SearchLink from '@/components/Search.vue'
   import Sidebar from '@/components/Sidebar.vue'
-  import addCategory from '@/components/addCategory.vue'
 
   export default {
     components: {
       Panel,
       SearchLink,
-      Sidebar,
-      addCategory
+      Sidebar
     },
 
     data () {
