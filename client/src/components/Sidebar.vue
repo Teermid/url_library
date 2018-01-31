@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div id="sidebar">
+    <div id="branch"> SAVIFY </div>
     <nav class="menu">
     <ul>
       <li v-model="category" @click="displayCategory" value="All">all</li>
@@ -72,11 +73,46 @@
 
   ul {
     list-style-type: none;
+    padding: 0px;
   }
 
   ul li {
     cursor: pointer;
+    color:white;
+    text-align: center;
+    padding:5px;
   }
+  
+</style>
+
+<style>
+
+  .menu {
+    float:left;
+    width:100%;
+
+  }
+
+  #sidebar {
+    float: left;
+    min-width: 270px;
+    max-width: 270px;
+    height: 100vh;
+    background-color: #477c96;
+    background-image: -webkit-linear-gradient(258deg, #477c96 50%, #43779c 100%);
+    background-image: -o-linear-gradient(258deg, #477c96 50%, #43779c 100%);
+    background-image: linear-gradient(348deg, #477c96 50%, #43779c 100%);
+  }
+
+  #branch {
+    float: left;
+    width: calc(100% - (var(--header-padding)*2));
+    text-align: center;
+    color: white;
+    padding: var(--header-padding);
+    background-color: #4b7fa4;
+  }
+
   .show {
     display:inherit !important;
   }
