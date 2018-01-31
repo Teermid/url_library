@@ -34,7 +34,7 @@
   import Sidebar from '@/components/Sidebar.vue'
   import Search from '@/components/Search.vue'
   import List from '@/components/List.vue'
-  
+
   export default {
     components: {
       Sidebar,
@@ -65,6 +65,7 @@
   #main {
     width: calc(100% - 270px);
     float: left;
+    background-color: #FAFAFA;
   }
 
   .content-wrapper {

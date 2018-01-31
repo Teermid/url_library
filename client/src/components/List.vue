@@ -1,25 +1,11 @@
 <template>
 <div>
 
-  <!-- <div class="llistat" v-for="el in elements" :key="el.id">
-    <ul>
-      <li><a v-bind:href="el.link" target="_blank"><strong>{{el.title}}</strong></a></li>
-      <li>{{el.description}}</li>
-      <li>#{{el.category}}</li>
-      <router-link tag="li" :to="{
-                    name: 'edit',
-                    params: {
-                      element_id: el.id
-                    }
-                  }">edit</router-link>
-    </ul>
-  </div> -->
-
   <div id="content-body">
     <div class="content-link" v-for="el in elements" :key="el.id">
-      <a v-bind:href="el.link" target="_blank"><div class="content-link-image"></div></a>
+      <a v-bind:href="el.link" target="_blank"><div class="content-link-image" v-bind:style="{ backgroundImage: 'url(' + el.imageURL + ')'}"></div></a>
       <div class="content-link-info">
-        <div class="content-link-info-icon"><img src="https://www.studentjob.es/sjes-favicon-196x196.png"></div>
+        <div class="content-link-info-icon"><img v-bind:src="el.iconURL"></div>
         <div class="content-link-info-title">{{ el.title }}</div>
         <div class="content-link-info-description">{{ el.description }}</div>
         <div class="content-link-info-tags"></div>
@@ -105,7 +91,6 @@ export default {
     /* display: none; */
     width:100%;
     height: calc(100% - 65px);
-    background-image: url("https://d36bmc1enj16yj.cloudfront.net/production/assets/og-logos/social/sj_es-og-social-9cfd2cb26b1ba29628c5da9a5fdae1ea2ef3c5ad1d95d4230920f79f012fab33.png");
     background-position: top;
     background-repeat: no-repeat;
     background-size:cover;

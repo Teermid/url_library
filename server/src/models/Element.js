@@ -5,6 +5,8 @@ module.exports = function (sequelize, DataTypes) {
     category: DataTypes.STRING,
     link: DataTypes.STRING,
     description: DataTypes.STRING,
+    imageURL: DataTypes.STRING,
+    iconURL: DataTypes.STRING,
     userID: DataTypes.STRING
   });
 
