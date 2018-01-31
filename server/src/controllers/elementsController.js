@@ -17,18 +17,14 @@ module.exports = {
   async getElements (req, res) {
 
     if(req.query.categoryValue !== undefined) {
-      console.log('inside category not undefined');
       category = req.query.categoryValue
     }
-    console.log('category before function => ' + category);
+
     const searchValue = req.query.searchValue
     const isSearch = req.query.isSearch
     const userID = req.query.userID
-    console.log('userID const -> ' + userID);
 
     if (isSearch === 'true') {
-
-      console.log('inside search is true');
       if (searchValue !== '') {
         if(category == 'All') {
           try {
@@ -53,11 +49,11 @@ module.exports = {
                 userID: userID,
                 category : category,
                 [Op.and]:
-                {
-                  title: {
-                    [Op.like]: `%${searchValue}%`
+                  {
+                    title: {
+                      [Op.like]: `%${searchValue}$`
+                    }
                   }
-                }
                 //category: category,
                 // $or: [
                 //   'title', 'category'
@@ -75,7 +71,6 @@ module.exports = {
         }
 
       } else {
-        console.log('Inside searchValue is empty');
         if(category == 'All') {
           try {
             const element = await Element.findAll({
@@ -104,7 +99,6 @@ module.exports = {
       }
 
     } else {
-      console.log('Inside seacrh is false');
       if (category === 'All') {
         console.log('Inside category is all');
         try {
