@@ -29,6 +29,10 @@ module.exports = (app) => {
     elementsController.editElement
   );
 
+  app.delete('/elements/:id',
+    elementsController.deleteElement
+  );
+
   app.post('/category',
     categoryController.addCategory
   );

@@ -1,7 +1,8 @@
 <template>
-    <div class="">
+  <div>
+    <PageHeader></PageHeader>
+    <div>
         <h1>Login</h1>
-
         <input
           v-model="email"
           type="email"
@@ -19,12 +20,17 @@
         </button>
         <p v-html="error" />
     </div>
-
+  </div>
 </template>
 
 <script>
 import auth from '@/services/Auth'
+import PageHeader from '@/components/Header.vue'
+
 export default {
+  components: {
+    PageHeader
+  },
   data () {
     return {
       email: '',

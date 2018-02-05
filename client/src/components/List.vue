@@ -1,6 +1,5 @@
 <template>
 <div>
-
   <div id="content-body">
     <div class="content-link" v-for="el in elements" :key="el.id">
       <a v-bind:href="el.link" target="_blank"><div class="content-link-image" v-bind:style="{ backgroundImage: 'url(' + el.imageURL + ')'}"></div></a>
@@ -9,7 +8,13 @@
         <div class="content-link-info-title">{{ el.title }}</div>
         <div class="content-link-info-description">{{ el.description }}</div>
         <div class="content-link-info-tags"></div>
-        <div class="content-link-info-settings"></div>
+        <div class="content-link-info-settings"
+          @click="navigateTo({
+            name:'edit',
+            params: {
+              element_id:el.id
+            }
+            })">edit</div>
       </div>
     </div>
   </div>
@@ -30,9 +35,9 @@ export default {
   },
 
   methods: {
-    // navigateTo(route) {
-    //   this.$router.push(route)
-    // }
+    navigateTo (route) {
+      this.$router.push(route)
+    }
   },
 
   async beforeMount () {
@@ -100,7 +105,7 @@ export default {
     width:calc(100% - 20px);
     height:calc(100% - 20px);
     background-color: white;
-    padding:10px;
+    padding:12px 10px 10px 10px;
     transition: all .4s ease-in-out;
     /* transition-timing-function: cubic-bezier(0, 1, 0.5, 1); */
   }
@@ -110,8 +115,8 @@ export default {
    }
 
   .content-link-info-icon {
-    width:40px;
-    height: 40px;
+    width:32px;
+    height: 32px;
     float:left;
   }
 
@@ -125,17 +130,25 @@ export default {
     width:calc(100% - 50px);
     font-size:15px;
     margin-left: 10px;
-    text-align: justify;
+    text-align: left;
   }
 
   .content-link-info-description {
     float:left;
     width:100%;
     font-size:14px;
-    margin-top: 15px;
+    margin-top: 20px;
     color: #acacac;
     text-align: justify;
+  }
 
+  .content-link-info-settings {
+    width:100%;
+    float:left;
+    margin-top:60px;
+    font-size: 12px;
+    color: #acacac;
+    cursor:pointer;
   }
 
 </style>

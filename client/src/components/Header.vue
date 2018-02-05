@@ -9,7 +9,6 @@
         <router-link to="login" v-if="!$store.state.userLogged">Login</router-link>
         <button @click="logOut" v-if="$store.state.userLogged">Log Out</button>
       </div>
-
     </div>
 </template>
 
@@ -32,7 +31,7 @@
   }
 </script>
 
-<style scoped>
+<style>
   .header {
       margin-bottom: 20px;
       width: 100%;

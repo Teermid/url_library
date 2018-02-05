@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <page-header />
     <router-view/>
   </div>
 </template>
@@ -30,21 +29,23 @@ export default {
     display: none;
   }
 
+  html body {
+    margin: 0px;
+    padding: 0;
+    border: 0;
+    outline: 0;
+  }
 
   input:focus {
     outline: none;
   }
 
-  /* body h1 {
+  body h1 {
     margin: 0px;
     padding: 0;
     border: 0;
     outline: 0;
-    font-size: 100%;
-    vertical-align: baseline;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-    background-color: #f1f5f6;
-  } */
+  }
 
   #app {
     /* font-family: 'Avenir', Helvetica, Arial, sans-serif; */

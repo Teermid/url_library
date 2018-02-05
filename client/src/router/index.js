@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import Register from '@/components/Register'
 import Login from '@/components/Login'
-// import List from '@/components/List'
 import CreateElement from '@/components/createElement'
 import EditElement from '@/components/editElement'
 import Main from '@/components/Main'
@@ -15,8 +13,9 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: HelloWorld
+      name: 'Login',
+      component: Login,
+      beforeEnter: guard.userNotLogged
     },
     {
       path: '/register',

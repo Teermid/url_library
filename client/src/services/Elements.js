@@ -22,5 +22,9 @@ export default{
 
   editElement (element) {
     return api().put(`elements/${element.id}`, element)
+  },
+
+  deleteElement (elementid) {
+    return api().delete(`elements/${elementid}`)
   }
 }
