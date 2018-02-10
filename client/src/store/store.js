@@ -11,7 +11,8 @@ export default new Vuex.Store({
     userID: null,
     userLogged: false,
     searchString: null,
-    categoryFilter: null
+    categoryFilter: null,
+    popupDisplay: false
   },
   mutations: {
     setToken (state, token) {
@@ -29,7 +30,6 @@ export default new Vuex.Store({
       state.userID = userID
     },
     userNameLogOut (state) {
-      console.log('inside set state: ' + state.userLogged)
       state.userLogged = false
     },
     setSearchString (state, searchString) {
@@ -37,6 +37,9 @@ export default new Vuex.Store({
     },
     setCategoryFilter (state, categoryFilter) {
       state.categoryFilter = categoryFilter
+    },
+    setPopupDisplay (state, popupDisplay) {
+      state.popupDisplay = popupDisplay
     }
 
   },
@@ -59,7 +62,9 @@ export default new Vuex.Store({
     },
     setCategoryFilter ({commit}, categoryFilter) {
       commit('setCategoryFilter', categoryFilter)
+    },
+    setPopupDisplay ({commit}, popupDisplay) {
+      commit('setPopupDisplay', popupDisplay)
     }
-
   }
 })

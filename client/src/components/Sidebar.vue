@@ -4,25 +4,31 @@
     <nav class="menu">
     <ul>
       <li v-model="category" @click="displayCategory" value="All">all</li>
-      <span v-for="ca in categories" :key="ca.id">
-        <li v-model="category" @click="displayCategory" v-bind:value="ca.name">{{ ca.name }}</li>
-      </span>
+      <li v-for="ca in categories" :key="ca.id" v-model="category" @click="displayCategory" v-bind:value="ca.name">{{ ca.name }}</li>
     </ul>
   </nav>
-  <input
-    v-model="category.name"
-    type="text"
-    name="name"
-    value="name"
-    placeholder="name">
-  <button @click="addCategory">
-    Add
-  </button>
+  <div id="add-wrapper">
+    <div id="add-category">
+      <input
+        v-model="category.name"
+        type="text"
+        name="name"
+        value="name"
+        placeholder="name">
+      <button @click="addCategory">
+        Add
+      </button>
+    </div>
+
+    <button @click="popUpDisplay"style="margin-top:20px;">add link</button>
+  </div>
+
 </div>
 </template>
 
 
 <script>
+  // import { EventBus } from '@/main.js'
   import Category from '@/services/Category'
   export default {
     data () {
@@ -63,6 +69,10 @@
         } catch (e) {
           console.log(e.response)
         }
+      },
+
+      popUpDisplay () {
+        this.$store.dispatch('setPopupDisplay', true)
       }
     }
 }
@@ -82,7 +92,7 @@
     text-align: center;
     padding:5px;
   }
-  
+
 </style>
 
 <style>
@@ -119,5 +129,27 @@
   .nested > ul {
     padding-left:10px;
     display:none;
+  }
+
+  #add-wrapper {
+    float:left;
+    width:100%;
+    margin-top:400px;
+  }
+
+  #add-category {
+    float:left;
+    width:100%;
+  }
+
+  @media screen and (max-width: 920px) {
+     #sidebar {
+       position:absolute;
+       left: -270px;
+     }
+
+     #main {
+       width:100% !important;
+     }
   }
 </style>

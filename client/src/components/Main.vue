@@ -1,5 +1,6 @@
 <template>
   <div>
+    <CreateElement></CreateElement>
     <Sidebar></Sidebar>
 
     <div id="main">
@@ -34,23 +35,18 @@
   import Sidebar from '@/components/Sidebar.vue'
   import Search from '@/components/Search.vue'
   import List from '@/components/List.vue'
+  import CreateElement from '@/components/CreateElement.vue'
 
   export default {
     components: {
       Sidebar,
       Search,
-      List
+      List,
+      CreateElement
     },
     data () {
       return {
         search: ''
-      }
-    },
-
-    watch: {
-      search (value) {
-        this.$store.dispatch('setSearchString', value)
-        console.log(this.$store.state.searchString)
       }
     },
 
