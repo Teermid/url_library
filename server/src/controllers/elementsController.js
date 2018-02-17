@@ -34,7 +34,6 @@ module.exports = {
                     [Op.like]: `%${searchValue}%`
                   }
                 }
-
             })
             res.send(element)
           } catch (e) {
@@ -47,19 +46,12 @@ module.exports = {
             const element = await Element.findAll({
               where: {
                 userID: userID,
-                $and: [
-                  {
-                    category : category,
-                  },
-                  {
-                    title: {
-                      [Op.like]: `%${searchValue}$`
-                    }
-                  }
-                ]
+                category: category,
+                title: {
+                  [Op.like]: `%${searchValue}%`
+                }
               }
             })
-
             res.send(element)
           } catch (e) {
             res.status(500).send({error: 'error getting elements by search'});
@@ -96,14 +88,18 @@ module.exports = {
 
     } else {
       if (category === 'All') {
-        console.log('Inside category is all');
         try {
           const element = await Element.findAll({
             where: {
               userID: userID
             }
           })
-        res.send(element)
+          // const element = await db.sequelize.query(
+          //   "SELECT * FROM Elements WHERE userID = :userID",
+          //    { replacements: {userID: userID }},
+          //    { type: sequelize.QueryTypes.SELECT}
+          // )
+          res.send(element)
         } catch (e) {
           res.status(500).send({error: 'error getting all elements'});
         }

@@ -42,7 +42,7 @@ export default {
 
   async beforeMount () {
     this.elements = (await Elements.getElements('All', false, null, this.userID)).data
-    // this.categories = (await Category.getCategory(this.userID)).data
+    console.log(this.elements)
   },
 
   watch: {
