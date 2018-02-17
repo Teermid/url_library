@@ -21,9 +21,9 @@
       }
       */
       logOut () {
-        this.$store.dispatch('setToken', null)
-        this.$store.dispatch('setUser', null)
-        this.$store.dispatch('userLogOut', false)
+        this.$store.commit('setToken', null)
+        this.$store.commit('setUser', null)
+        this.$store.commit('userLogOut', false)
         this.$router.push('/')
       }
 

@@ -14,57 +14,95 @@ export default new Vuex.Store({
     categoryFilter: null,
     popupDisplay: false
   },
-  mutations: {
-    setToken (state, token) {
-      state.token = token
-      if (token) {
+  mutations: { // syncronous
+    setToken (state, content) {
+      if (content) {
+        state.token = content
         state.userLogged = true
-      } else {
-        state.userLogged = false
       }
+      /* Necessari?? */
+      // } else  {
+      //   state.userLogged = false
+      // }
     },
-    setUser (state, user) {
-      state.user = user
-    },
-    setUserID (state, userID) {
-      state.userID = userID
-    },
-    userNameLogOut (state) {
-      state.userLogged = false
-    },
-    setSearchString (state, searchString) {
-      state.searchString = searchString
-    },
-    setCategoryFilter (state, categoryFilter) {
-      state.categoryFilter = categoryFilter
-    },
-    setPopupDisplay (state, popupDisplay) {
-      state.popupDisplay = popupDisplay
-    }
 
+    setUser (state, content) {
+      state.user = content
+    },
+
+    setUserID (state, content) {
+      state.userID = content
+    },
+
+    setUserLogged (state, content) {
+      state.userLogged = content
+    },
+
+    setSearchString (state, content) {
+      state.searchString = content
+    },
+
+    setCategoryFilter (state, content) {
+      state.categoryFilter = content
+    },
+
+    setPopUpDisplay (state) {
+      state.popupDisplay = !state.popupDisplay
+    }
   },
-  actions: {
-    setToken ({commit}, token) {
-      commit('setToken', token)
+
+  // actions: { // asyncronous
+  //   setToken ({commit}, token) {
+  //     commit('setToken', token)
+  //   },
+  //   setUser ({commit}, userName) {
+  //     commit('setUser', userName)
+  //   },
+  //   setUserID ({commit}, userID) {
+  //     commit('setUserID', userID)
+  //   },
+  //   userNameLogOut ({commit}) {
+  //     console.log('inside userNameLogOut')
+  //     commit('userNameLogOut')
+  //   },
+  //   setSearchString ({commit}, searchString) {
+  //     commit('setSearchString', searchString)
+  //   },
+  //   setCategoryFilter ({commit}, categoryFilter) {
+  //     commit('setCategoryFilter', categoryFilter)
+  //   },
+  //   setPopupDisplay ({commit}, popupDisplay) {
+  //     commit('setPopupDisplay', popupDisplay)
+  //   }
+  // },
+
+  getters: {
+    getToken (state) {
+      return state.token
     },
-    setUser ({commit}, userName) {
-      commit('setUser', userName)
+
+    getUser (state) {
+      return state.user
     },
-    setUserID ({commit}, userID) {
-      commit('setUserID', userID)
+
+    getUserID (state) {
+      return state.userID
     },
-    userNameLogOut ({commit}) {
-      console.log('inside userNameLogOut')
-      commit('userNameLogOut')
+
+    getUserLogged (state) {
+      return state.userLogged
     },
-    setSearchString ({commit}, searchString) {
-      commit('setSearchString', searchString)
+
+    getSearchString (state) {
+      return state.searchString
     },
-    setCategoryFilter ({commit}, categoryFilter) {
-      commit('setCategoryFilter', categoryFilter)
+
+    getCategoryFilter (state) {
+      return state.categoryFilter
     },
-    setPopupDisplay ({commit}, popupDisplay) {
-      commit('setPopupDisplay', popupDisplay)
+
+    getPopUpDisplay (state) {
+      return state.popupDisplay
     }
   }
 })

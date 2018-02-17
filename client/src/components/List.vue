@@ -30,7 +30,7 @@ export default {
     return {
       elements: [{}],
       categories: [{}],
-      userID: this.$store.state.userID
+      userID: this.$store.getters.getUserID
     }
   },
 
@@ -73,10 +73,10 @@ export default {
     width: calc(100% - 40px);
     display: grid;
     grid-gap: 20px;
-    grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
     grid-auto-rows: 240px;
-    height: calc(100vh - 190px);
-    padding: 0 20px 20px 20px;
+    height: calc(100vh - 150px);
+    padding: 0 20px 0px 20px;
     overflow-y: scroll;
   }
 
@@ -95,7 +95,7 @@ export default {
   .content-link-image {
     /* display: none; */
     width:100%;
-    height: calc(100% - 65px);
+    height: calc(100% - 60px);
     background-position: top;
     background-repeat: no-repeat;
     background-size:cover;
@@ -106,12 +106,12 @@ export default {
     height:calc(100% - 20px);
     background-color: white;
     padding:12px 10px 10px 10px;
-    transition: all .4s ease-in-out;
+    transition: all .3s ease-in-out;
     /* transition-timing-function: cubic-bezier(0, 1, 0.5, 1); */
   }
 
   .content-link-info:hover {
-    margin-top: -175px;
+    margin-top: -180px;
    }
 
   .content-link-info-icon {
@@ -128,7 +128,7 @@ export default {
   .content-link-info-title {
     float:left;
     width:calc(100% - 50px);
-    font-size:15px;
+    font-size:14px;
     margin-left: 10px;
     text-align: left;
   }

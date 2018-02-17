@@ -20,8 +20,7 @@
 
     watch: {
       search (value) {
-        this.$store.dispatch('setSearchString', value)
-        console.log(this.$store.state.searchString)
+        this.$store.commit('setSearchString', value)
       }
     },
 

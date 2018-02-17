@@ -15,11 +15,10 @@ category = null;
 
 module.exports = {
   async getElements (req, res) {
-
     if(req.query.categoryValue !== undefined) {
       category = req.query.categoryValue
     }
-
+    console.log(`category -> ${category}`);
     const searchValue = req.query.searchValue
     const isSearch = req.query.isSearch
     const userID = req.query.userID
@@ -44,26 +43,23 @@ module.exports = {
 
         } else {
           try {
+            console.log(`Search string is true and category is ${category}`);
             const element = await Element.findAll({
               where: {
                 userID: userID,
-                category : category,
-                [Op.and]:
+                $and: [
+                  {
+                    category : category,
+                  },
                   {
                     title: {
                       [Op.like]: `%${searchValue}$`
                     }
                   }
-                //category: category,
-                // $or: [
-                //   'title', 'category'
-                // ].map(key => ({
-                //   [key]: {
-                //     $like: `%${searchValue}%`
-                //   }
-                // }))
+                ]
               }
             })
+
             res.send(element)
           } catch (e) {
             res.status(500).send({error: 'error getting elements by search'});

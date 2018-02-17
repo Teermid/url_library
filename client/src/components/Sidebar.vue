@@ -39,7 +39,7 @@
           name: ''
         },
         categories: [{}],
-        userID: this.$store.state.userID
+        userID: this.$store.getters.getUserID
       }
     },
 
@@ -55,16 +55,14 @@
       displayCategory () {
         this.displayed = !this.displayed
         this.category = event.currentTarget.getAttribute('value')
-        this.$store.dispatch('setCategoryFilter', this.category)
+        this.$store.commit('setCategoryFilter', this.category)
       },
 
       async addCategory () {
-        this.category.userID = this.$store.state.userID
-        // console.log('addCategory.vue --> ' + this.category)
+        this.category.userID = this.$store.getters.getUserID
         try {
           const response = await Category.addCategory(this.category)
-          console.log('element added -> ' + response)
-          // this.$router.push('/list')
+          console.log(response)
           this.printCategories()
         } catch (e) {
           console.log(e.response)
@@ -72,7 +70,7 @@
       },
 
       popUpDisplay () {
-        this.$store.dispatch('setPopupDisplay', true)
+        this.$store.commit('setPopUpDisplay')
       }
     }
 }
@@ -142,7 +140,7 @@
     width:100%;
   }
 
-  @media screen and (max-width: 920px) {
+  @media screen and (max-width: 829px) {
      #sidebar {
        position:absolute;
        left: -270px;
