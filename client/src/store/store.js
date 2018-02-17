@@ -11,8 +11,9 @@ export default new Vuex.Store({
     userID: null,
     userLogged: false,
     searchString: null,
-    categoryFilter: null,
-    popupDisplay: false
+    categoryFilter: 'All',
+    popupDisplay: false,
+    refreshElements: false
   },
   mutations: { // syncronous
     setToken (state, content) {
@@ -48,6 +49,10 @@ export default new Vuex.Store({
 
     setPopUpDisplay (state) {
       state.popupDisplay = !state.popupDisplay
+    },
+
+    setRefreshElements (state) {
+      state.refreshElements = !state.refreshElements
     }
   },
 

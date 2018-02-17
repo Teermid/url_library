@@ -30,33 +30,49 @@ export default {
     return {
       elements: [{}],
       categories: [{}],
-      userID: this.$store.getters.getUserID
+      userID: this.$store.getters.getUserID,
+      categoryFilter: '',
+      searchValue: ''
     }
   },
 
   methods: {
+    async getElements (cat, isSearch, searchVal, userID) {
+      this.elements = (await Elements.getElements(cat, isSearch, searchVal, userID)).data
+      console.log(this.elements)
+    },
+
     navigateTo (route) {
       this.$router.push(route)
     }
   },
 
   async beforeMount () {
-    this.elements = (await Elements.getElements('All', false, null, this.userID)).data
-    console.log(this.elements)
+    this.getElements('All', false, null, this.userID)
   },
 
   watch: {
     '$store.state.searchString': {
-      // immediate: true,
-      async handler (searchValue) {
-        this.elements = (await Elements.getElements(null, 'true', searchValue, this.userID)).data
+      // this.searchValue = this.$store.getters.getSearchString
+      async handler (value) {
+        this.searchValue = value
+        this.getElements(null, 'true', this.searchValue, this.userID)
       }
     },
 
     '$store.state.categoryFilter': {
-      // immediate: true,
-      async handler (categoryValue) {
-        this.elements = (await Elements.getElements(categoryValue, 'false', null, this.userID)).data
+      // this.$store.getters.getCategoryFilter
+      async handler (value) {
+        this.categoryFilter = value
+        this.getElements(this.categoryFilter, 'false', null, this.userID)
+      }
+    },
+
+    '$store.state.refreshElements': {
+      async handler () {
+        console.log('inside refreshElements watcher')
+        console.log('categoryFilter -> ' + this.categoryFilter)
+        this.getElements(this.categoryFilter, 'false', null, this.userID)
       }
     }
   }
