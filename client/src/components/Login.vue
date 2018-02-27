@@ -42,19 +42,19 @@ export default {
 
   methods: {
     async Login () {
-      console.log('VUE --> Login')
       try {
-        console.log('VUE --> login --> try')
         const response = await auth.login({
           email: this.email,
           password: this.password
         })
+        console.log(response)
         this.$store.commit('setToken', response.data.token)
         this.$store.commit('setUser', response.data.user)
         this.$store.commit('setUserID', response.data.user.id)
         this.$router.push('/list')
       } catch (e) {
-        this.error = e.response.data.error
+        console.log('ERROR')
+        // this.error = e.response.data.error
       }
     }
 

@@ -1,16 +1,5 @@
 const {User} = require('../models');
-const jwt = require('jsonwebtoken');
-const config = require('../config/config');
-
-
-function jwtSingUser(user) {
-  console.log('inside jwtSingUser');
-  const ONE_WEEK = 60 * 60 * 24 * 7;
-  return jwt.sign(user, config.authentication.jwtSecret,
-  {
-    expiresIn: '1h'
-  })
-}
+const tokenPolicy = require('../policies/tokenPolicy')
 
 module.exports = {
   async register(req, res) {
@@ -21,7 +10,7 @@ module.exports = {
       /*Loging automàtic al registrar-se:*/
       res.send({
         user: userJson,
-        token: jwtSingUser(userJson)
+        token: tokenPolicy.jwtSignUser(userJson)
       });
     } catch (e) {
       res.status(400).send({error: 'Error creating the account'});
@@ -49,7 +38,7 @@ module.exports = {
         const userJson = user.toJSON()
         res.send({
           user: userJson,
-          token: jwtSingUser(userJson)
+          token: tokenPolicy.jwtSignUser(userJson)
         });
       }
     } catch (e) {
