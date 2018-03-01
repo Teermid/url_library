@@ -2,6 +2,7 @@ const { Element } = require('../models');
 const metascraper = require('metascraper');
 const got = require('got')
 const db = require('../models/index');
+const queries = require('./queries/getQueries')
 const Op = db.Op;
 category = null;
 
@@ -15,111 +16,50 @@ category = null;
 
 module.exports = {
   async getElements (req, res) {
-    if(req.query.categoryValue !== undefined) {
-      category = req.query.categoryValue
-    }
+    category = req.query.categoryValue || category
+
     console.log(`category -> ${category}`);
     const searchValue = req.query.searchValue
     const isSearch = req.query.isSearch
     const userID = req.query.userID
+    let response = null
 
-    if (isSearch === 'true') {
-      if (searchValue !== '') {
-        if(category == 'All') {
-          try {
-            const element = await Element.findAll({
-              where: {
-                userID: userID,
-                title: {
-                    [Op.like]: `%${searchValue}%`
-                  }
-                }
-            })
-            res.send(element)
-          } catch (e) {
-            res.status(500).send({error: 'error getting elements by search'});
-          }
 
-        } else {
-          try {
-            console.log(`Search string is true and category is ${category}`);
-            const element = await Element.findAll({
-              where: {
-                userID: userID,
-                category: category,
-                title: {
-                  [Op.like]: `%${searchValue}%`
-                }
-              }
-            })
-            res.send(element)
-          } catch (e) {
-            res.status(500).send({error: 'error getting elements by search'});
-          }
-        }
-
-      } else {
-        if(category == 'All') {
-          try {
-            const element = await Element.findAll({
-              where: {
-                userID: userID
-              }
-            })
-            res.send(element)
-          } catch (e) {
-            res.status(500).send({error: 'Error fetching elements (elementsController)'});
-          }
-
-        } else {
-          try {
-            const element = await Element.findAll({
-              where: {
-                userID: userID,
-                category: category
-              }
-            })
-            res.send(element)
-          } catch (e) {
-            res.status(500).send({error: 'Error fetching elements (elementsController)'});
-          }
-        }
-      }
-
-    } else {
-      if (category === 'All') {
-        try {
-          const element = await Element.findAll({
-            where: {
-              userID: userID
-            }
-          })
-          // const element = await db.sequelize.query(
-          //   "SELECT * FROM Elements WHERE userID = :userID",
-          //    { replacements: {userID: userID }},
-          //    { type: sequelize.QueryTypes.SELECT}
-          // )
-          res.send(element)
-        } catch (e) {
-          res.status(500).send({error: 'error getting all elements'});
-        }
-
-      } else {
-        console.log('Inside category is defined');
-        try {
-          const element = await Element.findAll({
-            where: {
-              userID: userID,
-              category: category
-            }
-          })
-        res.send(element)
-        } catch (e) {
-          res.status(500).send({error: 'error getting elements by category'});
-        }
-      }
-
+    if (isSearch === 'true' && searchValue !== '' && category == 'All') {
+      response = await queries.query_1(userID, searchValue)
     }
+    if (isSearch === 'true' && searchValue !== '' && category == 'Unsorted') {
+      response = await queries.query_2(userID, searchValue)
+    }
+    if (isSearch === 'true' && searchValue !== '' && category !== 'All'  && category !== 'Unsorted' ) {
+      response = await queries.query_3(userID, category, searchValue)
+    }
+    if (isSearch === 'true' && searchValue === '' && category == 'All') {
+      response = await queries.query_4(userID)
+    }
+    if (isSearch === 'true' && searchValue === '' && category == 'Unsorted') {
+      response = await queries.query_5(userID)
+    }
+    if (isSearch === 'true' && searchValue === '' && category !== 'All'  && category !== 'Unsorted') {
+      response = await queries.query_6(userID, category)
+    }
+    if (isSearch === 'false' && category === 'All') {
+      response = await queries.query_4(userID)
+    }
+    if (isSearch === 'false' && category === 'Unsorted') {
+      response = await queries.query_5(userID)
+    }
+    if (isSearch === 'false' && category !== 'All'  && category !== 'Unsorted') {
+      response = await queries.query_6(userID, category)
+    }
+
+
+    if (response.error) {
+      res.status(500).send(response)
+    } else {
+      res.send (response)
+    }
+
   },
 
   async addElements (req, res) {
