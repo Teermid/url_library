@@ -5,13 +5,11 @@ module.exports = {
 
   async verifyToken (req, res, next) {
     const authHeader = req.headers['authoritzation']
-    console.log(`authHeader => ${authHeader}`);
     if (typeof authHeader == 'undefined') {
       res.send(403)
     } else {
       const bearer = authHeader.split(' ')
       const token = bearer[1]
-      console.log(`token => ${token}`);
       const response = await jwt.verify(token, config.authentication.jwtSecret)
       if (response.id) {
         next()

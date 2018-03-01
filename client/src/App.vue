@@ -32,8 +32,8 @@ export default {
     outline: 0;
   }
 
-  input:focus {
-    outline: none;
+  input:focus, textarea:focus, select:focus {
+    outline: 1px solid lightblue;
   }
 
   body h1 {

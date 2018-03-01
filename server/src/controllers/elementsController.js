@@ -123,15 +123,15 @@ module.exports = {
   },
 
   async addElements (req, res) {
-    console.log(`req.body =>${req.body.link}`)
+
     const { title, description, image, logo } = await getMetadata(req.body.link)
     try {
       const element = await Element.create(
         {
-          title: title,
+          title: req.body.title || title,
           link: req.body.link,
-          description: description,
-          category: req.body.category,
+          description: req.body.description || description,
+          category: req.body.category || null,
           imageURL: image,
           iconURL: logo,
           userID: req.body.userID

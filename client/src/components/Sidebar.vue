@@ -4,6 +4,7 @@
     <nav class="menu">
     <ul>
       <li v-model="category" @click="displayCategory" value="All">all</li>
+      <li v-model="category" @click="displayCategory" value="Unsorted">Unsorted</li>
       <li v-for="ca in categories" :key="ca.id" v-model="category" @click="displayCategory" v-bind:value="ca.name">{{ ca.name }}</li>
     </ul>
   </nav>
@@ -89,6 +90,10 @@
     color:white;
     text-align: center;
     padding:5px;
+  }
+
+  ul li:nth-child(2) {
+    margin-bottom:20px;
   }
 
 </style>
