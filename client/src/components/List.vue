@@ -1,23 +1,31 @@
 <template>
 <div>
-  <div id="content-body">
-    <div class="content-link" v-for="el in elements" :key="el.id">
-      <a v-bind:href="el.link" target="_blank"><div class="content-link-image" v-bind:style="{ backgroundImage: 'url(' + el.imageURL + ')'}"></div></a>
-      <div class="content-link-info">
-        <div class="content-link-info-icon"><img v-bind:src="el.iconURL"></div>
-        <div class="content-link-info-title">{{ el.title }}</div>
-        <div class="content-link-info-description">{{ el.description }}</div>
-        <div class="content-link-info-tags"></div>
-        <div class="content-link-info-settings"
-          @click="navigateTo({
-            name:'edit',
-            params: {
-              element_id:el.id
-            }
-            })">edit</div>
+
+    <!-- GRID -->
+    <div v-if="$store.getters.getGrid" id="grid-content-body">
+      <div class="grid-content-link" v-for="el in elements" :key="el.id">
+        <a v-bind:href="el.link" target="_blank"><div class="grid-content-link-image" v-bind:style="{ backgroundImage: 'url(' + el.imageURL + ')'}"></div></a>
+        <div class="grid-content-link-info">
+          <div class="grid-content-link-info-icon"><img v-bind:src="el.iconURL"></div>
+          <div class="grid-content-link-info-title">{{ el.title }}</div>
+          <div class="grid-content-link-info-description">{{ el.description }}</div>
+          <div class="grid-content-link-info-settings" @click="navigateTo({name:'edit', params: {element_id:el.id}})"> edit </div>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- LIST -->
+    <div v-if="!$store.getters.getGrid" id="list-content-body">
+      <div class="list-content-link" v-for="el in elements" :key="el.id">
+        <div class="list-content-link-icon"><img v-bind:src="el.iconURL"></div>
+        <div class="list-content-link-info">
+          <div class="list-content-link-info-title">{{ el.title }}</div>
+          <div class="list-content-link-info-description">{{ el.description }}</div>
+        </div>
+        <div class="list-content-link-settings" @click="navigateTo({name:'edit', params: {element_id:el.id}})"> edit </div>
+      </div>
+    </div>
+
 
 </div>
 </template>
@@ -80,12 +88,7 @@ export default {
 </script>
 
 <style>
-  #content-body {
-    /* max-width: var(--_6element-width);
-    min-width: var(--_6element-width);
-    width: 90%;
-    margin: 20px auto;
-    height: 100vh; */
+  #grid-content-body {
     width: calc(100% - 40px);
     display: grid;
     grid-gap: 20px;
@@ -96,19 +99,17 @@ export default {
     overflow-y: scroll;
   }
 
-  .content-link {
+  .grid-content-link {
     overflow: hidden;
-    -webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
+    /* -webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
     -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
-    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
-    /*display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2em;
-    color: #ffeead;*/
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15); */
+
+    webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
 
-  .content-link-image {
+  .grid-content-link-image {
     /* display: none; */
     width:100%;
     height: calc(100% - 60px);
@@ -117,7 +118,7 @@ export default {
     background-size:cover;
   }
 
-  .content-link-info {
+  .grid-content-link-info {
     width:calc(100% - 20px);
     height:calc(100% - 20px);
     background-color: white;
@@ -126,22 +127,22 @@ export default {
     /* transition-timing-function: cubic-bezier(0, 1, 0.5, 1); */
   }
 
-  .content-link-info:hover {
+  .grid-content-link-info:hover {
     margin-top: -180px;
    }
 
-  .content-link-info-icon {
+  .grid-content-link-info-icon {
     width:32px;
     height: 32px;
     float:left;
   }
 
-  .content-link-info-icon > img {
+  .grid-content-link-info-icon > img {
     width:100%;
     height: 100%;
   }
 
-  .content-link-info-title {
+  .grid-content-link-info-title {
     float:left;
     width:calc(100% - 50px);
     font-size:14px;
@@ -149,7 +150,7 @@ export default {
     text-align: left;
   }
 
-  .content-link-info-description {
+  .grid-content-link-info-description {
     float:left;
     width:100%;
     font-size:14px;
@@ -158,13 +159,77 @@ export default {
     text-align: justify;
   }
 
-  .content-link-info-settings {
+  .grid-content-link-info-settings {
     width:100%;
     float:left;
     margin-top:60px;
     font-size: 12px;
     color: #acacac;
     cursor:pointer;
+  }
+
+  /* --------------------------------------------- */
+
+  #list-content-body {
+    width: calc(100% - 40px);
+    height: calc(100vh - 150px);
+    display:flex;
+    flex-direction:column;
+    padding: 0 20px 0px 20px;
+    overflow-y: scroll;
+  }
+
+  .list-content-link {
+    height:60px;
+    padding:10px;
+    background-color:white;
+    margin-bottom:10px;
+    /* -webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
+    -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15); */
+
+    webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .list-content-link-icon {
+    width:32px;
+    height: 32px;
+    float: left;
+    margin-right:10px;
+  }
+
+  .list-content-link-icon > img {
+    height: 100%;
+    width: 100%;
+  }
+
+  .list-content-link-info {
+    width: 90%;
+    height:100px;
+    float:left;
+  }
+
+  .list-content-link-info-title {
+    text-align: left;
+    height: 20px;
+    width:100%;
+    float:left;
+    font-size:14px;
+    text-align: left;
+  }
+
+  .list-content-link-info-description {
+    height: 40px;
+    width:100%;
+    float:left;
+    font-size:14px;
+    color: #acacac;
+    text-align: justify;
+  }
+
+  .list-content-link-settings {
+    float:left;
   }
 
 </style>

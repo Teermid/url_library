@@ -13,7 +13,8 @@ export default new Vuex.Store({
     searchString: null,
     categoryFilter: 'All',
     popupDisplay: false,
-    refreshElements: false
+    refreshElements: false,
+    grid: false
   },
   mutations: { // syncronous
     setToken (state, content) {
@@ -53,6 +54,10 @@ export default new Vuex.Store({
 
     setRefreshElements (state) {
       state.refreshElements = !state.refreshElements
+    },
+
+    setGrid (state) {
+      state.grid = !state.grid
     }
   },
 
@@ -108,6 +113,10 @@ export default new Vuex.Store({
 
     getPopUpDisplay (state) {
       return state.popupDisplay
+    },
+
+    getGrid (state) {
+      return state.grid
     }
   }
 })

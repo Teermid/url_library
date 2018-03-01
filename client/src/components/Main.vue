@@ -8,7 +8,7 @@
       <!-- Future components -->
       <div id="content-header" class="content-wrapper">
         <div v-model="category" id="content-header-category"> {{ category }} </div>
-        <div id="content-header-filters"> Filters</div>
+        <div id="content-header-filters" @click="itemsDisplay()"> Filters </div>
       </div>
 
       <list></list>
@@ -38,6 +38,12 @@
       }
     },
 
+    methods: {
+      itemsDisplay () {
+        this.$store.commit('setGrid')
+      }
+    },
+
     watch: {
       '$store.state.categoryFilter': {
         // this.$store.getters.getCategoryFilter
@@ -55,7 +61,7 @@
   #main {
     width: calc(100% - 270px);
     float: left;
-    background-color: #FAFAFA;
+    background-color: #f5f7f8;
   }
 
   .content-wrapper {
