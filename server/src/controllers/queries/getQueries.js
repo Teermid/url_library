@@ -4,7 +4,12 @@ const Op = db.Op;
 
 module.exports = {
 
-  async query_1 (userID, searchValue) {
+  async query_1 (userID, searchValue, sortBy) {
+    let order = 'DESC'
+    if (sortBy === 'title') {
+      order = 'ASC'
+    }
+
     try {
       const element = await Element.findAll({
         where: {
@@ -12,7 +17,10 @@ module.exports = {
           title: {
               [Op.like]: `%${searchValue}%`
             }
-          }
+          },
+          order: [
+            [sortBy, order]
+          ]
         })
       return element
     } catch (e) {
@@ -20,7 +28,12 @@ module.exports = {
     }
   },
 
-  async query_2 (userID, searchValue) {
+  async query_2 (userID, searchValue, sortBy) {
+    let order = 'DESC'
+    if (sortBy === 'title') {
+      order = 'ASC'
+    }
+
     try {
       const element = await Element.findAll({
         where: {
@@ -29,7 +42,10 @@ module.exports = {
           title: {
             [Op.like]: `%${searchValue}%`
           }
-        }
+        },
+        order: [
+          [sortBy, order]
+        ]
       })
       return element
     } catch (e) {
@@ -37,7 +53,12 @@ module.exports = {
     }
   },
 
-  async query_3 (userID, category, searchValue) {
+  async query_3 (userID, category, searchValue, sortBy) {
+    let order = 'DESC'
+    if (sortBy === 'title') {
+      order = 'ASC'
+    }
+
     try {
       const element = await Element.findAll({
         where: {
@@ -46,7 +67,10 @@ module.exports = {
           title: {
             [Op.like]: `%${searchValue}%`
           }
-        }
+        },
+        order: [
+          [sortBy, order]
+        ]
       })
       return element
     } catch (e) {
@@ -54,13 +78,21 @@ module.exports = {
     }
   },
 
-  async query_4 (userID) {
+  async query_4 (userID, sortBy) {
+    let order = 'DESC'
+    if (sortBy === 'title') {
+      order = 'ASC'
+    }
+
     console.log(`inside query 4`);
     try {
       const element = await Element.findAll({
         where: {
           userID: userID
-        }
+        },
+        order: [
+          [sortBy, order]
+        ]
       })
       return element
     } catch (e) {
@@ -68,13 +100,21 @@ module.exports = {
     }
   },
 
-  async query_5 (userID) {
+  async query_5 (userID, sortBy) {
+    let order = 'DESC'
+    if (sortBy === 'title') {
+      order = 'ASC'
+    }
+
     try {
       const element = await Element.findAll({
         where: {
           userID: userID,
           category: null
-        }
+        },
+        order: [
+          [sortBy, order]
+        ]
       })
       return element
     } catch (e) {
@@ -82,13 +122,21 @@ module.exports = {
     }
   },
 
-  async query_6 (userID, category) {
+  async query_6 (userID, category, sortBy) {
+    let order = 'DESC'
+    if (sortBy === 'title') {
+      order = 'ASC'
+    }
+    
     try {
       const element = await Element.findAll({
         where: {
           userID: userID,
           category: category
-        }
+        },
+        order: [
+          [sortBy, order]
+        ]
       })
       return element
     } catch (e) {

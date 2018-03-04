@@ -22,35 +22,36 @@ module.exports = {
     const searchValue = req.query.searchValue
     const isSearch = req.query.isSearch
     const userID = req.query.userID
+    const sortBy = req.query.sortBy
     let response = null
 
 
     if (isSearch === 'true' && searchValue !== '' && category == 'All') {
-      response = await queries.query_1(userID, searchValue)
+      response = await queries.query_1(userID, searchValue, sortBy)
     }
     if (isSearch === 'true' && searchValue !== '' && category == 'Unsorted') {
-      response = await queries.query_2(userID, searchValue)
+      response = await queries.query_2(userID, searchValue, sortBy)
     }
     if (isSearch === 'true' && searchValue !== '' && category !== 'All'  && category !== 'Unsorted' ) {
-      response = await queries.query_3(userID, category, searchValue)
+      response = await queries.query_3(userID, category, searchValue, sortBy)
     }
     if (isSearch === 'true' && searchValue === '' && category == 'All') {
-      response = await queries.query_4(userID)
+      response = await queries.query_4(userID, sortBy)
     }
     if (isSearch === 'true' && searchValue === '' && category == 'Unsorted') {
-      response = await queries.query_5(userID)
+      response = await queries.query_5(userID, sortBy)
     }
     if (isSearch === 'true' && searchValue === '' && category !== 'All'  && category !== 'Unsorted') {
-      response = await queries.query_6(userID, category)
+      response = await queries.query_6(userID, category, sortBy)
     }
     if (isSearch === 'false' && category === 'All') {
-      response = await queries.query_4(userID)
+      response = await queries.query_4(userID, sortBy)
     }
     if (isSearch === 'false' && category === 'Unsorted') {
-      response = await queries.query_5(userID)
+      response = await queries.query_5(userID, sortBy)
     }
     if (isSearch === 'false' && category !== 'All'  && category !== 'Unsorted') {
-      response = await queries.query_6(userID, category)
+      response = await queries.query_6(userID, category, sortBy)
     }
 
 

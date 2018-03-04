@@ -40,13 +40,19 @@ export default {
       categories: [{}],
       userID: this.$store.getters.getUserID,
       categoryFilter: '',
-      searchValue: ''
+      searchValue: '',
+      sortBy: this.$store.getters.getSortBy
     }
   },
 
+  async beforeMount () {
+    console.log('before mount ->' + this.sortBy)
+    this.getElements('All', false, null, this.userID, this.sortBy)
+  },
+
   methods: {
-    async getElements (cat, isSearch, searchVal, userID) {
-      this.elements = (await Elements.getElements(cat, isSearch, searchVal, userID)).data
+    async getElements (cat, isSearch, searchVal, userID, sortBy) {
+      this.elements = (await Elements.getElements(cat, isSearch, searchVal, userID, sortBy)).data
       console.log(this.elements)
     },
 
@@ -55,16 +61,12 @@ export default {
     }
   },
 
-  async beforeMount () {
-    this.getElements('All', false, null, this.userID)
-  },
-
   watch: {
     '$store.state.searchString': {
       // this.searchValue = this.$store.getters.getSearchString
       async handler (value) {
         this.searchValue = value
-        this.getElements(null, 'true', this.searchValue, this.userID)
+        this.getElements(null, 'true', this.searchValue, this.userID, this.sortBy)
       }
     },
 
@@ -72,15 +74,25 @@ export default {
       // this.$store.getters.getCategoryFilter
       async handler (value) {
         this.categoryFilter = value
-        this.getElements(this.categoryFilter, 'false', null, this.userID)
+        this.getElements(this.categoryFilter, 'false', null, this.userID, this.sortBy)
+      }
+    },
+
+    '$store.state.sortBy': {
+      async handler (value) {
+        this.sortBy = value
+        let searchValue = this.searchValue || null
+        let isSearch = 'true'
+        if (searchValue === null) {
+          isSearch = 'false'
+        }
+        this.getElements(this.categoryFilter, isSearch, searchValue, this.userID, this.sortBy)
       }
     },
 
     '$store.state.refreshElements': {
       async handler () {
-        console.log('inside refreshElements watcher')
-        console.log('categoryFilter -> ' + this.categoryFilter)
-        this.getElements(this.categoryFilter, 'false', null, this.userID)
+        this.getElements(this.categoryFilter, 'false', null, this.userID, this.sortBy)
       }
     }
   }

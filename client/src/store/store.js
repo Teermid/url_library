@@ -14,7 +14,8 @@ export default new Vuex.Store({
     categoryFilter: 'All',
     popupDisplay: false,
     refreshElements: false,
-    grid: false
+    grid: false,
+    sortBy: 'updatedAt'
   },
   mutations: { // syncronous
     setToken (state, content) {
@@ -58,6 +59,10 @@ export default new Vuex.Store({
 
     setGrid (state) {
       state.grid = !state.grid
+    },
+
+    setSortBy (state, content) {
+      state.sortBy = content
     }
   },
 
@@ -117,6 +122,10 @@ export default new Vuex.Store({
 
     getGrid (state) {
       return state.grid
+    },
+
+    getSortBy (state) {
+      return state.sortBy
     }
   }
 })

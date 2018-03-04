@@ -8,7 +8,11 @@
       <!-- Future components -->
       <div id="content-header" class="content-wrapper">
         <div v-model="category" id="content-header-category"> {{ category }} </div>
-        <div id="content-header-filters" @click="itemsDisplay()"> Filters </div>
+        <div id="content-header-filters">
+          <div @click="itemsDisplay()">Display</div>
+          <div @click="sortBy('title')">Nom</div>
+          <div @click="sortBy('updatedAt')">Data</div>
+        </div>
       </div>
 
       <list></list>
@@ -41,6 +45,10 @@
     methods: {
       itemsDisplay () {
         this.$store.commit('setGrid')
+      },
+
+      sortBy (param) {
+        this.$store.commit('setSortBy', param)
       }
     },
 
@@ -78,5 +86,11 @@
     float: right;
     padding: 30px 40px;
     text-align: center;
+    width: fit-content;
+  }
+
+  #content-header-filters div {
+    float:left;
+    margin-left:10px;
   }
 </style>
