@@ -111,10 +111,10 @@
     min-width: 270px;
     max-width: 270px;
     height: 100vh;
-    background-color: #477c96;
-    background-image: -webkit-linear-gradient(258deg, #477c96 50%, #43779c 100%);
+    background-color: #2c3e50;
+    /* background-image: -webkit-linear-gradient(258deg, #477c96 50%, #43779c 100%);
     background-image: -o-linear-gradient(258deg, #477c96 50%, #43779c 100%);
-    background-image: linear-gradient(348deg, #477c96 50%, #43779c 100%);
+    background-image: linear-gradient(348deg, #477c96 50%, #43779c 100%); */
   }
 
   #branch {
@@ -145,7 +145,7 @@
     width:100%;
   }
 
-  @media screen and (max-width: 829px) {
+  @media screen and (max-width: 849px) {
      #sidebar {
        position:absolute;
        left: -270px;
