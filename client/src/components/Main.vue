@@ -69,7 +69,7 @@
   #main {
     width: calc(100% - 270px);
     float: left;
-    background-color: #f5f7f8;
+    background-color: #f3f2f5;
   }
 
   .content-wrapper {

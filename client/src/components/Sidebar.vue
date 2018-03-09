@@ -111,7 +111,7 @@
     min-width: 270px;
     max-width: 270px;
     height: 100vh;
-    background-color: #2c3e50;
+    background-color: #343334;
     /* background-image: -webkit-linear-gradient(258deg, #477c96 50%, #43779c 100%);
     background-image: -o-linear-gradient(258deg, #477c96 50%, #43779c 100%);
     background-image: linear-gradient(348deg, #477c96 50%, #43779c 100%); */
@@ -123,7 +123,7 @@
     text-align: center;
     color: white;
     padding: var(--header-padding);
-    background-color: #4b7fa4;
+    background-color: #343334;
   }
 
   .show {
@@ -145,7 +145,7 @@
     width:100%;
   }
 
-  @media screen and (max-width: 849px) {
+  @media screen and (max-width: 869px) {
      #sidebar {
        position:absolute;
        left: -270px;

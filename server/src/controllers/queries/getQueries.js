@@ -127,7 +127,7 @@ module.exports = {
     if (sortBy === 'title') {
       order = 'ASC'
     }
-    
+
     try {
       const element = await Element.findAll({
         where: {
