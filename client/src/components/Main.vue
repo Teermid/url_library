@@ -69,7 +69,9 @@
   #main {
     width: calc(100% - 270px);
     float: left;
-    background-color: #f3f2f5;
+    /* background-color: #f3f2f5; */
+    /* background-color: #fbfafb; */
+    background-color: #f2f3f5;
   }
 
   .content-wrapper {

@@ -108,10 +108,10 @@ export default {
 :root {
   --content-body-width: calc(100% - 40px);
   --content-body-height: calc(100vh - 150px);
-  --box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.21);
+  --box-shadow: 0px 2px 2px 0px rgba(222,221,223,0.7);
 
-  --grid-content-container-width: 270px;
-  --grid-content-container-height: 270px;
+  --grid-content-container-width: 250px;
+  --grid-content-container-height: 220px;
 
   --grid-content-img-height: calc(100% - (var(--grid-content-container-width) / 3));
 
@@ -136,15 +136,14 @@ export default {
   grid-auto-rows: var(--grid-content-container-height);
   padding: 0 20px 0px 20px;
   overflow-y: scroll;
+
 }
 
 .grid-content-link {
   overflow: hidden;
-  /* -webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
-    -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15);
-    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.15); */
   box-shadow: var(--box-shadow);
   webkit-box-shadow: var(--box-shadow);
+  border-radius: 3px;
 }
 
 .grid-content-link-image {

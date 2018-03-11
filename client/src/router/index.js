@@ -35,12 +35,6 @@ export default new Router({
       component: Main,
       beforeEnter: guard.userLogged
     },
-    // {
-    //   path: '/list/add',
-    //   name: 'add',
-    //   component: CreateElement,
-    //   beforeEnter: guard.userLogged
-    // },
     {
       path: '/list/edit/:element_id',
       name: 'edit',

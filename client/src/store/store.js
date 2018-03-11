@@ -14,7 +14,7 @@ export default new Vuex.Store({
     categoryFilter: 'All',
     popupDisplay: false,
     refreshElements: false,
-    grid: false,
+    grid: true,
     sortBy: 'updatedAt'
   },
   mutations: { // syncronous
