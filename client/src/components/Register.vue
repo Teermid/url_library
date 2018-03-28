@@ -50,7 +50,7 @@ export default {
         console.log(response)
         this.$store.commit('setToken', response.data.token)
         this.$store.commit('setUser', response.data.user)
-        this.$store.commit('setUserID', response.data.user.id)
+        this.$store.commit('setUserID', response.data.user._id)
         this.$router.push('/list')
       } catch (e) {
         this.error = e.response.data.error

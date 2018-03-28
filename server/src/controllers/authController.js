@@ -1,12 +1,23 @@
-const {User} = require('../models');
+const User = require('../models/User');
 const tokenPolicy = require('../policies/tokenPolicy')
+const bcryptPolicy = require('../policies/bcryptPolicy')
 
 module.exports = {
   async register(req, res) {
     try {
-      console.log('inside REGISTER => ' + req.body.email);
-      const user = await User.create(req.body);
-      const userJson = user.toJSON();
+      const userBeforeHash = new User(req.body);
+      console.log('User model created -> ' + userBeforeHash);
+      const userAfterHash = await bcryptPolicy.getHash(userBeforeHash)
+      console.log('user with hash -> ' + userAfterHash);
+      userAfterHash.save(function(err){
+        if (err) {
+            console.log('error creating user');
+            res.send(err)
+        }
+      })
+
+
+      const userJson = userAfterHash.toJSON();
       /*Loging automàtic al registrar-se:*/
       res.send({
         user: userJson,
@@ -20,18 +31,23 @@ module.exports = {
   async login(req, res) {
     console.log(`inside login`);
     try {
-      const {email, password} = req.body;
+      //const {email, password} = req.body;
+      // const user = await User.findOne({
+      //   where: {
+      //     email: email
+      //   }
+      // });
       const user = await User.findOne({
-        where: {
-          email: email
-        }
-      });
+        'email': req.body.email
+      }).exec()
       console.log(`user found: ${user}`);
+      console.log(user.password);
+
 
       if (!user) {
         res.status(403).send({error: 'Login information is not correct'});
 
-      } else if (!(await user.comparePassword(password))) {
+      } else if (!(await bcryptPolicy.comparePasswords(req.body.password, user.password))) {
         res.status(403).send({error: 'Login information is not correct'});
 
       } else {

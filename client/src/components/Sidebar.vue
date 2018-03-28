@@ -38,7 +38,7 @@
         category: {
           userID: '',
           name: '',
-          active: false
+          active: 'false'
         },
         categories: [{}],
         userID: this.$store.getters.getUserID

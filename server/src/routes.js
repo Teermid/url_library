@@ -15,12 +15,12 @@ module.exports = (app) => {
   );
 
   app.post('/elements',
-    tokenPolicy.verifyToken,
+    /*tokenPolicy.verifyToken,*/
     elementsController.addElements
   );
 
   app.get('/elements',
-    tokenPolicy.verifyToken,
+    /*tokenPolicy.verifyToken,*/
     elementsController.getElements
   );
 
@@ -40,12 +40,12 @@ module.exports = (app) => {
   );
 
   app.post('/category',
-    tokenPolicy.verifyToken,
+    /*tokenPolicy.verifyToken,*/
     categoryController.addCategory
   );
 
   app.get('/category',
-    tokenPolicy.verifyToken,
+  /*  tokenPolicy.verifyToken,*/
     categoryController.getCategories
   );
 };

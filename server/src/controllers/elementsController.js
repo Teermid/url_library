@@ -1,9 +1,7 @@
-const { Element } = require('../models');
+const Element = require('../models/Element');
 const metascraper = require('metascraper');
 const got = require('got')
-const db = require('../models/index');
 const queries = require('./queries/getQueries')
-const Op = db.Op;
 category = null;
 
   async function getMetadata(targetUrl) {
@@ -14,15 +12,19 @@ category = null;
     //console.log(`title => ${title}, description =>${description}, logo =>${logo}`);
   };
 
+  function escapeRegExp(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  }
+
 module.exports = {
   async getElements (req, res) {
+    console.log('INSIDE GET ELEMENTS');
     category = req.query.categoryValue || category
-
-    console.log(`category -> ${category}`);
-    const searchValue = req.query.searchValue
+    const searchValue = (req.query.searchValue == null) ? '' : new RegExp(escapeRegExp(req.query.searchValue), 'gi')
+    console.log(searchValue);
     const isSearch = req.query.isSearch
     const userID = req.query.userID
-    const sortBy = req.query.sortBy
+    const sortBy = req.query.sortBy || null
     let response = null
 
 
@@ -64,23 +66,32 @@ module.exports = {
   },
 
   async addElements (req, res) {
-
     const { title, description, image, logo } = await getMetadata(req.body.link)
+    console.log(title+' '+description+' '+image+' '+logo);
+
     try {
-      const element = await Element.create(
+      const element = new Element(
         {
           title: req.body.title || title,
           link: req.body.link,
           description: req.body.description || description,
-          category: req.body.category || null,
+          categories: req.body.categories || null,
           imageURL: image,
           iconURL: logo,
-          userID: req.body.userID
+          owner: req.body.user_id
         });
+        console.log('After new Element');
+        console.log(element);
+        const response = await element.save()
 
-      res.send(element)
-    } catch (e) {
-      res.status(500).send({error: 'error adding element (elementsController)'});
+      // for (var i = 0; i < req.body.category.length; i++) {
+      //   await element.addCategories(req.body.category[i].id)
+      // }
+      res.send(response)
+
+    } catch (error) {
+      // res.status(500).send({error: 'error adding element (elementsController)'});
+      res.send(error)
     }
   },
 

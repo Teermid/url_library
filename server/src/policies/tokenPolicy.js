@@ -20,6 +20,7 @@ module.exports = {
   },
 
   jwtSignUser(user) {
+    console.log('INSIDE JWTSIGNUSER');
     const ONE_WEEK = 60 * 60 * 24 * 7
     return jwt.sign(user, config.authentication.jwtSecret,
     {

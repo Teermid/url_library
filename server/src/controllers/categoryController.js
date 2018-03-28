@@ -1,15 +1,14 @@
-const { Category } = require('../models');
-
+const Category= require('../models/Category');
 
 module.exports = {
   async getCategories (req, res) {
+    console.log('hit getCategories -> ' + req.params.owner);
     try {
-      const category = await Category.findAll({
-        where: {
-          userID: req.query.userID
-        }
-      })
-    res.send(category)
+      const category = await Category.find({
+        //owner: '5ab91a44c131d622fceb4c1a'
+        'owner': req.query.userID
+      }).exec()
+      res.send(category)
     } catch (e) {
       res.status(500).send({error: 'error getting categories'});
     }
@@ -18,13 +17,9 @@ module.exports = {
   },
 
   async addCategory (req, res) {
-    console.log('categoryController -> ' + req.body.name + ' ' + req.body.userID);
     try {
-      const category = await Category.create(
-        {
-          name: req.body.name,
-          userID: req.body.userID
-        });
+      const category = new Category(req.body)
+      await category.save()
       res.send(category)
     } catch (e) {
       res.status(500).send({error: 'error adding category (elementsController)'});
@@ -32,12 +27,12 @@ module.exports = {
 
   },
 
-  async getElementById (req, res) {
-
-  },
-
-  async editElement (req, res) {
-
-  },
+  // async getElementById (req, res) {
+  //
+  // },
+  //
+  // async editElement (req, res) {
+  //
+  // },
 
 }

@@ -9,9 +9,9 @@
       </a>
       <div class="grid-content-link-info">
         <!-- <div class="grid-content-link-info-icon"><img v-bind:src="el.iconURL"></div> -->
-        <div class="grid-content-link-info-category">
+        <!-- <div class="grid-content-link-info-category">
           <div class="category-name"> {{el.category}} </div>
-        </div>
+        </div> -->
         <div class="grid-content-link-info-title">{{ el.title }}</div>
         <!-- <div class="grid-content-link-info-description">{{ el.description }}</div> -->
         <!-- <div class="grid-content-link-info-settings" @click="navigateTo({name:'edit', params: {element_id:el.id}})"> edit </div> -->
@@ -42,7 +42,6 @@ export default {
   data () {
     return {
       elements: [{}],
-      categories: [{}],
       userID: this.$store.getters.getUserID,
       categoryFilter: '',
       searchValue: '',

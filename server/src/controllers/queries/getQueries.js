@@ -1,27 +1,15 @@
-const { Element } = require('../../models');
-const db = require('../../models/index');
-const Op = db.Op;
+const Element = require('../../models/Element');
 
 module.exports = {
 
   async query_1 (userID, searchValue, sortBy) {
-    let order = 'DESC'
-    if (sortBy === 'title') {
-      order = 'ASC'
-    }
-
+  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
-      const element = await Element.findAll({
-        where: {
-          userID: userID,
-          title: {
-              [Op.like]: `%${searchValue}%`
-            }
-          },
-          order: [
-            [sortBy, order]
-          ]
+      const element = await Element.find({
+        'owner': userID,
+        'title': searchValue
         })
+
       return element
     } catch (e) {
       return({error:'error in query_1'})
@@ -29,23 +17,12 @@ module.exports = {
   },
 
   async query_2 (userID, searchValue, sortBy) {
-    let order = 'DESC'
-    if (sortBy === 'title') {
-      order = 'ASC'
-    }
-
+  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
-      const element = await Element.findAll({
-        where: {
-          userID: userID,
-          category: null,
-          title: {
-            [Op.like]: `%${searchValue}%`
-          }
-        },
-        order: [
-          [sortBy, order]
-        ]
+      const element = await Element.find({
+       'owner': userID,
+       'categories': null,
+       'title': searchValue
       })
       return element
     } catch (e) {
@@ -54,23 +31,12 @@ module.exports = {
   },
 
   async query_3 (userID, category, searchValue, sortBy) {
-    let order = 'DESC'
-    if (sortBy === 'title') {
-      order = 'ASC'
-    }
-
+  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
-      const element = await Element.findAll({
-        where: {
-          userID: userID,
-          category: category,
-          title: {
-            [Op.like]: `%${searchValue}%`
-          }
-        },
-        order: [
-          [sortBy, order]
-        ]
+      const element = await Element.find({
+        'owner': userID,
+        'categories.name': category,
+        'title': searchValue
       })
       return element
     } catch (e) {
@@ -79,20 +45,11 @@ module.exports = {
   },
 
   async query_4 (userID, sortBy) {
-    let order = 'DESC'
-    if (sortBy === 'title') {
-      order = 'ASC'
-    }
-
-    console.log(`inside query 4`);
+  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
+  console.log('QUERY 4');
     try {
-      const element = await Element.findAll({
-        where: {
-          userID: userID
-        },
-        order: [
-          [sortBy, order]
-        ]
+      const element = await Element.find({
+        'owner': userID
       })
       return element
     } catch (e) {
@@ -101,20 +58,12 @@ module.exports = {
   },
 
   async query_5 (userID, sortBy) {
-    let order = 'DESC'
-    if (sortBy === 'title') {
-      order = 'ASC'
-    }
-
+  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
-      const element = await Element.findAll({
-        where: {
-          userID: userID,
-          category: null
-        },
-        order: [
-          [sortBy, order]
-        ]
+      const element = await Element.find({
+        'owner': userID,
+        'category': null
+
       })
       return element
     } catch (e) {
@@ -123,20 +72,11 @@ module.exports = {
   },
 
   async query_6 (userID, category, sortBy) {
-    let order = 'DESC'
-    if (sortBy === 'title') {
-      order = 'ASC'
-    }
-
+  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
-      const element = await Element.findAll({
-        where: {
-          userID: userID,
-          category: category
-        },
-        order: [
-          [sortBy, order]
-        ]
+      const element = await Element.find({
+        owner: userID,
+        'categories.name': category
       })
       return element
     } catch (e) {

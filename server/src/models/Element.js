@@ -1,14 +1,28 @@
+const mongoose = require('mongoose');
+const CategoryModel = require('./Category')
 
-module.exports = function (sequelize, DataTypes) {
-  const Element = sequelize.define('Element', {
-    title: DataTypes.STRING,
-    category: DataTypes.STRING,
-    link: DataTypes.STRING,
-    description: DataTypes.STRING,
-    imageURL: DataTypes.STRING,
-    iconURL: DataTypes.STRING,
-    userID: DataTypes.STRING
-  });
+let elementSchema = mongoose.Schema({
+  title: {
+    type: String
+  },
+  link: {
+    type:String,
+  },
+  description: {
+    type: String,
+  },
+  categories: {
+    type: [CategoryModel.schema]
+  },
+  imageURL: {
+    type:String,
+  },
+  iconURL: {
+    type:String,
+  },
+  owner: {
+    type: String
+  }
+});
 
-  return Element
-}
+module.exports = mongoose.model('Element', elementSchema)
