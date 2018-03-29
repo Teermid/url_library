@@ -36,9 +36,7 @@
       return {
         displayed: false,
         category: {
-          userID: '',
-          name: '',
-          active: 'false'
+          name: ''
         },
         categories: [{}],
         userID: this.$store.getters.getUserID
@@ -56,12 +54,12 @@
 
       displayCategory () {
         this.displayed = !this.displayed
-        this.category = event.currentTarget.getAttribute('value')
-        this.$store.commit('setCategoryFilter', this.category)
+        var value = event.currentTarget.getAttribute('value')
+        this.$store.commit('setCategoryFilter', value)
       },
 
       async addCategory () {
-        this.category.userID = this.$store.getters.getUserID
+        this.category.owner = this.$store.getters.getUserID
         try {
           const response = await Category.addCategory(this.category)
           console.log(response)

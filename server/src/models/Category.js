@@ -11,7 +11,7 @@ let categorySchema = mongoose.Schema({
   },
   active: {
     type: Boolean,
-    default: true
+    default: false
   }
 
 });

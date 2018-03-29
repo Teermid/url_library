@@ -78,7 +78,7 @@ module.exports = {
           categories: req.body.categories || null,
           imageURL: image,
           iconURL: logo,
-          owner: req.body.user_id
+          owner: req.body.userID
         });
         console.log('After new Element');
         console.log(element);
