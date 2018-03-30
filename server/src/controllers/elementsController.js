@@ -5,7 +5,6 @@ const queries = require('./queries/getQueries')
 category = null;
 
   async function getMetadata(targetUrl) {
-    console.log('inside getMetadata')
     const {body: html, url} = await got(targetUrl)
     return await metascraper({html, url})
     //return metadata
@@ -18,7 +17,6 @@ category = null;
 
 module.exports = {
   async getElements (req, res) {
-    console.log('INSIDE GET ELEMENTS');
     category = req.query.categoryValue || category
     const searchValue = (req.query.searchValue == null) ? '' : new RegExp(escapeRegExp(req.query.searchValue), 'gi')
     console.log(searchValue);
@@ -67,7 +65,7 @@ module.exports = {
 
   async addElements (req, res) {
     const { title, description, image, logo } = await getMetadata(req.body.link)
-    console.log(title+' '+description+' '+image+' '+logo);
+    // console.log(title+' '+description+' '+image+' '+logo);
 
     try {
       const element = new Element(
@@ -80,9 +78,9 @@ module.exports = {
           iconURL: logo,
           owner: req.body.userID
         });
-        console.log('After new Element');
-        console.log(element);
+
         const response = await element.save()
+        console.log('after save -> ' + response);
 
       // for (var i = 0; i < req.body.category.length; i++) {
       //   await element.addCategories(req.body.category[i].id)

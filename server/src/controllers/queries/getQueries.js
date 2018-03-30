@@ -21,7 +21,7 @@ module.exports = {
     try {
       const element = await Element.find({
        'owner': userID,
-       'categories': null,
+       'categories': [],
        'title': searchValue
       })
       return element
@@ -34,9 +34,16 @@ module.exports = {
   //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
       const element = await Element.find({
-        'owner': userID,
-        'categories.name': category,
-        'title': searchValue
+        "$or":[{
+          'owner': userID,
+          'categories.name': category,
+          'title': searchValue
+        },{
+          'owner': userID,
+          'categories.parentCategory': category,
+          'title': searchValue
+        }]
+
       })
       return element
     } catch (e) {
@@ -62,8 +69,7 @@ module.exports = {
     try {
       const element = await Element.find({
         'owner': userID,
-        'category': null
-
+        'categories': []
       })
       return element
     } catch (e) {
@@ -75,8 +81,13 @@ module.exports = {
   //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
       const element = await Element.find({
-        owner: userID,
-        'categories.name': category
+        "$or":[{
+          'owner': userID,
+          'categories.name': category,
+        },{
+          'owner': userID,
+          'categories.parentCategory': category,
+        }]
       })
       return element
     } catch (e) {

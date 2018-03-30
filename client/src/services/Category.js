@@ -10,6 +10,7 @@ export default{
   },
 
   addCategory (content) {
+    console.log(content)
     return api().post('category', content)
   }
 

@@ -12,6 +12,7 @@ export default new Vuex.Store({
     userLogged: false,
     searchString: null,
     categoryFilter: 'All',
+    categoriesList: [],
     popupDisplay: false,
     refreshElements: false,
     grid: true,
@@ -47,6 +48,10 @@ export default new Vuex.Store({
 
     setCategoryFilter (state, content) {
       state.categoryFilter = content
+    },
+
+    setCategoriesList (state, content) {
+      state.categoriesList = content
     },
 
     setPopUpDisplay (state) {
@@ -114,6 +119,10 @@ export default new Vuex.Store({
 
     getCategoryFilter (state) {
       return state.categoryFilter
+    },
+
+    getCategoriesList (state) {
+      return state.categoriesList
     },
 
     getPopUpDisplay (state) {

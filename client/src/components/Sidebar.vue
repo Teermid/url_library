@@ -1,13 +1,24 @@
 <template>
   <div id="sidebar">
     <div id="branch"> SAVIFY </div>
-    <nav class="menu">
-    <ul>
-      <li v-model="category" @click="displayCategory" value="All">all</li>
-      <li v-model="category" @click="displayCategory" value="Unsorted">Unsorted</li>
-      <li v-for="ca in categories" :key="ca.id" v-model="category" @click="displayCategory" v-bind:value="ca.name">{{ ca.name }}</li>
-    </ul>
-  </nav>
+    <div class="menu">
+      <div v-model="category" @click="displayCategory" value="All">all</div>
+      <div v-model="category" @click="displayCategory" value="Unsorted">Unsorted</div>
+
+      <ul id="root-list">
+        <li class="root" v-for="ca in categories" :key="ca._id" v-model="category">
+          <span @click="displayCategory" v-bind:value="ca.name"> {{ ca.name }} </span>
+
+          <ul class="nested-list">
+            <li class="nested" v-for="nested in ca.nestedCategories" :key="nested._id">
+              <span @click="displayCategory" v-bind:value="nested.name">{{ nested.name }}</span>
+            </li>
+          </ul>
+
+       </li>
+     </ul>
+
+  </div>
   <div id="add-wrapper">
     <div id="add-category">
       <input
@@ -16,6 +27,11 @@
         name="name"
         value="name"
         placeholder="name">
+      <input
+        v-model="category.parent"
+        type="text"
+        name="parent"
+        placeholder="parent">
       <button @click="addCategory">
         Add
       </button>
@@ -36,7 +52,8 @@
       return {
         displayed: false,
         category: {
-          name: ''
+          name: '',
+          parent: ''
         },
         categories: [{}],
         userID: this.$store.getters.getUserID
@@ -50,6 +67,7 @@
     methods: {
       async printCategories () {
         this.categories = (await Category.getCategory(this.userID)).data
+        this.$store.commit('setCategoriesList', this.categories)
       },
 
       displayCategory () {
@@ -60,6 +78,7 @@
 
       async addCategory () {
         this.category.owner = this.$store.getters.getUserID
+        console.log(this.category)
         try {
           const response = await Category.addCategory(this.category)
           console.log(response)
@@ -76,34 +95,33 @@
 }
 </script>
 
-
-<style scoped>
-
-  ul {
-    list-style-type: none;
-    padding: 0px;
-  }
-
-  ul li {
-    cursor: pointer;
-    color:white;
-    text-align: center;
-    padding:5px;
-  }
-
-  ul li:nth-child(2) {
-    margin-bottom:20px;
-  }
-
-</style>
-
 <style>
 
   .menu {
     float:left;
     width:100%;
-
+    padding:0px 15px 0px 15px
   }
+
+  .menu ul {
+    list-style: none;
+  }
+
+  .menu li, .menu div {
+    color: white;
+    text-align: left;
+    padding:5px 5px 0px 5px;
+    cursor: pointer;
+  }
+
+  .menu #root-list {
+    padding: 0px;
+  }
+
+  .menu .nested-list {
+    padding-left: 20px;
+  }
+
 
   #sidebar {
     float: left;
