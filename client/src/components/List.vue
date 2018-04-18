@@ -1,34 +1,93 @@
 <template>
 <div>
 
+  <v-dialog v-model="popUpEdit" origin="top center" max-width="500px">
+    <edit-element></edit-element>
+  </v-dialog>
+
+  <v-dialog v-model="deleteVerification" origin="top center" max-width="250px">
+    <v-card class="pb-2">
+      <v-card-text class="pt-3 pb-0">
+        <v-icon color="red">warning</v-icon>
+        <p class="subheading f_bold mt-1">Eliminar marcador?</p>
+      </v-card-text>
+      <v-btn
+        @click="deleteVerification = !deleteVerification"
+        depressed
+        color="red accent-2"
+        class="white--text">
+        Cancelar</v-btn>
+      <v-btn
+        @click="confirmDeletion()"
+        depressed
+        color="blue accent-2"
+        class="white--text">
+        Confirmar</v-btn>
+    </v-card>
+  </v-dialog>
+
   <!-- GRID -->
-  <div v-if="$store.getters.getGrid" id="grid-content-body">
-    <div class="grid-content-link" v-for="el in elements" :key="el.id">
-      <a v-bind:href="el.link" target="_blank">
-        <div class="grid-content-link-image" v-bind:style="{ backgroundImage: 'url(' + el.imageURL + ')'}"></div>
-      </a>
-      <div class="grid-content-link-info">
-        <!-- <div class="grid-content-link-info-icon"><img v-bind:src="el.iconURL"></div> -->
-        <div class="grid-content-link-info-category">
-          <div class="category-name" v-for="cat in el.categories" :key="cat._id"> {{ cat.name }} </div>
-        </div>
-        <div class="grid-content-link-info-title">{{ el.title }}</div>
-        <!-- <div class="grid-content-link-info-description">{{ el.description }}</div> -->
-        <!-- <div class="grid-content-link-info-settings" @click="navigateTo({name:'edit', params: {element_id:el.id}})"> edit </div> -->
-      </div>
-    </div>
+  <div v-if="$store.getters.getGrid" id="card-content-body">
+    <v-card class="white shadow" v-for="el in elements" :key="el.id" flat>
+       <a v-bind:href="el.link"><v-card-media v-bind:src="el.imageURL" height="150px"></v-card-media></a>
+       <v-card-title class="pb-0" style="min-height:180px">
+         <div class="info_container">
+           <div class="ma-0 black--text left f_black float-left title_">{{ el.title }}</div>
+           <div class="mt-2 mx-0 black--text left f_light float-left description">{{ el.description }}</div>
+
+           <v-menu bottom left>
+              <v-btn icon slot="activator" light>
+                <v-icon color="grey lighten-2">more_horiz</v-icon>
+              </v-btn>
+              <v-list class="white">
+                <v-list-tile @click="deleteElement(el._id)">
+                  <v-list-tile-title> Eliminar </v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile @click="editElement(el._id)">
+                  <v-list-tile-title> Editar </v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile @click="">
+                  <v-list-tile-title> (Visualitzar) </v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+
+         </div>
+       </v-card-title>
+       <v-card-actions>
+       </v-card-actions>
+     </v-card>
   </div>
 
   <!-- LIST -->
-  <div v-if="!$store.getters.getGrid" id="list-content-body">
-    <div class="list-content-link" v-for="el in elements" :key="el.id">
-      <div class="list-content-link-icon"><img v-bind:src="el.iconURL"></div>
-      <div class="list-content-link-info">
-        <div class="list-content-link-info-title">{{ el.title }}</div>
-        <div class="list-content-link-info-description">{{ el.description }}</div>
-      </div>
-      <div class="list-content-link-settings" @click="navigateTo({name:'edit', params: {element_id:el.id}})"> edit </div>
-    </div>
+  <div v-if="!$store.getters.getGrid" id="grid-content-body">
+    <v-card class="white shadow" v-for="el in elements" :key="el.id" flat>
+       <a v-bind:href="el.link"><v-card-media v-bind:src="el.imageURL" height="100px"></v-card-media></a>
+       <v-card-title class="pb-0 pt-2">
+         <div class="info_container">
+           <div class="ma-0 black--text left f_black float-left title_">{{ el.title }}</div>
+           <v-menu bottom left>
+              <v-btn icon slot="activator" light>
+                <v-icon color="grey lighten-2">more_horiz</v-icon>
+              </v-btn>
+              <v-list class="white">
+                <v-list-tile @click="deleteElement(el._id)">
+                  <v-list-tile-title> Eliminar </v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile @click="editElement(el._id)">
+                  <v-list-tile-title> Editar </v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile @click="">
+                  <v-list-tile-title> (Visualitzar) </v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+
+         </div>
+       </v-card-title>
+       <v-card-actions>
+       </v-card-actions>
+     </v-card>
   </div>
 
 
@@ -37,27 +96,50 @@
 
 <script>
 import Elements from '@/services/Elements'
-
+import EditElement from '@/components/EditElement'
 export default {
+  components: {
+    EditElement
+  },
   data () {
     return {
       elements: [{}],
       userID: this.$store.getters.getUserID,
-      categoryFilter: '',
+      categoryFilter: 'All',
       searchValue: '',
-      sortBy: this.$store.getters.getSortBy
+      sortBy: this.$store.getters.getSortBy,
+      popUpEdit: false,
+      deleteVerification: false,
+      idToDelete: ''
     }
   },
 
   async beforeMount () {
-    console.log('before mount ->' + this.sortBy)
     this.getElements('All', false, null, this.userID, this.sortBy)
   },
 
   methods: {
     async getElements (cat, isSearch, searchVal, userID, sortBy) {
       this.elements = (await Elements.getElements(cat, isSearch, searchVal, userID, sortBy)).data
-      console.log(this.elements)
+    },
+
+    async deleteElement (id) {
+      // await Elements.deleteElement(id)
+      // this.getElements(this.categoryFilter, 'true', this.searchValue, this.userID, this.sortBy)
+      this.idToDelete = id
+      this.deleteVerification = true
+    },
+
+    async confirmDeletion () {
+      await Elements.deleteElement(this.idToDelete)
+      this.getElements(this.categoryFilter, 'true', this.searchValue, this.userID, this.sortBy)
+      this.deleteVerification = false
+    },
+
+    editElement (id) {
+      this.$store.commit('setElementId', id)
+      this.$store.commit('setElementByIdTrigger')
+      this.popUpEdit = !this.popUpEdit
     },
 
     navigateTo (route) {
@@ -109,22 +191,46 @@ export default {
   --content-body-height: calc(100vh - 150px);
   --box-shadow: 0px 2px 2px 0px rgba(222,221,223,0.7);
 
-  --grid-content-container-width: 250px;
-  --grid-content-container-height: 220px;
+  --card-content-container-width: 280px;
+  --card-content-container-height: 330px;
 
-  --grid-content-img-height: calc(100% - (var(--grid-content-container-width) / 3));
+  --grid-content-container-width: 200px;
+  --grid-content-container-height: 200px;
 
-  --grid-content-info-height: calc(100% - var(--grid-content-img-height) - 20px);
-  --grid-content-info-width: calc(100% - 20px);
-
-  --font-color: #acacac;
-  --text-align: left;
-  --font-size-title: 16px;
-  --font-size-description: 14px;
-
-  --list-element-height: 55px;
 }
 
+
+#card-content-body {
+  width: var(--content-body-width);
+  height: var(--content-body-height);
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-content-container-width), 1fr));
+  grid-auto-rows: var(--card-content-container-height);
+  padding: 0 20px 0px 20px;
+  overflow-y: scroll;
+
+}
+
+.shadow {
+  box-shadow: var(--box-shadow);
+  webkit-box-shadow: var(--box-shadow);
+  border-radius: 3px;
+}
+
+.description {
+  max-height: 65px;
+  min-height: 65px;
+  margin-top:20px;
+  overflow: hidden;
+}
+
+.title_ {
+  max-height: 48px;
+  overflow: hidden;
+}
+
+/* --------------------------------------------- */
 
 #grid-content-body {
   width: var(--content-body-width);
@@ -135,160 +241,6 @@ export default {
   grid-auto-rows: var(--grid-content-container-height);
   padding: 0 20px 0px 20px;
   overflow-y: scroll;
-
 }
 
-.grid-content-link {
-  overflow: hidden;
-  box-shadow: var(--box-shadow);
-  webkit-box-shadow: var(--box-shadow);
-  border-radius: 3px;
-}
-
-.grid-content-link-image {
-  /* display: none; */
-  width: 100%;
-  height: var(--grid-content-img-height);
-  background-position: top;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.grid-content-link-info {
-  width: var(--grid-content-info-width);
-  height: var(--grid-content-info-height);
-  float: left;
-  background-color: white;
-  padding: 10px 10px 10px 10px;
-  transition: all .3s ease-in-out;
-  /* transition-timing-function: cubic-bezier(0, 1, 0.5, 1); */
-}
-
-
-/* .grid-content-link-info:hover {
-    margin-top: -180px;
-   } */
-
-/* .grid-content-link-info-icon {
-  width: 32px;
-  height: 32px;
-  float: left;
-}
-
-.grid-content-link-info-icon>img {
-  width: 100%;
-  height: 100%;
-} */
-
-.grid-content-link-info-category {
-  height: 15px;
-  width:100%;
-  float:left;
-  margin-bottom: 10px;
-}
-
-.grid-content-link-info-category div {
-  height: 15px;
-  width:fit-content;
-  padding: 1px 7px 1px 7px;
-  background-color: #dddcfb;
-  color: #5a52ff;
-  font-size:12px;
-  font-weight: 500;
-  border-radius: 10px;
-  float: left;
-  margin-right:5px;
-}
-
-
-.grid-content-link-info-title {
-  float: left;
-  width: 100%;
-  margin-bottom: 10px;
-  font-size: var(--font-size-title);
-  font-weight: 500;
-  text-align: left;
-}
-
-.grid-content-link-info-description {
-  float: left;
-  width: calc(100% - 20px);
-  font-size: var(--font-size-description);
-  color: var(--font-color);
-  text-align: var(--text-align);
-}
-
-.grid-content-link-info-settings {
-  width: 100%;
-  float: left;
-  margin-top: 60px;
-  font-size: 12px;
-  color: var(--font-color);
-  cursor: pointer;
-}
-
-
-/* --------------------------------------------- */
-
-#list-content-body {
-  width: var(--content-body-width);
-  height: var(--content-body-height);
-  display: flex;
-  flex-direction: column;
-  padding: 0 20px 0px 20px;
-  overflow-y: scroll;
-}
-
-.list-content-link {
-  height: var(--list-element-height);
-  padding: 10px;
-  background-color: white;
-  margin-bottom: 10px;
-  box-shadow: var(--box-shadow);
-  webkit-box-shadow: var(--box-shadow);
-}
-
-.list-content-link-icon {
-  width: 32px;
-  height: 32px;
-  float: left;
-  margin-top: calc( ((var(--list-element-height))/2) - 16px);
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
-.list-content-link-icon>img {
-  height: 100%;
-  width: 100%;
-}
-
-.list-content-link-info {
-  width: 90%;
-  height: var(--list-element-height);
-  float: left;
-}
-
-.list-content-link-info-title {
-  text-align: left;
-  height: calc((var(--list-element-height))/3);
-  width: 100%;
-  float: left;
-  font-size: 14px;
-  text-align: left;
-}
-
-.list-content-link-info-description {
-  height: 40px;
-  width: 100%;
-  float: left;
-  font-size: 14px;
-  color: var(--font-color);
-  text-align: var(--text-align);
-}
-
-.list-content-link-settings {
-  float: right;
-  width: 30px;
-  display: none
-}
 </style>

@@ -1,11 +1,21 @@
 <template>
-  <div>
-    <CreateElement></CreateElement>
-    <Sidebar></Sidebar>
+  <v-app>
+    <!--<CreateElement></CreateElement>-->
+    <search></search>
+    <v-content class="background">
+      <div id="content-header" class="content-wrapper">
+        <div v-model="category" id="content-header-category"> {{ category }} </div>
+        <div id="content-header-filters">
+          <div @click="itemsDisplay()">Display</div>
+          <div @click="sortBy('title')">Nom</div>
+          <div @click="sortBy('updatedAt')">Data</div>
+        </div>
+      </div>
+      <list></list>
+    </v-content>
 
-    <div id="main">
+    <!-- <d!iv id="main">
       <search></search>
-      <!-- Future components -->
       <div id="content-header" class="content-wrapper">
         <div v-model="category" id="content-header-category"> {{ category }} </div>
         <div id="content-header-filters">
@@ -16,9 +26,11 @@
       </div>
 
       <list></list>
+    -->
 
     </div>
-  </div>
+
+  </v-app>
 
 </template>
 
@@ -26,14 +38,12 @@
   import Sidebar from '@/components/Sidebar.vue'
   import Search from '@/components/Search.vue'
   import List from '@/components/List.vue'
-  import CreateElement from '@/components/CreateElement.vue'
 
   export default {
     components: {
       Sidebar,
       Search,
-      List,
-      CreateElement
+      List
     },
     data () {
       return {
@@ -65,19 +75,6 @@
 
 
 <style>
-
-  #main {
-    width: calc(100% - 270px);
-    float: left;
-    /* background-color: #f3f2f5; */
-    /* background-color: #fbfafb; */
-    background-color: #f2f3f5;
-  }
-
-  .content-wrapper {
-    float: left;
-    width:100%;
-  }
 
   #content-header-category {
     float: left;

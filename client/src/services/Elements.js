@@ -17,12 +17,13 @@ export default{
     return api().post('elements', content)
   },
 
-  getEditElement (elementid) {
+  getElementById (elementid) {
     return api().get(`elements/${elementid}`)
   },
 
   editElement (element) {
-    return api().put(`elements/${element.id}`, element)
+    console.log(element._id)
+    return api().put(`elements/${element._id}`, element)
   },
 
   deleteElement (elementid) {

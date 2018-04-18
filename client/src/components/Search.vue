@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="searchbar">
     <input
       v-model="search"
@@ -7,14 +7,45 @@
       placeholder="Search.."
       ></input>
   </div>
+</template>
+-->
 
+<template>
+  <div>
+    <v-navigation-drawer fixed v-model="drawer" app dark class="sidebar">
+      <sidebar></sidebar>
+    </v-navigation-drawer>
+    <v-toolbar
+      color="white"
+      height="60"
+      dense
+      fixed
+      app>
+      <v-toolbar-side-icon color="grey--text" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-icon class="ml-3" color="grey lighten-1" size="25px">search</v-icon>
+      <v-layout row align-center>
+        <input class="black--text" type="text" placeholder="Cerca.." v-model="search"
+          style="
+            padding:10px;
+            border:none;
+            width:100%;
+          "
+        >
+      </v-layout>
+    </v-toolbar>
+  </div>
 </template>
 
 <script>
+  import Sidebar from '@/components/Sidebar.vue'
   export default {
+    components: {
+      Sidebar
+    },
     data () {
       return {
-        search: ''
+        search: '',
+        drawer: true
       }
     },
 
@@ -22,28 +53,6 @@
       search (value) {
         this.$store.commit('setSearchString', value)
       }
-    },
-
-    methods: {
     }
   }
 </script>
-
-
-<style>
-
-  #searchbar {
-    float: left;
-    width:100%;
-  }
-
-  #searchbar > input {
-    width: calc(100% - (var(--header-padding)*2));
-    padding: calc(var(--header-padding) + 1px);
-    border: 0px;
-    -webkit-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
-    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2);
-  }
-
-</style>

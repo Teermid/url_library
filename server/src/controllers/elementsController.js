@@ -65,7 +65,7 @@ module.exports = {
 
   async addElements (req, res) {
     const { title, description, image, logo } = await getMetadata(req.body.link)
-    // console.log(title+' '+description+' '+image+' '+logo);
+    console.log('addElement hited from chrome extension');
 
     try {
       const element = new Element(
@@ -73,22 +73,17 @@ module.exports = {
           title: req.body.title || title,
           link: req.body.link,
           description: req.body.description || description,
-          categories: req.body.categories || null,
+          categories: req.body.categories || [],
           imageURL: image,
           iconURL: logo,
-          owner: req.body.userID
+          owner: req.body.userID,
+          timestamp: new Date()
         });
 
         const response = await element.save()
-        console.log('after save -> ' + response);
-
-      // for (var i = 0; i < req.body.category.length; i++) {
-      //   await element.addCategories(req.body.category[i].id)
-      // }
       res.send(response)
 
     } catch (error) {
-      // res.status(500).send({error: 'error adding element (elementsController)'});
       res.send(error)
     }
   },
@@ -103,12 +98,15 @@ module.exports = {
   },
 
   async editElement (req, res) {
+
     try {
-      const element = await Element.update(req.body, {
-        where: {
-          id: req.params.id
-        }
-      })
+      const element_temp = await Element.findById(req.params.id)
+      var oldDate = element_temp.timestamp
+      await Element.findByIdAndRemove(req.params.id)
+      const element = new Element(req.body)
+      element.timestamp = oldDate
+      console.log('element-timestamp -> ' + element.timestamp);
+      const response = await element.save()
       res.send(element)
     } catch (e) {
       res.status(500).send({error: 'error geting element by id (elementsController)'});
@@ -117,12 +115,9 @@ module.exports = {
 
   async deleteElement (req, res) {
     try {
-      await Element.destroy({
-        where: {
-          id: req.params.id
-        }
-      })
-      res.status(200).send({msg: 'Element deleted'})
+      const response = await Element.findByIdAndRemove(req.params.id)
+      res.send(response)
+    /*  res.status(200).send({msg: 'Element deleted'})*/
     } catch (e) {
       res.status(500).send({error: 'error geting element by id (elementsController)'});
     }

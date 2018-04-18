@@ -13,10 +13,13 @@ export default new Vuex.Store({
     searchString: null,
     categoryFilter: 'All',
     categoriesList: [],
-    popupDisplay: false,
+    popUpDisplay: false,
     refreshElements: false,
     grid: true,
-    sortBy: 'updatedAt'
+    sortBy: 'updatedAt',
+    sidebar: true,
+    elementID: '',
+    elementByIdTrigger: false
   },
   mutations: { // syncronous
     setToken (state, content) {
@@ -55,7 +58,7 @@ export default new Vuex.Store({
     },
 
     setPopUpDisplay (state) {
-      state.popupDisplay = !state.popupDisplay
+      state.popUpDisplay = !state.popUpDisplay
     },
 
     setRefreshElements (state) {
@@ -68,6 +71,17 @@ export default new Vuex.Store({
 
     setSortBy (state, content) {
       state.sortBy = content
+    },
+
+    setSidebar (state) {
+      console.log(state.sidebar)
+      state.sidebar = !state.sidebar
+    },
+    setElementId (state, content) {
+      state.elementID = content
+    },
+    setElementByIdTrigger (state) {
+      state.elementByIdTrigger = !state.elementByIdTrigger
     }
   },
 
@@ -126,7 +140,7 @@ export default new Vuex.Store({
     },
 
     getPopUpDisplay (state) {
-      return state.popupDisplay
+      return state.popUpDisplay
     },
 
     getGrid (state) {
@@ -135,6 +149,19 @@ export default new Vuex.Store({
 
     getSortBy (state) {
       return state.sortBy
+    },
+
+    getSidebar (state) {
+      console.log(state.sidebar)
+      return state.sidebar
+    },
+
+    getElementId (state) {
+      return state.elementID
+    },
+
+    getElementByIdTrigger (state) {
+      return state.elementByIdTrigger
     }
   }
 })

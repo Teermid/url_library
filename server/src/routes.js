@@ -25,17 +25,17 @@ module.exports = (app) => {
   );
 
   app.get('/elements/:id',
-    tokenPolicy.verifyToken,
+    /*tokenPolicy.verifyToken,*/
     elementsController.getElementById
   );
 
   app.put('/elements/:id',
-    tokenPolicy.verifyToken,
+    /*tokenPolicy.verifyToken,*/
     elementsController.editElement
   );
 
   app.delete('/elements/:id',
-    tokenPolicy.verifyToken,
+    /*tokenPolicy.verifyToken,*/
     elementsController.deleteElement
   );
 
@@ -47,5 +47,15 @@ module.exports = (app) => {
   app.get('/category',
   /*  tokenPolicy.verifyToken,*/
     categoryController.getCategories
+  );
+
+  app.put('/category/:id',
+  /*  tokenPolicy.verifyToken,*/
+    categoryController.editCategory
+  );
+
+  app.delete('/category/:id',
+  /*  tokenPolicy.verifyToken,*/
+    categoryController.deleteCategory
   );
 };

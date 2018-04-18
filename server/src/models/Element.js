@@ -11,9 +11,18 @@ let elementSchema = mongoose.Schema({
   description: {
     type: String,
   },
-  categories: {
-    type: [CategoryModel.schema]
-  },
+  categories: [{
+    /*type: [CategoryModel.schema]*/
+    name:String,
+    owner:String,
+    kind: String,
+    disabled: Boolean,
+    parentCategory: String,
+    nestedCategories: {
+      type: String,
+      default: null
+    }
+  }],
   imageURL: {
     type:String,
   },
@@ -22,6 +31,9 @@ let elementSchema = mongoose.Schema({
   },
   owner: {
     type: String
+  },
+   timestamp: {
+     type: Date,
   }
 });
 

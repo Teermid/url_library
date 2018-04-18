@@ -8,7 +8,7 @@ module.exports = {
       const element = await Element.find({
         'owner': userID,
         'title': searchValue
-        })
+      }).sort({'timestamp':-1})
 
       return element
     } catch (e) {
@@ -23,7 +23,7 @@ module.exports = {
        'owner': userID,
        'categories': [],
        'title': searchValue
-      })
+     }).sort({'timestamp':-1})
       return element
     } catch (e) {
       return({error:'error in query_2'})
@@ -44,7 +44,7 @@ module.exports = {
           'title': searchValue
         }]
 
-      })
+      }).sort({'timestamp':-1})
       return element
     } catch (e) {
       return({error:'error in query_3'})
@@ -57,7 +57,7 @@ module.exports = {
     try {
       const element = await Element.find({
         'owner': userID
-      })
+      }).sort({'timestamp':-1})
       return element
     } catch (e) {
       return({error:'error in query_4'})
@@ -70,7 +70,7 @@ module.exports = {
       const element = await Element.find({
         'owner': userID,
         'categories': []
-      })
+      }).sort({'timestamp':-1})
       return element
     } catch (e) {
       return({error:'error in query_5'})
@@ -88,7 +88,7 @@ module.exports = {
           'owner': userID,
           'categories.parentCategory': category,
         }]
-      })
+      }).sort({'timestamp':-1})
       return element
     } catch (e) {
       return({error:'error in query_6'})

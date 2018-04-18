@@ -1,59 +1,76 @@
+
+
 <template>
-  <div id="sidebar">
-    <div id="branch"> SAVIFY </div>
-    <div class="menu">
-      <div v-model="category" @click="displayCategory" value="All">all</div>
-      <div v-model="category" @click="displayCategory" value="Unsorted">Unsorted</div>
+  <div>
+    <v-dialog v-model="popUpDisplay" origin="top center" max-width="500px">
+      <add-bookmark></add-bookmark>
+    </v-dialog>
 
-      <ul id="root-list">
-        <li class="root" v-for="ca in categories" :key="ca._id" v-model="category">
-          <span @click="displayCategory" v-bind:value="ca.name"> {{ ca.name }} </span>
+    <v-list class="mt-5 sidebar" dense dark>
+      <v-list-tile class="mt-3" @click="">
+        <v-list-tile-action class="icon-span">
+          <v-icon class="icon-span" color="white">dashboard</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-title class="white--text" @click="displayCategory" value="All">Tots</v-list-tile-title>
+      </v-list-tile>
 
-          <ul class="nested-list">
-            <li class="nested" v-for="nested in ca.nestedCategories" :key="nested._id">
-              <span @click="displayCategory" v-bind:value="nested.name">{{ nested.name }}</span>
-            </li>
-          </ul>
+      <v-list-tile @click="">
+        <v-list-tile-action>
+          <v-icon color="white">inbox</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-title class="white--text"  @click="displayCategory" value="Unsorted">Sense Classificar</v-list-tile-title>
+      </v-list-tile>
 
-       </li>
-     </ul>
+      <v-subheader class="mt-4">CATEGORIES</v-subheader>
+      <v-list>
 
-  </div>
-  <div id="add-wrapper">
-    <div id="add-category">
-      <input
-        v-model="category.name"
-        type="text"
-        name="name"
-        value="name"
-        placeholder="name">
-      <input
-        v-model="category.parent"
-        type="text"
-        name="parent"
-        placeholder="parent">
-      <button @click="addCategory">
-        Add
-      </button>
+        <v-expansion-panel expand focusable style="box-shadow:none">
+            <v-expansion-panel-content style="border:none" v-for="ca in categories" :key="ca._id" v-if="!ca.parentCategory">
+              <div slot="header" @click="displayCategory" v-bind:value="ca.name"> {{ ca.name }} </div>
+              <v-list dense>
+                <v-list-tile @click="" v-for="nested in ca.nestedCategories" :key="nested._id">
+                  <v-list-tile-title class="ml-4" @click="displayCategory" v-bind:value="nested.name"> {{ nested.name }} </v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
+
+      </v-list>
+    </v-list>
+
+    <div>
+      <v-list dense dark>
+        <v-list-tile class="mt-3" @click="">
+          <v-list-tile-action>
+            <v-icon color="white">playlist_add</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title class="white--text">Afegir Categoria</v-list-tile-title>
+        </v-list-tile>
+
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon color="white">library_add</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title class="white--text" @click.stop="popUpDisplay = !popUpDisplay">Afegir Marcador</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
     </div>
-
-    <button @click="popUpDisplay"style="margin-top:20px;">add link</button>
   </div>
-
-</div>
 </template>
 
-
 <script>
-  // import { EventBus } from '@/main.js'
   import Category from '@/services/Category'
+  import addBookmark from '@/components/addBookmark'
   export default {
+    components: {
+      addBookmark
+    },
     data () {
       return {
-        displayed: false,
+        popUpDisplay: false,
         category: {
           name: '',
-          parent: ''
+          parentCategory: ''
         },
         categories: [{}],
         userID: this.$store.getters.getUserID
@@ -78,7 +95,6 @@
 
       async addCategory () {
         this.category.owner = this.$store.getters.getUserID
-        console.log(this.category)
         try {
           const response = await Category.addCategory(this.category)
           console.log(response)
@@ -86,90 +102,15 @@
         } catch (e) {
           console.log(e.response)
         }
-      },
+      }
+    },
 
-      popUpDisplay () {
-        this.$store.commit('setPopUpDisplay')
+    watch: {
+      '$store.state.popUpDisplay': {
+        async handler (value) {
+          this.popUpDisplay = !this.popUpDisplay
+        }
       }
     }
 }
 </script>
-
-<style>
-
-  .menu {
-    float:left;
-    width:100%;
-    padding:0px 15px 0px 15px
-  }
-
-  .menu ul {
-    list-style: none;
-  }
-
-  .menu li, .menu div {
-    color: white;
-    text-align: left;
-    padding:5px 5px 0px 5px;
-    cursor: pointer;
-  }
-
-  .menu #root-list {
-    padding: 0px;
-  }
-
-  .menu .nested-list {
-    padding-left: 20px;
-  }
-
-
-  #sidebar {
-    float: left;
-    min-width: 270px;
-    max-width: 270px;
-    height: 100vh;
-    background-color: #343334;
-    /* background-image: -webkit-linear-gradient(258deg, #477c96 50%, #43779c 100%);
-    background-image: -o-linear-gradient(258deg, #477c96 50%, #43779c 100%);
-    background-image: linear-gradient(348deg, #477c96 50%, #43779c 100%); */
-  }
-
-  #branch {
-    float: left;
-    width: calc(100% - (var(--header-padding)*2));
-    text-align: center;
-    color: white;
-    padding: var(--header-padding);
-    background-color: #343334;
-  }
-
-  .show {
-    display:inherit !important;
-  }
-  .nested > ul {
-    padding-left:10px;
-    display:none;
-  }
-
-  #add-wrapper {
-    float:left;
-    width:100%;
-    margin-top:400px;
-  }
-
-  #add-category {
-    float:left;
-    width:100%;
-  }
-
-  @media screen and (max-width: 869px) {
-     #sidebar {
-       position:absolute;
-       left: -270px;
-     }
-
-     #main {
-       width:100% !important;
-     }
-  }
-</style>
