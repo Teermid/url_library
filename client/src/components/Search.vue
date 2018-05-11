@@ -12,16 +12,13 @@
 
 <template>
   <div>
-    <v-navigation-drawer fixed v-model="drawer" app dark class="sidebar">
-      <sidebar></sidebar>
-    </v-navigation-drawer>
     <v-toolbar
       color="white"
       height="60"
       dense
       fixed
       app>
-      <v-toolbar-side-icon color="grey--text" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-side-icon color="grey--text" @click.stop="toggleSidebar"></v-toolbar-side-icon>
       <v-icon class="ml-3" color="grey lighten-1" size="25px">search</v-icon>
       <v-layout row align-center>
         <input class="black--text" type="text" placeholder="Cerca.." v-model="search"
@@ -46,6 +43,12 @@
       return {
         search: '',
         drawer: true
+      }
+    },
+
+    methods: {
+      toggleSidebar () {
+        this.$store.commit('setSidebarDisplay')
       }
     },
 

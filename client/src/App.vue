@@ -5,16 +5,16 @@
 </template>
 
 <script>
-import PageHeader from '@/components/Header.vue'
 export default {
-  name: 'app',
-  components: {
-    PageHeader
-  }
+  name: 'app'
 }
 </script>
 
 <style>
+
+  /*.list__tile:hover {
+    background-color:lightblue !important;
+  }*/
 
   :root {
     --header-padding: 25px;

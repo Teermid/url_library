@@ -1,5 +1,4 @@
 import ls from '@/store/store'
-console.log(ls.state.userLogged)
 
 export default {
   userLogged (to, from, next) {

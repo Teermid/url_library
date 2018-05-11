@@ -22,11 +22,15 @@ export default{
   },
 
   editElement (element) {
-    console.log(element._id)
     return api().put(`elements/${element._id}`, element)
   },
 
   deleteElement (elementid) {
     return api().delete(`elements/${elementid}`)
+  },
+
+  deleteMult (ids) {
+    console.log(ids)
+    return api().post(`mult`, ids)
   }
 }

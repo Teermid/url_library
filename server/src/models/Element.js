@@ -1,40 +1,45 @@
-const mongoose = require('mongoose');
-const CategoryModel = require('./Category')
+const mongoose = require('mongoose')
+/* const CategoryModel = require('./Category') */
 
 let elementSchema = mongoose.Schema({
   title: {
     type: String
   },
   link: {
-    type:String,
+    type: String
   },
   description: {
-    type: String,
+    type: String
   },
   categories: [{
-    /*type: [CategoryModel.schema]*/
-    name:String,
-    owner:String,
+    name: String,
+    owner: String,
     kind: String,
-    disabled: Boolean,
     parentCategory: String,
     nestedCategories: {
       type: String,
       default: null
-    }
+    },
+    selected: Boolean,
+    hidden: Boolean,
+    disabled: Boolean
   }],
   imageURL: {
-    type:String,
+    type: String
   },
   iconURL: {
-    type:String,
+    type: String
   },
   owner: {
     type: String
   },
-   timestamp: {
-     type: Date,
+  timestamp: {
+    type: Date
+  },
+  selected: {
+    type: Boolean,
+    default: false
   }
-});
+})
 
 module.exports = mongoose.model('Element', elementSchema)

@@ -1,10 +1,5 @@
 <template>
 <div>
-
-  <v-dialog v-model="popUpEdit" origin="top center" max-width="500px">
-    <edit-element></edit-element>
-  </v-dialog>
-
   <v-dialog v-model="deleteVerification" origin="top center" max-width="250px">
     <v-card class="pb-2">
       <v-card-text class="pt-3 pb-0">
@@ -26,31 +21,30 @@
     </v-card>
   </v-dialog>
 
-  <!-- GRID -->
-  <div v-if="$store.getters.getGrid" id="card-content-body">
+  <!-- CARDS -->
+  <div v-if="$store.state.elementsDisplay === 'card'" id="card-content-body">
     <v-card class="white shadow" v-for="el in elements" :key="el.id" flat>
-       <a v-bind:href="el.link"><v-card-media v-bind:src="el.imageURL" height="150px"></v-card-media></a>
-       <v-card-title class="pb-0" style="min-height:180px">
-         <div class="info_container">
-           <div class="ma-0 black--text left f_black float-left title_">{{ el.title }}</div>
-           <div class="mt-2 mx-0 black--text left f_light float-left description">{{ el.description }}</div>
+      <div v-bind:class="{ selectionFilter:selectionFilter }" @click="select(el)"></div>
+      <div v-bind:class="{ selectionFilterSelected:el.selected }"></div>
+      <a v-bind:href="el.link"><v-card-media v-bind:src="el.imageURL" height="150px"></v-card-media></a>
+      <v-card-title class="pb-0" style="min-height:180px">
+        <div class="info_container">
+          <div class="ma-0 black--text left f_black float-left title_">{{ el.title }}</div>
+          <div class="mt-2 mx-0 black--text left f_light float-left description">{{ el.description }}</div>
 
-           <v-menu bottom left>
-              <v-btn icon slot="activator" light>
-                <v-icon color="grey lighten-2">more_horiz</v-icon>
-              </v-btn>
-              <v-list class="white">
-                <v-list-tile @click="deleteElement(el._id)">
-                  <v-list-tile-title> Eliminar </v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile @click="editElement(el._id)">
-                  <v-list-tile-title> Editar </v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile @click="">
-                  <v-list-tile-title> (Visualitzar) </v-list-tile-title>
-                </v-list-tile>
-              </v-list>
-            </v-menu>
+          <v-menu bottom left>
+            <v-btn icon slot="activator" light>
+              <v-icon color="grey lighten-2">more_horiz</v-icon>
+            </v-btn>
+            <v-list class="white">
+              <v-list-tile @click="deleteElement(el._id)">
+                <v-list-tile-title> Eliminar </v-list-tile-title>
+              </v-list-tile>
+              <v-list-tile @click="editElement(el._id)">
+                <v-list-tile-title> Editar </v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
 
          </div>
        </v-card-title>
@@ -59,8 +53,8 @@
      </v-card>
   </div>
 
-  <!-- LIST -->
-  <div v-if="!$store.getters.getGrid" id="grid-content-body">
+  <!-- GRID -->
+  <div v-if="$store.state.elementsDisplay === 'grid'" id="grid-content-body">
     <v-card class="white shadow" v-for="el in elements" :key="el.id" flat>
        <a v-bind:href="el.link"><v-card-media v-bind:src="el.imageURL" height="100px"></v-card-media></a>
        <v-card-title class="pb-0 pt-2">
@@ -76,9 +70,6 @@
                 </v-list-tile>
                 <v-list-tile @click="editElement(el._id)">
                   <v-list-tile-title> Editar </v-list-tile-title>
-                </v-list-tile>
-                <v-list-tile @click="">
-                  <v-list-tile-title> (Visualitzar) </v-list-tile-title>
                 </v-list-tile>
               </v-list>
             </v-menu>
@@ -110,7 +101,10 @@ export default {
       sortBy: this.$store.getters.getSortBy,
       popUpEdit: false,
       deleteVerification: false,
-      idToDelete: ''
+      idToDelete: '',
+      selectionFilter: false,
+      selectionFilterSelected: false,
+      selectedArray: []
     }
   },
 
@@ -139,11 +133,25 @@ export default {
     editElement (id) {
       this.$store.commit('setElementId', id)
       this.$store.commit('setElementByIdTrigger')
-      this.popUpEdit = !this.popUpEdit
+      this.$store.commit('setEditDisplay')
     },
 
     navigateTo (route) {
       this.$router.push(route)
+    },
+
+    select (el) {
+      var exists = false
+      for (var i = 0; i < this.$store.getters.getSelectedArray.length; i++) {
+        if (el._id === this.$store.getters.getSelectedArray[i]) {
+          this.$store.getters.getSelectedArray.splice(i, 1)
+          exists = true
+        }
+      }
+      if (!exists) {
+        this.$store.commit('setSelectedArray', el._id)
+      }
+      el.selected = !el.selected
     }
   },
 
@@ -179,6 +187,12 @@ export default {
     '$store.state.refreshElements': {
       async handler () {
         this.getElements(this.categoryFilter, 'false', null, this.userID, this.sortBy)
+      }
+    },
+
+    '$store.state.multSelect': {
+      async handler () {
+        this.selectionFilter = !this.selectionFilter
       }
     }
   }
@@ -241,6 +255,25 @@ export default {
   grid-auto-rows: var(--grid-content-container-height);
   padding: 0 20px 0px 20px;
   overflow-y: scroll;
+}
+
+/* --------------------------------------------- */
+
+.selectionFilter {
+  z-index:10;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor:pointer;
+}
+
+.selectionFilterSelected {
+  z-index:5;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #add8e64d;
+  border: 2px solid #4c9ade;
 }
 
 </style>

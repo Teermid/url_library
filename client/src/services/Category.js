@@ -9,6 +9,10 @@ export default{
     })
   },
 
+  getRootCategories () {
+    return api().get('root-categories')
+  },
+
   addCategory (content) {
     console.log(content)
     return api().post('category', content)

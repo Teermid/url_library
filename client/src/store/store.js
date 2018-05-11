@@ -14,12 +14,15 @@ export default new Vuex.Store({
     categoryFilter: 'All',
     categoriesList: [],
     popUpDisplay: false,
+    editDisplay: false,
     refreshElements: false,
-    grid: true,
-    sortBy: 'updatedAt',
-    sidebar: true,
+    elementsDisplay: 'card',
+    sortBy: ['timestamp', 1],
+    sidebarDisplay: true,
     elementID: '',
-    elementByIdTrigger: false
+    elementByIdTrigger: false,
+    multSelect: false,
+    selectedArray: []
   },
   mutations: { // syncronous
     setToken (state, content) {
@@ -61,54 +64,42 @@ export default new Vuex.Store({
       state.popUpDisplay = !state.popUpDisplay
     },
 
+    setEditDisplay (state) {
+      state.editDisplay = !state.editDisplay
+    },
+
     setRefreshElements (state) {
       state.refreshElements = !state.refreshElements
     },
 
-    setGrid (state) {
-      state.grid = !state.grid
+    setElementsDisplay (state, content) {
+      state.elementsDisplay = content
     },
 
     setSortBy (state, content) {
       state.sortBy = content
     },
 
-    setSidebar (state) {
-      console.log(state.sidebar)
-      state.sidebar = !state.sidebar
+    setSidebarDisplay (state) {
+      state.sidebarDisplay = !state.sidebarDisplay
     },
+
     setElementId (state, content) {
       state.elementID = content
     },
+
     setElementByIdTrigger (state) {
       state.elementByIdTrigger = !state.elementByIdTrigger
+    },
+
+    setMultSelect (state) {
+      state.multSelect = !state.multSelect
+    },
+
+    setSelectedArray (state, content) {
+      state.selectedArray.push(content)
     }
   },
-
-  // actions: { // asyncronous
-  //   setToken ({commit}, token) {
-  //     commit('setToken', token)
-  //   },
-  //   setUser ({commit}, userName) {
-  //     commit('setUser', userName)
-  //   },
-  //   setUserID ({commit}, userID) {
-  //     commit('setUserID', userID)
-  //   },
-  //   userNameLogOut ({commit}) {
-  //     console.log('inside userNameLogOut')
-  //     commit('userNameLogOut')
-  //   },
-  //   setSearchString ({commit}, searchString) {
-  //     commit('setSearchString', searchString)
-  //   },
-  //   setCategoryFilter ({commit}, categoryFilter) {
-  //     commit('setCategoryFilter', categoryFilter)
-  //   },
-  //   setPopupDisplay ({commit}, popupDisplay) {
-  //     commit('setPopupDisplay', popupDisplay)
-  //   }
-  // },
 
   getters: {
     getToken (state) {
@@ -143,17 +134,20 @@ export default new Vuex.Store({
       return state.popUpDisplay
     },
 
-    getGrid (state) {
-      return state.grid
+    getEditDisplay (state) {
+      return state.editDisplay
+    },
+
+    getElementsDisplay (state) {
+      return state.elementsDisplay
     },
 
     getSortBy (state) {
       return state.sortBy
     },
 
-    getSidebar (state) {
-      console.log(state.sidebar)
-      return state.sidebar
+    getSidebarDisplay (state) {
+      return state.sidebarDisplay
     },
 
     getElementId (state) {
@@ -162,6 +156,14 @@ export default new Vuex.Store({
 
     getElementByIdTrigger (state) {
       return state.elementByIdTrigger
+    },
+
+    getMultSelect (state) {
+      return state.multSelect
+    },
+
+    getSelectedArray (state) {
+      return state.selectedArray
     }
   }
 })

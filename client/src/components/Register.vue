@@ -1,6 +1,5 @@
 <template>
   <div>
-    <PageHeader></PageHeader>
     <div class="">
         <h1>Register</h1>
 
@@ -26,11 +25,7 @@
 
 <script>
 import auth from '@/services/Auth'
-import PageHeader from '@/components/Header.vue'
 export default {
-  components: {
-    PageHeader
-  },
   data () {
     return {
       email: '',

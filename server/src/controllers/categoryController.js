@@ -10,9 +10,29 @@ module.exports = {
     } catch (e) {
       res.status(500).send({error: 'error getting categories'});
     }
-
-
   },
+
+  async getRootCategories (req, res) {
+    try {
+      const category = await Category.find({
+        $or: [
+          {
+            'kind': 'root'
+          },
+          {
+            'kind': 'child',
+            'parentCategory': null
+
+          }
+        ]
+
+      },{name:1, _id:0})
+      res.send(category)
+    } catch (e) {
+      res.status(500).send({error: 'error getting root categories'});
+    }
+  },
+
 
   async addCategory (req, res) {
     try {

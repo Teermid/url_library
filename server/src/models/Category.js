@@ -17,11 +17,6 @@ let categorySchema = mongoose.Schema({
     default: 'child'
   },
 
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-
   parentCategory: {
     type: String,
     default: null
@@ -30,8 +25,26 @@ let categorySchema = mongoose.Schema({
   nestedCategories: [{
     name: String,
     parentCategory: String,
-    active: false
-  }]
+    selected: {
+      type: Boolean,
+      default: false
+    }
+  }],
+
+  selected: {
+    type: Boolean,
+    default:false
+  },
+
+  hidden: {
+    type: Boolean,
+    default:true
+  },
+
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 
 });
 

@@ -1,97 +1,100 @@
-const Element = require('../../models/Element');
+const Element = require('../../models/Element')
 
 module.exports = {
 
   async query_1 (userID, searchValue, sortBy) {
-  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
       const element = await Element.find({
         'owner': userID,
         'title': searchValue
-      }).sort({'timestamp':-1})
+      }).sort(await this.format(sortBy))
 
       return element
     } catch (e) {
-      return({error:'error in query_1'})
+      return ({error: 'error in query_1'})
     }
   },
 
   async query_2 (userID, searchValue, sortBy) {
-  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
       const element = await Element.find({
-       'owner': userID,
-       'categories': [],
-       'title': searchValue
-     }).sort({'timestamp':-1})
+        'owner': userID,
+        'categories': [],
+        'title': searchValue
+      }).sort(await this.format(sortBy))
       return element
     } catch (e) {
-      return({error:'error in query_2'})
+      return ({error: 'error in query_2'})
     }
   },
 
   async query_3 (userID, category, searchValue, sortBy) {
-  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
       const element = await Element.find({
-        "$or":[{
+        '$or': [{
           'owner': userID,
           'categories.name': category,
           'title': searchValue
-        },{
+        }, {
           'owner': userID,
           'categories.parentCategory': category,
           'title': searchValue
         }]
 
-      }).sort({'timestamp':-1})
+      }).sort(await this.format(sortBy))
       return element
     } catch (e) {
-      return({error:'error in query_3'})
+      return ({error: 'error in query_3'})
     }
   },
 
   async query_4 (userID, sortBy) {
-  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
-  console.log('QUERY 4');
     try {
       const element = await Element.find({
         'owner': userID
-      }).sort({'timestamp':-1})
+      }).sort(await this.format(sortBy))
       return element
     } catch (e) {
-      return({error:'error in query_4'})
+      return ({error: 'error in query_4'})
     }
   },
 
   async query_5 (userID, sortBy) {
-  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
       const element = await Element.find({
         'owner': userID,
         'categories': []
-      }).sort({'timestamp':-1})
+      }).sort(await this.format(sortBy))
       return element
     } catch (e) {
-      return({error:'error in query_5'})
+      return ({error: 'error in query_5'})
     }
   },
 
   async query_6 (userID, category, sortBy) {
-  //let order = (sortBy == 'title') ? 'ASC' : 'DESC'
     try {
       const element = await Element.find({
-        "$or":[{
+        '$or': [{
           'owner': userID,
-          'categories.name': category,
-        },{
+          'categories.name': category
+        }, {
           'owner': userID,
-          'categories.parentCategory': category,
+          'categories.parentCategory': category
         }]
-      }).sort({'timestamp':-1})
+      }).sort(await this.format(sortBy))
       return element
     } catch (e) {
-      return({error:'error in query_6'})
+      return ({error: 'error in query_6'})
+    }
+  },
+
+  // ------------------------------------------
+  async format (sortBy) {
+    switch (sortBy[0]) {
+      case 'timestamp':
+        return { 'timestamp': sortBy[1] }
+      case 'title':
+        return { 'title': sortBy[1] }
     }
   }
 }
