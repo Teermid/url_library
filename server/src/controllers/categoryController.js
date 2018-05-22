@@ -1,14 +1,16 @@
-const Category= require('../models/Category');
-const Element= require('../models/Element');
+const Category = require('../models/Category')
+const Element = require('../models/Element')
 
 module.exports = {
 
   async getCategories (req, res) {
     try {
-      const category = await Category.find({},{__v:0})
+      const category = await Category.find({
+        'owner': req.query.userID
+      }, {__v: 0})
       res.send(category)
     } catch (e) {
-      res.status(500).send({error: 'error getting categories'});
+      res.status(500).send({error: 'error getting categories'})
     }
   },
 
@@ -26,48 +28,46 @@ module.exports = {
           }
         ]
 
-      },{name:1, _id:0})
+      }, {name: 1, _id: 0})
       res.send(category)
     } catch (e) {
-      res.status(500).send({error: 'error getting root categories'});
+      res.status(500).send({error: 'error getting root categories'})
     }
   },
 
+  async getChildCategories (req, res) {
+    try {
+      const category = await Category.find({
+        $and: [
+          {
+            'kind': 'child'
+          },
+          {
+            'parentCategory': { $ne: null }
+          }
+        ]
+      })
+      res.send(category)
+    } catch (e) {
+      res.status(500).send({error: 'error getting child categories'})
+    }
+  },
 
   async addCategory (req, res) {
     try {
       const category = new Category(req.body)
-      console.log('category -> ' + category);
-      if (req.body.parentCategory) {
-        category.parentCategory = req.body.parentCategory
-        const parentCat = await Category.update(
-          {
-            'name': req.body.parentCategory
-          },
-          {
-            $push: {
-              nestedCategories: category
-            },
-            'kind': 'root',
-            'disabled': true
-          }
-        )
-      }
-
       const response = await category.save()
       res.send(response)
     } catch (e) {
-      res.status(500).send({error: 'error adding category (elementsController)'});
+      res.status(500).send({error: 'error adding category (elementsController)'})
     }
-
   },
 
   async editCategory (req, res) {
     // Modificar nom
     try {
-
       const response = await Category.update(
-        { '_id': req.params.id},
+        {'_id': req.params.id},
         { $set: { 'name': req.body.name } }
       )
 
@@ -78,7 +78,7 @@ module.exports = {
         )
 
         await Element.update(
-          { 'categories._id': req.params.id},
+          {'categories._id': req.params.id},
           { $set: { 'categories.$.name': req.body.name } },
           { multi: true }
 
@@ -86,12 +86,10 @@ module.exports = {
       }
 
       // Modificat parent
-
-      if (req.body.category !== "") {
-
+      if (req.body.rootName !== '') {
         await Category.update(
-          { '_id': req.params.id},
-          { $set: { 'parentCategory': req.body.category}}
+          {'_id': req.params.id},
+          { $set: {'parentCategory': req.body.rootName} }
         )
 
         await Category.update(
@@ -101,40 +99,46 @@ module.exports = {
 
         await Element.update(
           { 'categories._id': req.params.id },
-          { $set: { 'categories.$.parentCategory': req.body.category } },
+          { $set: { 'categories.$.parentCategory': req.body.rootName } },
           { multi: true }
         )
 
-      //  await Element.update(
-      //    { 'categories._id': req.params.id },
-      //    { $pull: { 'categories': { _id: req.params.id } } }
-      //  )
-
-        const cat = await Category.findById(req.params.id)
-
-        const response2 = await Category.update(
-          { 'name': req.body.category},
-          { $push: { nestedCategories: cat }}
+        // Cercar categories root sense categories niades i passar-les a child
+        let response = await Category.update(
+          {
+            'kind': 'root',
+            'nestedCategories': null
+          },
+          { $set: {'kind': 'child'} }
         )
 
-      }
+        console.log(response)
 
-      res.send(test)
+        // --------------------------
+        const cat = await Category.findById(req.params.id)
+
+        await Category.update(
+          {'name': req.body.rootName},
+          {
+            $set: { 'kind': 'root' },
+            $push: { nestedCategories: cat }
+          }
+
+        )
+      }
+      res.send('success')
     } catch (e) {
       res.send(e.data)
     }
-
   },
 
   async deleteCategory (req, res) {
     try {
-      const response = await Category.findById(req.params.id )
+      const response = await Category.findById(req.params.id)
       response.remove()
       res.send(response)
     } catch (e) {
       res.send(e)
     }
-
   }
-
 }

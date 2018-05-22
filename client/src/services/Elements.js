@@ -1,6 +1,6 @@
 import api from '@/services/Api'
 
-export default{
+export default {
   getElements (categoryValue, isSearch, searchValue, userID, sortBy) {
     return api().get('elements', {
       params: {
@@ -30,7 +30,14 @@ export default{
   },
 
   deleteMult (ids) {
-    console.log(ids)
-    return api().post(`mult`, ids)
+    return api().post(`delmult`, ids)
+  },
+
+  checkCategory (catID) {
+    return api().get(`elements/checkCat/${catID}`)
+  },
+
+  addMult (elements, catID) {
+    return api().post(`addmult/${catID}`, elements)
   }
 }

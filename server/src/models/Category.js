@@ -1,6 +1,5 @@
-const mongoose = require('mongoose');
-const CategoryModel = require('./Category');
-//const ElementModel = require('./Element')
+const mongoose = require('mongoose')
+// const CategoryModel = require('./Category')
 
 let categorySchema = mongoose.Schema({
   name: {
@@ -24,6 +23,7 @@ let categorySchema = mongoose.Schema({
 
   nestedCategories: [{
     name: String,
+    kind: String,
     parentCategory: String,
     selected: {
       type: Boolean,
@@ -33,12 +33,12 @@ let categorySchema = mongoose.Schema({
 
   selected: {
     type: Boolean,
-    default:false
+    default: false
   },
 
   hidden: {
     type: Boolean,
-    default:true
+    default: false
   },
 
   disabled: {
@@ -46,14 +46,12 @@ let categorySchema = mongoose.Schema({
     default: false
   }
 
-});
+})
 
-module.exports = mongoose.model('Category', categorySchema);
+module.exports = mongoose.model('Category', categorySchema)
 
 categorySchema.pre('remove', async function (next) {
-
   try {
-
     if (this.kind === 'child') {
       // Eliminem la categoria niada del array
       await this.model('Category').update(
@@ -61,19 +59,18 @@ categorySchema.pre('remove', async function (next) {
         { $pull: { 'nestedCategories': { _id: this._id } } }
       )
 
-      //Si la categoria root no te nestedCategories la convertim en child
+      // Si la categoria root no te nestedCategories la convertim en child
       await this.model('Category').update(
         { 'kind': 'root', 'nestedCategories': [] },
         { $set: { kind: 'child' } }
       )
 
-      //Eliminem la categoria del array de categories dels Elements
+      // Eliminem la categoria del array de categories dels Elements
       await this.model('Element').update(
         { 'categories._id': this._id },
         { $pull: { 'categories': { _id: this._id } } },
         { multi: true }
       )
-
     } else {
       await this.model('Category').update(
         { 'parentCategory': this.name },
@@ -83,15 +80,11 @@ categorySchema.pre('remove', async function (next) {
 
       await this.model('Element').update(
         {'categories.parentCategory': this.name},
-        { $set: {'categories.$.parentCategory': null } }
+        { $set: { 'categories.$.parentCategory': null } }
       )
     }
-
-
   } catch (e) {
     next()
   }
-
   next()
-
-});
+})

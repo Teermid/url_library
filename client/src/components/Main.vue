@@ -5,7 +5,7 @@
     <search></search>
     <sidebar></sidebar>
     
-    <v-content class="background">
+    <v-content v-bind:class=" { background:$store.state.sidebarDisplay } ">
       <list-actions></list-actions>
       <list></list>
     </v-content>

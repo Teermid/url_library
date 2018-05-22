@@ -12,16 +12,21 @@ export default new Vuex.Store({
     userLogged: false,
     searchString: null,
     categoryFilter: 'All',
+    tag: false,
+    tagContent: '',
     categoriesList: [],
+    rootCategoriesList: [],
     popUpDisplay: false,
     editDisplay: false,
     refreshElements: false,
+    refreshChildCategories: false,
     elementsDisplay: 'card',
     sortBy: ['timestamp', 1],
     sidebarDisplay: true,
     elementID: '',
     elementByIdTrigger: false,
     multSelect: false,
+    selectAll: false,
     selectedArray: []
   },
   mutations: { // syncronous
@@ -56,8 +61,20 @@ export default new Vuex.Store({
       state.categoryFilter = content
     },
 
+    setTag (state) {
+      state.tag = !state.tag
+    },
+
+    setTagContent (state, content) {
+      state.tagContent = content
+    },
+
     setCategoriesList (state, content) {
       state.categoriesList = content
+    },
+
+    setRootCategoriesList (state, content) {
+      state.rootCategoriesList = content
     },
 
     setPopUpDisplay (state) {
@@ -70,6 +87,10 @@ export default new Vuex.Store({
 
     setRefreshElements (state) {
       state.refreshElements = !state.refreshElements
+    },
+
+    setRefreshChildCategories (state) {
+      state.refreshChildCategories = !state.refreshChildCategories
     },
 
     setElementsDisplay (state, content) {
@@ -96,8 +117,16 @@ export default new Vuex.Store({
       state.multSelect = !state.multSelect
     },
 
+    setSelectAll (state, content) {
+      state.selectAll = content
+    },
+
     setSelectedArray (state, content) {
       state.selectedArray.push(content)
+    },
+
+    resetSelectedArray (state) {
+      state.selectedArray = []
     }
   },
 
@@ -126,8 +155,20 @@ export default new Vuex.Store({
       return state.categoryFilter
     },
 
+    getTag (state) {
+      return state.tag
+    },
+
+    getTagContent (state) {
+      return state.tagContent
+    },
+
     getCategoriesList (state) {
       return state.categoriesList
+    },
+
+    getRootCategoriesList (state) {
+      return state.rootCategoriesList
     },
 
     getPopUpDisplay (state) {

@@ -39,9 +39,19 @@ module.exports = (app) => {
     elementsController.deleteElement
   )
 
-  app.post('/mult',
+  app.get('/elements/checkCat/:catID',
+    /* tokenPolicy.verifyToken, */
+    elementsController.checkCategory
+  )
+
+  app.post('/delmult',
     /* tokenPolicy.verifyToken, */
     elementsController.deleteMultiple
+  )
+
+  app.post('/addmult/:catId',
+    /* tokenPolicy.verifyToken, */
+    elementsController.addMultiple
   )
 
   app.post('/category',
@@ -57,6 +67,11 @@ module.exports = (app) => {
   app.get('/root-categories',
   /*  tokenPolicy.verifyToken, */
     categoryController.getRootCategories
+  )
+
+  app.get('/child-categories',
+  /*  tokenPolicy.verifyToken, */
+    categoryController.getChildCategories
   )
 
   app.put('/category/:id',

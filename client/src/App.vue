@@ -77,8 +77,10 @@ export default {
 
   .background {
     /*background-color: #f5f5f5;*/
-    /*background-color: #f7f8fb;*/
-    background-color: #f7f7f7;
+    /*background-color: #f7f8fb;
+    background-color: #f4f8f9;*/
+    background-color: #f8f9f9;
+    /* padding-left: 270px !important; */
   }
 
   div.dialog__content {

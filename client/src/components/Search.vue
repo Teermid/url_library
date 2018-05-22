@@ -15,6 +15,8 @@
     <v-toolbar
       color="white"
       height="60"
+      class= "shadow"
+      v-bind:class=" { toolbarCustom:$store.state.sidebarDisplay } "
       dense
       fixed
       app>
@@ -59,3 +61,17 @@
     }
   }
 </script>
+
+<style scoped>
+
+ /* .toolbarCustom {
+    padding-left:270px !important;
+  } */
+
+  input {
+    padding: 10px;
+    border: none;
+    width: 100%;
+  }
+
+</style>

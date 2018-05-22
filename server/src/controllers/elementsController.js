@@ -1,4 +1,5 @@
 const Element = require('../models/Element')
+const Category = require('../models/Category')
 const metascraper = require('metascraper')
 const got = require('got')
 const queries = require('./queries/getQueries')
@@ -114,11 +115,43 @@ module.exports = {
     }
   },
 
+  async checkCategory (req, res) {
+    try {
+      const response = await Element.find({
+        'categories._id': req.params.catID
+      })
+      console.log(response)
+      res.send(response)
+    /*  res.status(200).send({msg: 'Element deleted'}) */
+    } catch (e) {
+      res.status(500).send({error: 'error checking for categories (elementsController)'})
+    }
+  },
+
   async deleteMultiple (req, res) {
     try {
       await Element.remove({'_id': {'$in': req.body}})
+      res.send('success')
     } catch (e) {
-      res.send(e)
+      res.status(500).send({error: 'error deleting multiple element (elementsController)'})
+    }
+  },
+
+  async addMultiple (req, res) {
+    try {
+      var category = await Category.findOne({'_id': req.params.catId})
+      category.nestedCategories = null
+      for (let i in req.body) {
+        if (!await Element.findOne({$and: [ {'_id': req.body[i]}, {'categories.name': category.name} ]})) {
+          await Element.update(
+            {'_id': req.body[i]},
+            {$push: { categories: category }}
+          )
+        }
+      }
+      res.send('success')
+    } catch (e) {
+      res.status(500).send({error: 'error adding categories to multiple elements (elementsController)'})
     }
   }
 
