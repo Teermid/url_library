@@ -6,12 +6,12 @@
         <v-btn icon slot="activator">
           <v-icon color="grey">filter_list</v-icon>
         </v-btn>
-        <v-card>   
+        <v-card>
           <v-list>
-            <v-list-tile v-for="opt in filterOptions" v-bind:class="{ active : opt.active }" @click="filterToggle(opt, false)">
+            <v-list-tile v-for="opt in filterOptions" :disabled="opt.disabled" v-bind:class="{ active : opt.active }" @click="filterToggle(opt, false)">
               <v-list-tile-title> {{ opt.name }} </v-list-tile-title>
             </v-list-tile>
-          </v-list>            
+          </v-list>
         </v-card>
       </v-menu>
 
@@ -24,7 +24,7 @@
             <v-list-tile v-for="opt in displayOptions" v-bind:class="{ active : opt.active }" @click="filterToggle(opt, true)">
               <v-list-tile-title> {{ opt.name }} </v-list-tile-title>
             </v-list-tile>
-          </v-list>   
+          </v-list>
         </v-card>
       </v-menu>
 
@@ -37,7 +37,7 @@
       <v-menu v-if="$store.state.multSelect" :close-on-content-click="false" min-width="200px">
         <v-btn depressed slot="activator">Afegir a</v-btn>
         <v-list>
-          <v-list-tile v-for="ca in childCategoryList" @click="addMult(ca)">
+          <v-list-tile v-for="ca in categoriesList" @click="addMult(ca)">
             <v-list-tile-title> {{ ca.name }} </v-list-tile-title>
           </v-list-tile>
         </v-list>
@@ -54,9 +54,9 @@
       <v-btn icon slot="activator" @click="multSelect" v-if="$store.state.multSelect">
         <v-icon color="grey">close</v-icon>
       </v-btn>
-     
+
      <!-- :close-on-content-click="false" -->
-     
+
       <!-- div @click="sortBy('title')">Nom</div>
       <div @click="sortBy('updatedAt')">Data</div>
       <div @click="multSelect" v-if="!select">Select</div>
@@ -80,14 +80,13 @@
 
 <script>
     import Elements from '@/services/Elements'
-    import Category from '@/services/Category'
     export default {
       data () {
         return {
           search: '',
           Object: [],
           category: this.$store.getters.getCategoryFilter,
-          childCategoryList: [],
+          categoriesList: this.$store.getters.getCategoriesList,
           displayOptions: [
             {
               name: 'Tarjetes',
@@ -108,32 +107,33 @@
 
           filterOptions: [
             {
-              name: 'A-z',
+              name: 'Títol',
               value: ['title', 1],
-              active: true
+              active: false
             },
-            {
+            /* {
               name: 'Z-a',
               value: ['title', -1],
               active: false
-            },
+            }, */
             {
-              name: 'Afegits recentment',
+              name: 'Data',
               value: ['timestamp', -1],
-              active: false
+              active: true
             },
-            {
+            /* {
               name: 'Més antics',
               value: ['timestamp', 1],
+              active: false
+            }, */
+            {
+              name: 'Categoria',
+              value: ['category', 1],
               active: false
             }
           ],
           checkbox: false
         }
-      },
-
-      async beforeMount () {
-        this.childCategoryList = (await Category.getChildCategories()).data
       },
 
       methods: {
@@ -184,41 +184,16 @@
 
       watch: {
         '$store.state.categoryFilter': {
-            // this.$store.getters.getCategoryFilter
           async handler (value) {
             this.category = value
+            if (value === 'All') {
+              this.filterOptions[2].disabled = false
+            } else {
+              this.filterOptions[2].disabled = true
+            }
           }
         }
       }
     }
 </script>
-
-<style>
-
-  .active {
-    background-color:#e5e5e5;    
-  }
-
-  .content-wrapper {
-    width:100%;
-    height:60px;
-    padding: 10px 20px;
-    margin-bottom:20px;
-  }
-
-  #content-header-category {
-    float: left;
-    padding: 20px 10px;
-  }
-
-  #content-header-filters {
-    float: right;
-    text-align: center;
-    width: fit-content;
-  }
-
-  #content-header-filters div {
-    /*float:left;
-    margin-left:10px;*/
-  }
-</style>
+<style src="../../css/listActions.css"></style>

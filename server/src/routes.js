@@ -21,7 +21,7 @@ module.exports = (app) => {
 
   app.get('/elements',
     /* tokenPolicy.verifyToken, */
-    elementsController.getElements
+    elementsController.getData
   )
 
   app.get('/elements/:id',
@@ -64,6 +64,11 @@ module.exports = (app) => {
     categoryController.getCategories
   )
 
+  app.get('/category/:catID',
+  /*  tokenPolicy.verifyToken, */
+    categoryController.getCategoryById
+  )
+
   app.get('/root-categories',
   /*  tokenPolicy.verifyToken, */
     categoryController.getRootCategories
@@ -79,8 +84,14 @@ module.exports = (app) => {
     categoryController.editCategory
   )
 
-  app.delete('/category/:id',
+  app.delete('/category/:id/:flag',
   /*  tokenPolicy.verifyToken, */
     categoryController.deleteCategory
   )
+
+  app.get('/categoryEmpty/:id',
+  /*  tokenPolicy.verifyToken, */
+    categoryController.isEmpty
+  )
+
 }

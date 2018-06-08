@@ -1,13 +1,16 @@
 import api from '@/services/Api'
 
 export default {
-  getCategory (userID) {
-    console.log('SERVICE_USERID: ' + userID)
+  getCategory (id) {
     return api().get('category', {
       params: {
-        userID: userID
+        userID: id
       }
     })
+  },
+
+  getCategoryById (id) {
+    return api().get(`category/${id}`)
   },
 
   getRootCategories () {
@@ -19,7 +22,6 @@ export default {
   },
 
   addCategory (content) {
-    console.log(content)
     return api().post('category', content)
   },
 
@@ -27,7 +29,12 @@ export default {
     return api().put(`category/${id}`, content)
   },
 
-  deleteCategory (id) {
-    return api().delete(`category/${id}`)
+  deleteCategory (id, content) {
+    console.log('content -> ' + content)
+    return api().delete(`category/${id}/${content}`)
+  },
+
+  isEmpty (id) {
+    return api().get(`categoryEmpty/${id}`)
   }
 }

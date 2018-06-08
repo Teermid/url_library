@@ -17,12 +17,12 @@ module.exports = {
           res.status(400).send({
             error: 'The email is not valid'
           })
-          break;
+          break
         case 'password':
           res.status(400).send({
             error: 'Password does not match the policy'
           })
-          break;
+          break
         default:
           res.status(400).send({
             error: 'Unexpected error (authControllerPolicy)'

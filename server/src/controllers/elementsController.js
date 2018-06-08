@@ -15,40 +15,32 @@ function escapeRegExp (text) {
 }
 
 module.exports = {
-  async getElements (req, res) {
+  async getData (req, res) {
+    console.log('HITED');
     category = req.query.categoryValue || category
-    const searchValue = (req.query.searchValue == null) ? '' : new RegExp(escapeRegExp(req.query.searchValue), 'gi')
-    console.log(searchValue)
+    const searchValue = (req.query.searchValue == null || req.query.searchValue == '') ? '' : new RegExp(escapeRegExp(req.query.searchValue), 'gi')
+    console.log('searchValue -> ' + searchValue);
     const isSearch = req.query.isSearch
     const userID = req.query.userID
-    const sortBy = req.query.sortBy || null
+    const sortBy = req.query.sortBy[0] || null
     let response = null
 
     if (isSearch === 'true' && searchValue !== '' && category === 'All') {
-      response = await queries.query_1(userID, searchValue, sortBy)
+      response = await queries.query_1(userID, searchValue)
     }
     if (isSearch === 'true' && searchValue !== '' && category === 'Unsorted') {
-      response = await queries.query_2(userID, searchValue, sortBy)
+      response = await queries.query_2(userID, searchValue)
     }
     if (isSearch === 'true' && searchValue !== '' && category !== 'All' && category !== 'Unsorted') {
-      response = await queries.query_3(userID, category, searchValue, sortBy)
+      response = await queries.query_3(userID, category, searchValue)
     }
-    if (isSearch === 'true' && searchValue === '' && category === 'All') {
+    if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category === 'All') {
       response = await queries.query_4(userID, sortBy)
     }
-    if (isSearch === 'true' && searchValue === '' && category === 'Unsorted') {
+    if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category === 'Unsorted') {
       response = await queries.query_5(userID, sortBy)
     }
-    if (isSearch === 'true' && searchValue === '' && category !== 'All' && category !== 'Unsorted') {
-      response = await queries.query_6(userID, category, sortBy)
-    }
-    if (isSearch === 'false' && category === 'All') {
-      response = await queries.query_4(userID, sortBy)
-    }
-    if (isSearch === 'false' && category === 'Unsorted') {
-      response = await queries.query_5(userID, sortBy)
-    }
-    if (isSearch === 'false' && category !== 'All' && category !== 'Unsorted') {
+    if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category !== 'All' && category !== 'Unsorted') {
       response = await queries.query_6(userID, category, sortBy)
     }
 
@@ -58,6 +50,7 @@ module.exports = {
       res.send(response)
     }
   },
+
 
   async addElements (req, res) {
     const { title, description, image, logo } = await getMetadata(req.body.link)
@@ -71,8 +64,7 @@ module.exports = {
           categories: req.body.categories || [],
           imageURL: image,
           iconURL: logo,
-          owner: req.body.userID,
-          timestamp: new Date()
+          owner: req.body.userID
         })
 
       const response = await element.save()

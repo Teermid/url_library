@@ -1,0 +1,120 @@
+#node {
+  text-align: left;
+}
+
+/* .sidebar {
+  width:270px !important;
+} */
+
+#brand {
+  width:100%;
+  float:left;
+  text-align: center;
+  padding:20px;
+}
+
+.fixedCategories {
+  width:100%;
+  margin-bottom:20px;
+  float:left;
+}
+
+.categoriesTitle {
+  width:100%;
+  float:left;
+  padding:10px;
+  color: #EEEEEE;
+}
+
+.categoryList {
+  float:left;
+  width:100%;
+  min-height: 60vh;
+  overflow-y:scroll;
+  margin-bottom:20px;
+}
+
+.categoryContainer {
+  width:100%;
+  float:left;
+}
+
+.rootWrapper {
+  width:100%;
+  float:left;
+  padding:10px;
+  cursor:pointer;
+}
+
+.rootWrapper:hover {
+  background-color: #4b4b4b;
+}
+
+.category:hover .edit {
+  display:inherit;
+}
+
+.root {
+  width: calc(100% - 55px);
+  float:left;
+}
+
+.dropdown {
+  width: fit-content;
+  margin-right:7px;
+  float:left;
+  font-size:11px;
+}
+
+.edit {
+  display:none;
+  float:right;
+}
+ .childContainer {
+   width: 100%;
+  float: left;
+ }
+
+.childWrapper {
+  float: left;
+  width: 100%;
+  padding: 10px 10px 10px 50px;
+  cursor: pointer;
+}
+
+.childWrapper:hover {
+  background-color: #4b4b4b;
+}
+
+.child {
+  width:calc(100% - 55px);
+  float:left;
+}
+
+.hidden {
+  height:0px;
+  overflow:hidden;
+}
+
+.selected {
+  background-color: #5a5a5a;
+  border-left:1px solid white;
+}
+
+.selected:hover {
+  background-color: #5a5a5a !important;
+}
+
+.addContainer {
+  width:100%;
+  float:left;
+}
+
+.add {
+  cursor:pointer;
+  padding:10px;
+}
+
+.delete {
+  visibility:hidden;
+}

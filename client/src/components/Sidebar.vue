@@ -1,7 +1,26 @@
 <template>
   <div id="node">
+    <v-dialog v-model="popupDeleteBookmarks" origin="top center" max-width="250px">
+      <v-card class="pb-2">
+        <v-card-text class="pt-3 pb-0">
+          <v-icon color="red">warning</v-icon>
+          <p class="subheading f_bold mt-1">Eliminar marcadors de la categoria?</p>
+        </v-card-text>
+        <v-btn
+          @click="deleteCategory(categoryIdToDelete, true)"
+          depressed
+          color="blue accent-2"
+          class="white--text">
+          NO</v-btn>
+        <v-btn
+          @click="deleteCategoryWithBookmarks(categoryIdToDelete)"
+          depressed
+          color="red accent-2"
+          class="white--text">
+          SÍ</v-btn>
+      </v-card>
+    </v-dialog>
     <v-navigation-drawer fixed v-model="$store.state.sidebarDisplay" app dark class="sidebar">
-      
       <div id="brand" class="white--text f_black subheading">
         SAVIFY
       </div>
@@ -16,47 +35,84 @@
 
       <div class="categoryList">
         <div class="categoryContainer" v-for="ca in categoriesTemp" :key="ca._id" v-if="!ca.parentCategory">
-          <div class="rootWrapper" 
+          <div class="rootWrapper category"
             v-bind:class="{ selected: ca.selected }"
-            v-on:drop="drop(ca, $event)" 
+            v-on:drop="drop(ca, $event)"
             v-on:dragover="$event.preventDefault()"
-            @click="displayCategory(ca)" 
-            v-bind:value="ca.name"
-            draggable="true" 
+            draggable="true"
             v-on:dragstart="drag(ca, $event)">
-            <div class="root white--text" > {{ ca.name }} </div>
-            <div class="dropdown white--text" @click="dropdown(ca)" v-if="ca.kind == 'root'"> ▼ </div>
+            <v-icon size="large" class="dropdown white--text" @click="dropdown(ca)" v-if="ca.kind == 'root'"> keyboard_arrow_down </v-icon>
+            <div class="root white--text" @click="displayCategory(ca)" v-bind:value="ca.name"> {{ ca.name }} </div>
+            <v-menu v-model="showMenu" offset-y absolute full-width>
+              <v-icon slot="activator" class="edit" size="medium"> more_vert </v-icon>
+              <v-list>
+                <v-list-tile @click="editCategory(ca._id)">
+                  <v-list-tile-title>Editar</v-list-tile-title>
+                </v-list-tile>
+                <v-list-tile @click="deleteCategory(ca._id)">
+                  <v-list-tile-title>Eliminar</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
           </div>
-          <div class="childWrapper" 
+
+          <div class="childContainer"
             v-bind:class="{ hidden: ca.hidden }"
-            v-for="nested in ca.nestedCategories" 
           >
-            <div class="child white--text" 
-             :key="nested._id"  
-              v-bind:value="nested.name" 
+            <div class="childWrapper category"
+              v-for="nested in ca.nestedCategories"
               v-bind:class="{ selected: nested.selected }"
-              draggable="true" 
-              v-on:dragstart="drag(nested, $event)"
-              @click="displayCategory(nested)"
-              v-on:drop="drop(nested, $event)" 
-              v-on:dragover="$event.preventDefault()"> 
-              {{ nested.name }} </div>
+            >
+              <div class="child white--text category"
+               :key="nested._id"
+                v-bind:value="nested.name"
+                draggable="true"
+                v-on:dragstart="drag(nested, $event)"
+                @click="displayCategory(nested)"
+                v-on:drop="drop(nested, $event)"
+                v-on:dragover="$event.preventDefault()">
+                {{ nested.name }}
+              </div>
+              <v-menu v-model="showMenu" offset-y absolute full-width>
+                <v-icon slot="activator" class="edit" size="medium"> more_vert </v-icon>
+                <v-list>
+                  <v-list-tile @click="editCategory(nested._id)">
+                    <v-list-tile-title>Editar</v-list-tile-title>
+                  </v-list-tile>
+                  <v-list-tile @click="deleteCategory(nested._id, false)">
+                    <v-list-tile-title>Eliminar</v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+             </v-menu>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="addContainer">
-        <v-menu top offset-y :close-on-content-click="false">
+        <v-menu top offset-y :close-on-content-click="false" value="addCategoryPopUp">
           <!-- <v-btn slot="activator">A Menu</v-btn> -->
           <div slot="activator" class="add white--text" >Afegir Categoria</div>
           <v-list>
             <v-form>
-              <v-text-field v-model="category.name"></v-text-field>
+              <v-text-field
+                placeholder="Nom"
+                v-model="category.name"
+              ></v-text-field>
+              <v-select
+                :items="rootCategories"
+                placeholder="Categoria pare"
+                clearable="true"
+                v-model="category.parentCategory"
+                label="Select"
+                item-text="name"
+                item-value="name"
+              ></v-select>
               <v-btn @click="addCategory">Afegir</v-btn>
             </v-form>
         </v-list>
         </v-menu>
-        <div class="add white--text" @click="togglePopUp">Afegir Marcador</div>
+        <div class="add white--text" @click="toggleBookmarkPopUp">Afegir Marcador</div>
       </div>
     </v-navigation-drawer>
   </div>
@@ -64,16 +120,13 @@
 
 <script>
   import Category from '@/services/Category'
-  import addBookmark from '@/components/addBookmark'
   import Element from '@/services/Elements'
   export default {
-    components: {
-      addBookmark
-    },
     data () {
       return {
         category: {
-          name: ''
+          name: '',
+          parentCategory: ''
         },
         categories: [{}],
         categoriesTemp: [{}],
@@ -90,7 +143,10 @@
           }
         ],
         rootCategories: [],
-        userID: this.$store.getters.getUserID
+        userID: this.$store.getters.getUserID,
+        editCatPopUp: false,
+        categoryIdToDelete: '',
+        popupDeleteBookmarks: false
         // hasBeenCalled = false
       }
     },
@@ -111,8 +167,8 @@
         this.$store.commit('setRootCategoriesList', this.rootCategories)
       },
 
-      displayCategory (cat) {
-        this.select(cat, null)
+      displayCategory (ca) {
+        this.select(ca, null)
         this.$store.commit('setCategoryFilter', event.currentTarget.getAttribute('value'))
       },
 
@@ -120,14 +176,17 @@
         this.category.owner = this.$store.getters.getUserID
         try {
           await Category.addCategory(this.category)
+          this.category.name = ''
+          this.category.parentCategory = ''
+          this.addCategoryPopUp = false
           this.printCategories()
           this.$store.commit('setRefreshChildCategories')
         } catch (e) {
-          console.log(e.response)
+          alert(e.response.data.error)
         }
       },
 
-      togglePopUp () {
+      toggleBookmarkPopUp () {
         this.$store.commit('setPopUpDisplay')
       },
 
@@ -135,9 +194,34 @@
         ca.hidden = !ca.hidden
       },
 
-      async deleteCategory (caID) {
-        await Category.deleteCategory(caID)
+      async deleteCategory (id, skip) {
+        if (skip) {
+          await Category.deleteCategory(id, false)
+          this.popupDeleteBookmarks = false
+          this.printCategories()
+          this.$store.commit('setRefreshElements')
+        } else {
+          this.categoryIdToDelete = id
+          if ((await Category.isEmpty(id)).data) {
+            await Category.deleteCategory(id, false)
+            this.printCategories()
+            this.$store.commit('setRefreshElements')
+          } else {
+            this.popupDeleteBookmarks = true
+          }
+        }
+      },
+
+      async deleteCategoryWithBookmarks (id) {
+        await Category.deleteCategory(id, true)
+        this.popupDeleteBookmarks = false
         this.printCategories()
+        this.$store.commit('setRefreshElements')
+      },
+      editCategory (id) {
+        this.$store.commit('setCategoryId', id)
+        this.$store.commit('setCategoryByIdTrigger')
+        this.$store.commit('setEditCategoryDisplay')
       },
 
       select (ca, tag) {
@@ -185,46 +269,12 @@
         let msg = JSON.parse(event.dataTransfer.getData('text'))
         if (msg.transmitter === 'category') {
           let allow = false
-          // Dragged category data
           let dragCategory = msg.content
           let dragId = dragCategory._id
           let dragName = dragCategory.name
-          let dragHasBookmarks = ((await Element.checkCategory(dragCategory._id)).data.length > 0)
-
-          // Droped category data
           let dropName = dropCategory.name
-          let dropHasBookmarks = ((await Element.checkCategory(dropCategory._id)).data.length > 0)
 
-          /*
-            GROUP 1
-            Dragged category: child without parent nor bookmarks inside
-          */
-          if ((dragCategory.kind === 'child' && !dragCategory.parentCategory && !dragHasBookmarks) && (dropCategory.kind === 'child' && !dropCategory.parentCategory && !dropHasBookmarks)) {
-            allow = true
-          }
-          if ((dragCategory.kind === 'child' && !dragCategory.parentCategory && !dragHasBookmarks) && (dropCategory.kind === 'root')) {
-            allow = true
-          }
-
-          /*
-            GROUP 2
-            Dragged category: child without parent with bookmarks inside
-          */
-          if ((dragCategory.kind === 'child' && !dragCategory.parentCategory && dragHasBookmarks) && (dropCategory.kind === 'child' && !dropCategory.parentCategory && !dropHasBookmarks)) {
-            allow = true
-          }
-          if ((dragCategory.kind === 'child' && !dragCategory.parentCategory && dragHasBookmarks) && (dropCategory.kind === 'root')) {
-            allow = true
-          }
-
-          /*
-            GROUP 3
-            Dragged category: child with parent
-          */
-          if ((dragCategory.kind === 'child' && dragCategory.parentCategory) && (dropCategory.kind === 'root')) {
-            allow = true
-          }
-          if ((dragCategory.kind === 'child' && dragCategory.parentCategory) && (dropCategory.kind === 'child' && !dropCategory.parentCategory && !dropHasBookmarks)) {
+          if ((dragCategory.kind === 'child') && ((dropCategory.kind === 'child' && !dropCategory.parentCategory) || dropCategory.kind === 'root')) {
             allow = true
           }
 
@@ -233,17 +283,14 @@
             this.printCategories()
           }
         }
+
         if (msg.transmitter === 'Bookmark') {
-          if (dropCategory.kind !== 'root') {
-            await Element.addMult([msg.content], dropCategory._id)
-            this.$store.commit('setRefreshElements')
-          }
+          await Element.addMult([msg.content], dropCategory._id)
+          this.$store.commit('setRefreshElements')
         }
         if (msg.transmitter === 'multBookmarks') {
-          if (dropCategory.kind !== 'root') {
-            await Element.addMult(this.$store.getters.getSelectedArray, dropCategory._id)
-            this.$store.commit('setRefreshElements')
-          }
+          await Element.addMult(this.$store.getters.getSelectedArray, dropCategory._id)
+          this.$store.commit('setRefreshElements')
         }
       }
     },
@@ -257,122 +304,4 @@
     }
 }
 </script>
-
-<style scoped>
-#node {
-  text-align: left;
-}
-
-/* .sidebar {
-  width:270px !important;
-} */
-
-#brand {
-  width:100%;
-  float:left;
-  text-align: center;
-  padding:20px;
-}
-
-.fixedCategories {
-  width:100%;
-  margin-bottom:20px;
-  float:left;
-}
-
-.categoriesTitle {
-  width:100%;
-  float:left;
-  padding:10px;
-  color: #EEEEEE;
-}
-
-.categoryList {
-  float:left;
-  width:100%;
-  min-height: 60vh;
-  overflow-y:scroll;
-  margin-bottom:20px;
-}
-
-.categoryContainer {
-  width:100%;
-  float:left;
-}
-
-.rootWrapper {
-  width:100%;
-  float:left;
-  padding:10px;
-  cursor:pointer;
-  transition: 0.2s;
-}
-
-.rootWrapper:hover {
-  background-color: #4b4b4b;
-  transition: 0.2s;
-}
-
-.rootWrapper:hover .delete {
-  visibility: visible;
-}
-
-.root {
-  width: calc(100% - 20px);
-  float:left;
-}
-
-.dropdown {
-  width: fit-content;
-  float:left;
-  font-size:11px;
-}
-
-.childWrapper {
-  float:left;
-  width:100%;
-}
-
-.child {
-  width:100%;
-  float:left;
-  padding:10px 10px 10px 30px;
-  height:100%;
-  cursor:pointer;
-}
-
-.child:hover {
-  background-color: #4b4b4b;
-}
-
-.hidden {
-  height:0px;
-  overflow:hidden;
-}
-
-.selected {
-  background-color: #5a5a5a;
-  border-left:1px solid white;
-}
-
-.selected:hover {
-  background-color: #5a5a5a !important;
-}
-
-.addContainer {
-  width:100%;
-  float:left;
-}
-
-.add {
-  cursor:pointer;
-  padding:10px;
-}
-
-.delete {
-  visibility:hidden;
-}
-
-
-
-</style>
+<style src="../../css/sidebar.css"></style>

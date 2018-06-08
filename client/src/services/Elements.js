@@ -1,7 +1,7 @@
 import api from '@/services/Api'
 
 export default {
-  getElements (categoryValue, isSearch, searchValue, userID, sortBy) {
+  getData (categoryValue, isSearch, searchValue, userID, sortBy) {
     return api().get('elements', {
       params: {
         categoryValue: categoryValue,
@@ -19,6 +19,14 @@ export default {
 
   getElementById (elementid) {
     return api().get(`elements/${elementid}`)
+  },
+
+  getBookmarksByCategory (userid) {
+    return api().get(`elementsbycat/${userid}`)
+  },
+
+  getBookmarksByName (userid) {
+    return api().get(`elementsbyname/${userid}`)
   },
 
   editElement (element) {

@@ -34,7 +34,8 @@ let elementSchema = mongoose.Schema({
     type: String
   },
   timestamp: {
-    type: Date
+    type: Date,
+    default: new Date()
   },
   selected: {
     type: Boolean,

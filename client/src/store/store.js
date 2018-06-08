@@ -21,13 +21,16 @@ export default new Vuex.Store({
     refreshElements: false,
     refreshChildCategories: false,
     elementsDisplay: 'card',
-    sortBy: ['timestamp', 1],
+    sortBy: ['title', 1],
     sidebarDisplay: true,
-    elementID: '',
+    elementId: '',
     elementByIdTrigger: false,
     multSelect: false,
     selectAll: false,
-    selectedArray: []
+    selectedArray: [],
+    categoryId: '',
+    categoryByIdTrigger: false,
+    editCategoryDisplay: false
   },
   mutations: { // syncronous
     setToken (state, content) {
@@ -106,7 +109,7 @@ export default new Vuex.Store({
     },
 
     setElementId (state, content) {
-      state.elementID = content
+      state.elementId = content
     },
 
     setElementByIdTrigger (state) {
@@ -127,6 +130,18 @@ export default new Vuex.Store({
 
     resetSelectedArray (state) {
       state.selectedArray = []
+    },
+
+    setCategoryId (state, content) {
+      state.categoryId = content
+    },
+
+    setCategoryByIdTrigger (state) {
+      state.categoryByIdTrigger = !state.categoryByIdTrigger
+    },
+
+    setEditCategoryDisplay (state) {
+      state.editCategoryDisplay = !state.editCategoryDisplay
     }
   },
 
@@ -192,7 +207,7 @@ export default new Vuex.Store({
     },
 
     getElementId (state) {
-      return state.elementID
+      return state.elementId
     },
 
     getElementByIdTrigger (state) {
@@ -205,6 +220,14 @@ export default new Vuex.Store({
 
     getSelectedArray (state) {
       return state.selectedArray
+    },
+
+    getEditCategoryDisplay (state) {
+      return state.editCategoryDisplay
+    },
+
+    getCategoryId (state) {
+      return state.categoryId
     }
   }
 })

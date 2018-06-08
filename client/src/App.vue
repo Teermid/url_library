@@ -33,6 +33,10 @@ export default {
     font-family: 'Source Sans Pro', sans-serif;
   }
 
+  html {
+    min-width: 655px;
+  }
+
   input:focus, textarea:focus, select:focus {
     outline: none;
   }
@@ -49,7 +53,7 @@ export default {
     text-align: justify;
   }
 
-  .left {
+  .f_left {
     text-align: left;
   }
 
@@ -86,7 +90,7 @@ export default {
   div.dialog__content {
     align-items: flex-start;
     margin-top: 10vh;
-    }
+  }
 
   /*.sidebar {
     background-color: #2c3e50 !important;

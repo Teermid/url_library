@@ -8,6 +8,10 @@ let userSchema = mongoose.Schema({
   password: {
     type: String,
     required: true
+  },
+  timestamp: {
+    type: Date,
+    default: new Date()
   }
 });
 

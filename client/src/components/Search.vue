@@ -64,10 +64,6 @@
 
 <style scoped>
 
- /* .toolbarCustom {
-    padding-left:270px !important;
-  } */
-
   input {
     padding: 10px;
     border: none;

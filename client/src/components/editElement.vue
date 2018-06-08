@@ -2,7 +2,7 @@
   <v-dialog v-model="$store.state.editDisplay" origin="top center" max-width="500px">
     <v-card>
       <v-card-title>
-         <span class="headline px-2">Nou Marcador</span>
+         <span class="headline px-2">Editar Marcador</span>
          <v-spacer></v-spacer>
           <v-btn icon slot="activator" @click="close">
             <v-icon color="grey lighten-2">close</v-icon>
