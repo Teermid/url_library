@@ -218,6 +218,7 @@
         this.printCategories()
         this.$store.commit('setRefreshElements')
       },
+
       editCategory (id) {
         this.$store.commit('setCategoryId', id)
         this.$store.commit('setCategoryByIdTrigger')
@@ -271,7 +272,6 @@
           let allow = false
           let dragCategory = msg.content
           let dragId = dragCategory._id
-          let dragName = dragCategory.name
           let dropName = dropCategory.name
 
           if ((dragCategory.kind === 'child') && ((dropCategory.kind === 'child' && !dropCategory.parentCategory) || dropCategory.kind === 'root')) {
@@ -279,7 +279,7 @@
           }
 
           if (allow) {
-            await Category.editCategory(dragId, {'name': dragName, 'rootName': dropName})
+            await Category.editCategoryHierarchy(dragId, dropName)
             this.printCategories()
           }
         }
@@ -296,6 +296,13 @@
     },
 
     watch: {
+      '$store.state.refreshElements': {
+        async handler (value) {
+          this.printCategories()
+        }
+
+      },
+
       '$store.state.tag': {
         async handler (value) {
           this.select(null, this.$store.getters.getTagContent)

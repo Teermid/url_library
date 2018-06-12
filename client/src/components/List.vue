@@ -223,7 +223,6 @@ export default {
     },
 
     selectAll () {
-      alert(this.data.length)
       for (var i = 0; i < this.data.length; i++) {
         for (var j = 0; j < this.data[i].elements.length; j++) {
           this.data[i].elements[j].selected = true
@@ -283,8 +282,13 @@ export default {
     '$store.state.categoryFilter': {
       async handler (value) {
         this.categoryFilter = value
+        if (value !== 'All' && this.sortBy[0] === 'category') {
+          // S'ha d'igualar a valor pe defecte de la configuració d'usuari
+          this.sortBy = 'date'
+        }
         // TODO: Comprovar si ens trobem a una categoria root per permetre l'opció de filtrar per categories nidades
-        this.getData(this.categoryFilter, 'false', null, this.userID, (value !== 'All') ? ['title', 1] : this.sortBy)
+
+        this.getData(this.categoryFilter, 'false', null, this.userID, this.sortBy)
       }
     },
 

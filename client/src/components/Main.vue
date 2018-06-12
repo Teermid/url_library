@@ -5,7 +5,6 @@
     <edit-category></edit-category>
     <search></search>
     <sidebar></sidebar>
-
     <v-content v-bind:class=" { background:$store.state.sidebarDisplay } ">
       <list-actions></list-actions>
       <list></list>

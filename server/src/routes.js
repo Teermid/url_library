@@ -2,6 +2,7 @@ const authController = require('./controllers/authController')
 const authControllerPolicy = require('./policies/authControllerPolicy')
 const elementsController = require('./controllers/elementsController')
 const categoryController = require('./controllers/categoryController')
+const metadataController = require('./controllers/metadataController')
 /* const tokenPolicy = require('./policies/tokenPolicy') */
 
 module.exports = (app) => {
@@ -44,6 +45,11 @@ module.exports = (app) => {
     elementsController.checkCategory
   )
 
+  app.post('/unsort',
+    /* tokenPolicy.verifyToken, */
+    elementsController.unsort
+  )
+
   app.post('/delmult',
     /* tokenPolicy.verifyToken, */
     elementsController.deleteMultiple
@@ -81,7 +87,12 @@ module.exports = (app) => {
 
   app.put('/category/:id',
   /*  tokenPolicy.verifyToken, */
-    categoryController.editCategory
+    categoryController.editCategoryName
+  )
+
+  app.put('/category/:id/:dropName',
+  /*  tokenPolicy.verifyToken, */
+    categoryController.editCategoryHierarchy
   )
 
   app.delete('/category/:id/:flag',
@@ -92,6 +103,11 @@ module.exports = (app) => {
   app.get('/categoryEmpty/:id',
   /*  tokenPolicy.verifyToken, */
     categoryController.isEmpty
+  )
+
+  app.post('/metadata',
+  /*  tokenPolicy.verifyToken, */
+    metadataController.getMetadataProvisional
   )
 
 }

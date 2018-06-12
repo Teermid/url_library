@@ -25,8 +25,12 @@ export default {
     return api().post('category', content)
   },
 
-  editCategory (id, content) {
-    return api().put(`category/${id}`, content)
+  editCategoryName (content) {
+    return api().put(`category/${content._id}`, content)
+  },
+
+  editCategoryHierarchy (dragId, dropName) {
+    return api().put(`category/${dragId}/${dropName}`)
   },
 
   deleteCategory (id, content) {

@@ -17,6 +17,8 @@
 
 .wrapper {
   width: 100%;
+  overflow-y: scroll;
+  height: calc(100vh - 120px);
 }
 
 #card-content-body {
@@ -156,7 +158,7 @@
 /* --------------------------------------------- */
 
 .selectionFilter {
-  z-index:3;
+  z-index:2;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -164,7 +166,7 @@
 }
 
 .selectionFilterSelected {
-  z-index: 2;
+  z-index:1;
   position: absolute;
   width: 100%;
   height: 100%;

@@ -34,8 +34,18 @@ let elementSchema = mongoose.Schema({
     type: String
   },
   timestamp: {
-    type: Date,
-    default: new Date()
+    date: {
+      type: Date,
+      default: new Date().setHours(0, 0, 0, 0)
+    },
+    month: {
+      type: Number,
+      default: new Date().getMonth()
+    },
+    year: {
+      type: Number,
+      default: new Date().getFullYear()
+    }
   },
   selected: {
     type: Boolean,

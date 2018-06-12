@@ -37,13 +37,17 @@ export default {
     return api().delete(`elements/${elementid}`)
   },
 
+  unsort (ids) {
+    return api().post(`unsort`, ids)
+  },
+
   deleteMult (ids) {
     return api().post(`delmult`, ids)
   },
 
-  checkCategory (catID) {
+  /* checkCategory (catID) {
     return api().get(`elements/checkCat/${catID}`)
-  },
+  }, */
 
   addMult (elements, catID) {
     return api().post(`addmult/${catID}`, elements)

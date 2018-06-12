@@ -32,22 +32,11 @@
         <v-icon color="grey">layers</v-icon>
       </v-btn>
 
-      <v-btn slot="activator" @click="selectAll" v-if="$store.state.multSelect">Tots</v-btn>
+      <v-btn slot="activator" @click="selectAll" v-if="$store.state.multSelect">
+        Tots
+      </v-btn>
 
-      <v-menu v-if="$store.state.multSelect" :close-on-content-click="false" min-width="200px">
-        <v-btn depressed slot="activator">Afegir a</v-btn>
-        <v-list>
-          <v-list-tile v-for="ca in categoriesList" @click="addMult(ca)">
-            <v-list-tile-title> {{ ca.name }} </v-list-tile-title>
-          </v-list-tile>
-        </v-list>
-        <v-divider></v-divider>
-        <v-list>
-          <v-list-tile>
-            <v-checkbox :label="`Eliminar actuals`" v-model="checkbox"></v-checkbox>
-          </v-list-tile>
-        </v-list>
-      </v-menu>
+      <v-btn depressed slot="activator" @click="unsort" v-if="$store.state.multSelect">Desclassificar</v-btn>
 
       <v-btn depressed slot="activator" @click="deleteMult" v-if="$store.state.multSelect">Eliminar</v-btn>
 
@@ -118,7 +107,7 @@
             }, */
             {
               name: 'Data',
-              value: ['timestamp', -1],
+              value: ['date', -1],
               active: true
             },
             /* {
@@ -169,17 +158,17 @@
           this.$store.commit('setSelectAll', true)
         },
 
+        unsort () {
+          Elements.unsort(this.$store.getters.getSelectedArray)
+          this.$store.commit('setRefreshElements')
+        },
+
         deleteMult () {
           Elements.deleteMult(this.$store.getters.getSelectedArray)
           this.$store.commit('setRefreshElements')
           this.$store.commit('resetSelectedArray')
-        },
-
-        addMult (ca) {
-          Elements.addMult(this.$store.getters.getSelectedArray, ca._id)
-          this.$store.commit('setRefreshElements')
-          this.$store.commit('resetSelectedArray')
         }
+
       },
 
       watch: {

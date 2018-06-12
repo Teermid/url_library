@@ -91,91 +91,56 @@ module.exports = {
   },
 
 
-  async editCategory (req, res) {
-    console.log('EDIT HITTED');
+  async editCategoryName (req, res) {
     try {
-      const categoryBeforeEdit = await Category.findById({'_id': req.params.id})
+      //Guardem la catgeoria abans de ser modificada
+      const categoryBeforeUpdate = await Category.findById({'_id': req.params.id})
+      console.log('beforeUpdate -> ' + categoryBeforeUpdate.name);
 
+      //Modifiquem el nom de la categoria
       const response = await Category.update(
         {'_id': req.params.id},
         { $set: { 'name': req.body.name } }
       )
 
+      //Si s'ha realitzat alguna modificació respecte el nom anterior...
       if (response.nModified !== 0) {
-        console.log('AKI AS DANTRAR')
-        console.log(categoryBeforeEdit.name)
-        console.log(req.body.name)
+        //Si la categoria a modificar és root
+        if (req.body.kind === 'root') {
+          console.log('KIND ROOT')
+          //Actualitzem la referencia 'parentCategory' de l'array de cat nidades
+          await Category.update(
+            { 'nestedCategories.parentCategory': categoryBeforeUpdate.name  },
+            { $set: { 'nestedCategories.$.parentCategory': req.body.name} },
+            { multi: true }
+          )
+          //Actualitzem la referencia 'parentCategory' de les child
+          await Category.update(
+              {'parentCategory': categoryBeforeUpdate.name},
+              { $set: { 'parentCategory': req.body.name} },
+              { multi: true }
+          )
+        }
 
-        //Categoria a modificar -> root
-        //actualitzem el nom del camp parentCategory de les child
-        const query1 = await Category.update(
-          {'parentCategory': categoryBeforeEdit.name},
-          { $set: { 'parentCategory': req.body.name} }
-        )
-
-        //Categoria a modificar -> root
-        //Actualitzem la referencia 'parentCategory' de l'array de cat nidades
-        const query2 = await Category.update (
-          { '_id': req.params.id  },
-          { $set: { 'nestedCategories.$.parentCategory': req.body.name} },
-          { multi: true }
-        )
-
-        //Categoria a modificar -> child
-        //Actualitzem la referencia 'nom' de l'array de cat nidades
-        const query3 = await Category.update(
-          { 'nestedCategories._id': req.params.id },
-          {
-            $set: {
-            'nestedCategories.$.name': req.body.name,
+        //Si la categoria a modificar és child amb pare
+        if (req.body.kind === 'child' && req.body.parentCategory !== null) {
+          console.log('KIND CHILD')
+          //modifiquem la referencia 'nom' de l'array de cat nidades
+          await Category.update(
+            { 'nestedCategories._id': req.params.id },
+            {
+              $set: {
+              'nestedCategories.$.name': req.body.name,
+             }
            }
-         }
-        )
+          )
+        }
 
+        //Modifiquem la refernecia de la categoria als elements
         await Element.update(
           {'categories._id': req.params.id},
           { $set: { 'categories.$.name': req.body.name } },
           { multi: true }
-        )
-
-      } else {
-        console.log('AKI NO AS DANTRAR FILL DE LA GRAN PUTA');
-        await Category.update(
-          {'_id': req.params.id},
-          { $set: {'parentCategory': req.body.rootName} }
-        )
-
-        await Category.update(
-          { 'nestedCategories._id': req.params.id },
-          { $pull: { 'nestedCategories': { _id: req.params.id } } }
-        )
-
-        await Element.update(
-          { 'categories._id': req.params.id },
-          { $set: { 'categories.$.parentCategory': req.body.rootName } },
-          { multi: true }
-        )
-
-        // Cercar categories root sense categories niades i passar-les a child
-
-        await Category.update(
-          {
-            'kind': 'root',
-            'nestedCategories': { $size: 0 }
-          },
-          { $set: {'kind': 'child'} }
-        )
-
-        // --------------------------
-        const cat = await Category.findById(req.params.id)
-
-        await Category.update(
-          {'name': req.body.rootName},
-          {
-            $set: { 'kind': 'root' },
-            $push: { nestedCategories: cat }
-          }
-
         )
       }
 
@@ -184,6 +149,56 @@ module.exports = {
       res.send(e.data)
     }
   },
+
+  async editCategoryHierarchy (req, res) {
+    console.log('editCategoryHierarchy');
+    console.log(req.params.id);
+    console.log(req.params.dropName);
+
+    try {
+      await Category.update(
+        {'_id': req.params.id},
+        { $set: {'parentCategory': req.params.dropName} }
+      )
+
+      await Category.update(
+        { 'nestedCategories._id': req.params.id },
+        { $pull: { 'nestedCategories': { _id: req.params.id } } }
+      )
+
+      await Element.update(
+        { 'categories._id': req.params.id },
+        { $set: { 'categories.$.parentCategory': req.params.dropName } },
+        { multi: true }
+      )
+
+        // Cercar categories root sense categories niades i passar-les a child
+
+      await Category.update(
+        {
+          'kind': 'root',
+          'nestedCategories': { $size: 0 }
+        },
+        { $set: {'kind': 'child'} }
+      )
+
+        // --------------------------
+      const cat = await Category.findById(req.params.id)
+
+      await Category.update(
+        {'name': req.params.dropName},
+        {
+          $set: { 'kind': 'root' },
+          $push: { nestedCategories: cat }
+        }
+      )
+      res.send('success')
+    } catch (e) {
+      res.send('error')
+    }
+
+  },
+
 
   async deleteCategory (req, res) {
     console.log('FLAG -> ' + req.params.flag);

@@ -16,12 +16,13 @@ export default new Vuex.Store({
     tagContent: '',
     categoriesList: [],
     rootCategoriesList: [],
+    refreshCategories: false,
     popUpDisplay: false,
     editDisplay: false,
     refreshElements: false,
     refreshChildCategories: false,
     elementsDisplay: 'card',
-    sortBy: ['title', 1],
+    sortBy: ['date', 1],
     sidebarDisplay: true,
     elementId: '',
     elementByIdTrigger: false,
@@ -78,6 +79,10 @@ export default new Vuex.Store({
 
     setRootCategoriesList (state, content) {
       state.rootCategoriesList = content
+    },
+
+    setRefreshCategories (state) {
+      state.refreshCategories = !state.refreshCategories
     },
 
     setPopUpDisplay (state) {
@@ -186,12 +191,20 @@ export default new Vuex.Store({
       return state.rootCategoriesList
     },
 
+    getRefreshCategories (state) {
+      return state.refreshCategories
+    },
+
     getPopUpDisplay (state) {
       return state.popUpDisplay
     },
 
     getEditDisplay (state) {
       return state.editDisplay
+    },
+
+    getRefreshElements (state) {
+      return state.refreshElements
     },
 
     getElementsDisplay (state) {

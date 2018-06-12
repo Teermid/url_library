@@ -1,14 +1,8 @@
 const Element = require('../models/Element')
 const Category = require('../models/Category')
-const metascraper = require('metascraper')
-const got = require('got')
+const Metadata = require('./metadataController')
 const queries = require('./queries/getQueries')
 var category = null
-
-async function getMetadata (targetUrl) {
-  const {body: html, url} = await got(targetUrl)
-  return metascraper({html, url})
-}
 
 function escapeRegExp (text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -51,9 +45,8 @@ module.exports = {
     }
   },
 
-
   async addElements (req, res) {
-    const { title, description, image, logo } = await getMetadata(req.body.link)
+    const { title, description, image, logo } = await Metadata.getMetadata(req.body.link)
 
     try {
       const element = new Element(
@@ -117,6 +110,19 @@ module.exports = {
     /*  res.status(200).send({msg: 'Element deleted'}) */
     } catch (e) {
       res.status(500).send({error: 'error checking for categories (elementsController)'})
+    }
+  },
+
+  async unsort (req, res) {
+    try {
+      await Element.update(
+        {'_id': {'$in': req.body}},
+        { $set: {'categories': []}},
+        { multi: true }
+      )
+      res.send('success')
+    } catch (e) {
+      res.status(500).send({error: 'error deleting multiple element (elementsController)'})
     }
   },
 

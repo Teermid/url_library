@@ -1,5 +1,15 @@
 const Element = require('../../models/Element')
 const Category = require('../../models/Category')
+const User = require('../../models/User')
+const alphabet = [
+  {"chunk": "Caracters", "regex":"^[^a-z0-9_]"},
+  {"chunk": "0-9", "regex":"^[0-9]"},
+  {"chunk": "A-F","regex": "^(a|b|c|d|e|f)"},
+  {"chunk": "G-L","regex": "^(g|h|i|j|k|l)"},
+  {"chunk": "M-Q","regex": "^(m|n|o|p|q)"},
+  {"chunk": "R-V","regex": "^(r|s|t|u|v)"},
+  {"chunk": "W-Z","regex": "^(w|x|y|z)"}
+]
 
 module.exports = {
   async query_1 (userID, searchValue) {
@@ -8,7 +18,7 @@ module.exports = {
       const elements = await Element.find({
         'owner': userID,
         'title': searchValue
-      })
+      }).sort({ timestamp: -1 })
       return this.finalList(elements)
     } catch (e) {
       return ({error: 'error in query_1'})
@@ -22,7 +32,7 @@ module.exports = {
         'owner': userID,
         'categories': [],
         'title': searchValue
-      })
+      }).sort({ timestamp: -1 })
       return this.finalList(elements)
     } catch (e) {
       return ({error: 'error in query_2'})
@@ -43,7 +53,7 @@ module.exports = {
           'title': searchValue
         }]
 
-      })
+      }).sort({ timestamp: -1 })
       return this.finalList(elements)
     } catch (e) {
       return ({error: 'error in query_3'})
@@ -52,7 +62,6 @@ module.exports = {
 
   async query_4 (userID, sortBy) {
     console.log('QUERY 4');
-    const alphabet = [{"chunk": "A-F","regex": "^(a|b|c|d|e|f)"},{"chunk": "G-L","regex": "^(g|h|i|j|k|l)"},{"chunk": "M-Q","regex": "^(m|n|o|p|q)"},{"chunk": "R-V","regex": "^(r|s|t|u|v)"},{"chunk": "W-Z","regex": "^(w|x|y|z)"}]
     var elements
     var finalList = []
 
@@ -76,9 +85,6 @@ module.exports = {
     }
 
     if (sortBy === 'title') {
-      console.log('SORT BY TITLE');
-      console.log(userID)
-      console.log(alphabet[0].regex);
       try {
         for(i = 0; i < alphabet.length; i++) {
           elements = await Element.find({'owner': userID, 'title': new RegExp(alphabet[i].regex, "i")}).sort({ title: 1 })
@@ -91,17 +97,67 @@ module.exports = {
         return({error: 'error in query_4'})
       }
     }
+
+    if (sortBy === 'date') {
+      var finalList = []
+      var monthList = []
+      try {
+        let { timestamp: firstConnection } = await User.findById(userID)
+
+        let elementsToday = await Element.find(
+          {
+            'owner': userID,
+            'timestamp.date': new Date().setHours(0, 0, 0, 0)
+          }).sort({ timestamp: -1 })
+
+        if (elementsToday.length !== 0) {
+          finalList.push({'title': 'Avui', 'elements': elementsToday})
+        }
+
+        let elementsThisMonth = await Element.find(
+          {
+            'owner': userID,
+            'timestamp.date': { $ne: new Date().setHours(0, 0, 0, 0) },
+            'timestamp.month': new Date().getMonth()
+          }).sort({ timestamp: -1 })
+
+        if (elementsThisMonth.length !== 0) {
+          finalList.push({'title': 'Aquest mes', 'elements': elementsThisMonth})
+        }
+
+
+        for (var i = new Date().getFullYear(); i >= firstConnection.getFullYear(); i--) {
+          for (var j = 11; j >= 0; j--) {
+              if (j !== new Date().getMonth()) {
+                let elementsPerMonth = await Element.find(
+                  {
+                    'owner': userID,
+                    'timestamp.month': j,
+                    'timestamp.year': i,
+                  }).sort({ timestamp: -1 })
+
+                if (elementsPerMonth.length !== 0) {
+                  monthList.push({'title': this.getMonthName(j), 'elements': elementsPerMonth})
+
+                }
+              }
+          }
+        }
+
+        return(finalList.concat(monthList))
+      } catch (e) {
+        return({error: 'error in query_4'})
+      }
+    }
   },
 
   async query_5 (userID, sortBy) {
     console.log('QUERY 5');
-    const alphabet = [{"chunk": "A-F","regex": "^(a|b|c|d|e|f)"},{"chunk": "G-L","regex": "^(g|h|i|j|k|l)"},{"chunk": "M-Q","regex": "^(m|n|o|p|q)"},{"chunk": "R-V","regex": "^(r|s|t|u|v)"},{"chunk": "W-Z","regex": "^(w|x|y|z)"}]
     var elements
     var finalList = []
     var counter = 0
 
     if (sortBy === 'title') {
-      console.log('SORT BY TITLE HIT');
       try {
         for(i = 0; i < alphabet.length; i++) {
           elements = await Element.find({
@@ -118,11 +174,65 @@ module.exports = {
         return({error: 'error in query_5'})
       }
     }
+
+    if (sortBy === 'date') {
+      var finalList = []
+      var monthList = []
+      try {
+        let { timestamp: firstConnection } = await User.findById(userID)
+
+        let elementsToday = await Element.find(
+          {
+            'owner': userID,
+            'categories': [],
+            'timestamp.date': new Date().setHours(0, 0, 0, 0)
+          }).sort({ timestamp: -1 })
+
+        if (elementsToday.length !== 0) {
+          finalList.push({'title': 'Avui', 'elements': elementsToday})
+        }
+
+        let elementsThisMonth = await Element.find(
+          {
+            'owner': userID,
+            'categories': [],
+            'timestamp.date': { $ne: new Date().setHours(0, 0, 0, 0) },
+            'timestamp.month': new Date().getMonth()
+          }).sort({ timestamp: -1 })
+
+        if (elementsThisMonth.length !== 0) {
+          finalList.push({'title': 'Aquest mes', 'elements': elementsThisMonth})
+        }
+
+
+        for (var i = new Date().getFullYear(); i >= firstConnection.getFullYear(); i--) {
+          for (var j = 11; j >= 0; j--) {
+              if (j !== new Date().getMonth()) {
+                let elementsPerMonth = await Element.find(
+                  {
+                    'owner': userID,
+                    'categories': [],
+                    'timestamp.month': j,
+                    'timestamp.year': i,
+                  }).sort({ timestamp: -1 })
+
+                if (elementsPerMonth.length !== 0) {
+                  monthList.push({'title': this.getMonthName(j), 'elements': elementsPerMonth})
+
+                }
+              }
+          }
+        }
+
+        return(finalList.concat(monthList))
+      } catch (e) {
+        return({error: 'error in query_4'})
+      }
+    }
   },
 
   async query_6 (userID, category, sortBy) {
     console.log('QUERY 6');
-    const alphabet = [{"chunk": "A-F","regex": "^(a|b|c|d|e|f)"},{"chunk": "G-L","regex": "^(g|h|i|j|k|l)"},{"chunk": "M-Q","regex": "^(m|n|o|p|q)"},{"chunk": "R-V","regex": "^(r|s|t|u|v)"},{"chunk": "W-Z","regex": "^(w|x|y|z)"}]
     var elements
     var finalList = []
     var counter = 0
@@ -131,14 +241,14 @@ module.exports = {
       try {
         for(i = 0; i < alphabet.length; i++) {
           elements = await Element.find({
+            'owner': userID,
+            'title': new RegExp(alphabet[i].regex, "i"),
             '$or': [{
-              'owner': userID,
               'categories.name': category
             }, {
-              'owner': userID,
               'categories.parentCategory': category
-            }],
-            'title': new RegExp(alphabet[i].regex, "i")
+            }]
+
           }).sort({ title: 1 })
           if (elements.length !== 0) {
             finalList.push({'title': alphabet[i].chunk, 'elements': elements})
@@ -150,13 +260,107 @@ module.exports = {
       } catch (e) {
         return ({error: 'error in query_6'})
       }
+    }
 
+    if (sortBy === 'date') {
+      var finalList = []
+      var monthList = []
+      try {
+        let { timestamp: firstConnection } = await User.findById(userID)
+
+        let elementsToday = await Element.find(
+          {
+            'owner': userID,
+            'timestamp.date': new Date().setHours(0, 0, 0, 0),
+            '$or': [{
+              'categories.name': category
+            }, {
+              'categories.parentCategory': category
+            }]
+          }).sort({ timestamp: -1 })
+
+        if (elementsToday.length !== 0) {
+          finalList.push({'title': 'Avui', 'elements': elementsToday})
+        }
+
+        let elementsThisMonth = await Element.find(
+          {
+            'owner': userID,
+            'timestamp.date': { $ne: new Date().setHours(0, 0, 0, 0) },
+            'timestamp.month': new Date().getMonth(),
+            '$or': [{
+              'categories.name': category
+            }, {
+              'categories.parentCategory': category
+            }]
+          }).sort({ timestamp: -1 })
+
+        if (elementsThisMonth.length !== 0) {
+          finalList.push({'title': 'Aquest mes', 'elements': elementsThisMonth})
+        }
+
+        for (var i = new Date().getFullYear(); i >= firstConnection.getFullYear(); i--) {
+          for (var j = 11; j >= 0; j--) {
+              if (j !== new Date().getMonth()) {
+                let elementsPerMonth = await Element.find(
+                  {
+                    'owner': userID,
+                    'timestamp.month': j,
+                    'timestamp.year': i,
+                    '$or': [{
+                      'categories.name': category
+                    }, {
+                      'categories.parentCategory': category
+                    }]
+                  }).sort({ timestamp: -1 })
+
+                if (elementsPerMonth.length !== 0) {
+                  monthList.push({'title': this.getMonthName(j), 'elements': elementsPerMonth})
+
+                }
+              }
+          }
+        }
+
+        return(finalList.concat(monthList))
+      } catch (e) {
+        return({error: 'error in query_4'})
+      }
     }
   },
 
   // ------------------------------------------
-  async finalList (elements) {
-    // console.log('inside finalList -> ' + elements[0].title);
-    return [{'title': 'SEARCH', 'elements': elements}]
+  finalList (elements) {
+    return [{'title': 'RESULTS', 'elements': elements}]
+  },
+
+  getMonthName (index) {
+    switch (index) {
+      case 0:
+        return 'Gener'
+      case 1:
+        return 'Febrer'
+      case 2:
+        return 'Març'
+      case 3:
+        return 'Abril'
+      case 4:
+        return 'Maig'
+      case 5:
+        return 'Juny'
+      case 6:
+        return 'Juliol'
+      case 7:
+        return 'Agost'
+      case 8:
+        return 'Setembre'
+      case 9:
+        return 'Octubre'
+      case 10:
+        return 'Novembre'
+      case 11:
+        return 'Decembre'
+    }
   }
+
 }

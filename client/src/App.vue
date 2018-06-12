@@ -84,7 +84,8 @@ export default {
     /*background-color: #f7f8fb;
     background-color: #f4f8f9;*/
     background-color: #f8f9f9;
-    /* padding-left: 270px !important; */
+    max-height: 100vh;
+    overflow:hidden;
   }
 
   div.dialog__content {

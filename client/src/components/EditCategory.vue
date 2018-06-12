@@ -43,8 +43,9 @@ export default {
   methods: {
     async editCategory () {
       // alert(this.category._id + ' | ' + this.category.name)
-      await Category.editCategory(this.category._id, this.category)
+      await Category.editCategoryName(this.category)
       this.$store.commit('setEditCategoryDisplay')
+      this.$store.commit('setRefreshElements')
     },
 
     close () {

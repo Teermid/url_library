@@ -15,7 +15,7 @@
     "nodemon": "^1.12.1"
   },
   "scripts": {
-    "start": "node node_modules/nodemon/bin/nodemon.js src/app.js --exec",
+    "start": "node node_modules/nodemon/bin/nodemon.js src/app.js --exec", 
     "lint": "node node_modules/.bin/eslint **.*.js"
   },
   "dependencies": {
