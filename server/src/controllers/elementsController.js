@@ -16,7 +16,8 @@ module.exports = {
     console.log('searchValue -> ' + searchValue);
     const isSearch = req.query.isSearch
     const userID = req.query.userID
-    const sortBy = req.query.sortBy[0] || null
+    const sortBy = req.query.sortBy || null
+    console.log(sortBy);
     let response = null
 
     if (isSearch === 'true' && searchValue !== '' && category === 'All') {
@@ -150,6 +151,29 @@ module.exports = {
       res.send('success')
     } catch (e) {
       res.status(500).send({error: 'error adding categories to multiple elements (elementsController)'})
+    }
+  },
+
+  async adminAdd (req, res) {
+    try {
+      for (var i = 1; i <= 20; i++) {
+        const { title, description, image, logo } = await Metadata.getMetadata(req.body.url)
+          const element = new Element(
+            {
+              title: req.body.title || title,
+              link: req.body.url,
+              description: req.body.description || description,
+              categories: req.body.categories || [],
+              imageURL: image,
+              iconURL: logo,
+              owner: req.body.userID
+            })
+          await element.save()
+          console.log('Element ' + i + ' added');
+      }
+      res.send('SUCCESS')
+    } catch (error) {
+      res.send('ERROR')
     }
   }
 

@@ -6,5 +6,8 @@ export default {
   },
   login (credentials) {
     return api().post('login', credentials)
+  },
+  getUserFromToken (jwt) {
+    return api().get(`user/${jwt}`)
   }
 }

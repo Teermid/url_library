@@ -80,10 +80,8 @@ export default {
   }
 
   .background {
-    /*background-color: #f5f5f5;*/
-    /*background-color: #f7f8fb;
-    background-color: #f4f8f9;*/
-    background-color: #f8f9f9;
+    /*background-color: #f8f9f9;*/
+    background-color: white;
     max-height: 100vh;
     overflow:hidden;
   }

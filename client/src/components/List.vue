@@ -156,11 +156,11 @@ export default {
   },
   data () {
     return {
-      data: [{}],
+      data: [],
       userID: this.$store.getters.getUserID,
       categoryFilter: 'All',
       searchValue: '',
-      sortBy: this.$store.getters.getSortBy,
+      sortBy: '',
       popUpEdit: false,
       deleteVerification: false,
       idToDelete: '',
@@ -171,8 +171,8 @@ export default {
   },
 
   async beforeMount () {
-    // this.getElements('All', false, null, this.userID, this.sortBy)
-    this.getData('All', false, null, this.userID, this.sortBy)
+    alert(this.$store.getters.getCategoryFilter)
+    this.getData(this.$store.getters.getCategoryFilter, false, null, this.userID, this.$store.getters.getSortBy)
     this.getCategories()
   },
 
@@ -194,7 +194,7 @@ export default {
 
     async confirmDeletion () {
       await Elements.deleteElement(this.idToDelete)
-      this.getData(this.categoryFilter, 'true', this.searchValue, this.userID, this.sortBy)
+      this.getData(this.categoryFilter, 'true', this.searchValue, this.userID, this.this.$store.getters.getSortBy)
       this.deleteVerification = false
     },
 
@@ -275,20 +275,20 @@ export default {
     '$store.state.searchString': {
       async handler (value) {
         this.searchValue = value
-        this.getData(null, 'true', this.searchValue, this.userID, this.sortBy)
+        this.getData(null, 'true', this.searchValue, this.userID, this.$store.getters.getSortBy)
       }
     },
 
     '$store.state.categoryFilter': {
       async handler (value) {
         this.categoryFilter = value
-        if (value !== 'All' && this.sortBy[0] === 'category') {
+        if (value !== 'All' && this.sortBy === 'category') {
           // S'ha d'igualar a valor pe defecte de la configuració d'usuari
           this.sortBy = 'date'
         }
         // TODO: Comprovar si ens trobem a una categoria root per permetre l'opció de filtrar per categories nidades
 
-        this.getData(this.categoryFilter, 'false', null, this.userID, this.sortBy)
+        this.getData(this.categoryFilter, 'false', null, this.userID, this.$store.getters.getSortBy)
       }
     },
 
@@ -301,7 +301,7 @@ export default {
 
     '$store.state.refreshElements': {
       async handler () {
-        this.getData(this.categoryFilter, 'false', null, this.userID, this.sortBy)
+        this.getData(this.categoryFilter, 'false', null, this.userID, this.$store.getters.getSortBy)
       }
     },
 

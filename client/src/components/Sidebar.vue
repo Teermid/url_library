@@ -9,42 +9,47 @@
         <v-btn
           @click="deleteCategory(categoryIdToDelete, true)"
           depressed
-          color="blue accent-2"
-          class="white--text">
+          color="blue accent-2">
           NO</v-btn>
         <v-btn
           @click="deleteCategoryWithBookmarks(categoryIdToDelete)"
           depressed
-          color="red accent-2"
-          class="white--text">
+          color="red accent-2">
           SÍ</v-btn>
       </v-card>
     </v-dialog>
-    <v-navigation-drawer fixed v-model="$store.state.sidebarDisplay" app dark class="sidebar">
-      <div id="brand" class="white--text f_black subheading">
+    <v-navigation-drawer v-bind:style="{'background-color':$store.state.settings.color.hex}" v-bind:class="{ 'white--text':!$store.state.settings.color.light }" fixed v-model="$store.state.sidebarDisplay" app class="sidebar">
+      <div id="brand" class="f_black subheading">
         SAVIFY
       </div>
 
       <div class="fixedCategories">
-        <div class="rootWrapper white--text" v-for="ca in fixedCategories" v-bind:class="{ selected: ca.selected }" @click="displayCategory(ca)" v-bind:value="ca.value"> {{ ca.name }} </div>
+        <div class="rootWrapper"
+          v-for="ca in text.fixedCategories"
+          v-bind:class="{ 'selectedLight': categorySelectedLight(ca), 'selectedDark': categorySelectedDark(ca), 'lightHover': $store.state.settings.color.light, 'darkHover': !$store.state.settings.color.light }"
+          @click="displayCategory(ca)"
+          v-bind:value="ca.value">
+          {{ ca.name }}
+        </div>
       </div>
 
       <div class="categoriesTitle body-2 f_black">
-        CATEGORIES
+        {{ text.CATEGORIES}}
       </div>
 
       <div class="categoryList">
         <div class="categoryContainer" v-for="ca in categoriesTemp" :key="ca._id" v-if="!ca.parentCategory">
+
           <div class="rootWrapper category"
-            v-bind:class="{ selected: ca.selected }"
+            v-bind:class="{ 'selectedLight': categorySelectedLight(ca), 'selectedDark': categorySelectedDark(ca), 'lightHover': $store.state.settings.color.light, 'darkHover': !$store.state.settings.color.light }"
             v-on:drop="drop(ca, $event)"
             v-on:dragover="$event.preventDefault()"
             draggable="true"
             v-on:dragstart="drag(ca, $event)">
-            <v-icon size="large" class="dropdown white--text" @click="dropdown(ca)" v-if="ca.kind == 'root'"> keyboard_arrow_down </v-icon>
-            <div class="root white--text" @click="displayCategory(ca)" v-bind:value="ca.name"> {{ ca.name }} </div>
+            <v-icon size="large" v-bind:class="{ 'white--text':!$store.state.settings.color.light }" class="dropdown" @click="dropdown(ca)" v-if="ca.kind == 'root'"> keyboard_arrow_down </v-icon>
+            <div class="root" @click="displayCategory(ca)" v-bind:value="ca.name"> {{ ca.name }} </div>
             <v-menu v-model="showMenu" offset-y absolute full-width>
-              <v-icon slot="activator" class="edit" size="medium"> more_vert </v-icon>
+              <v-icon slot="activator" v-bind:class="{ 'white--text':!$store.state.settings.color.light }" class="edit" size="medium"> more_vert </v-icon>
               <v-list>
                 <v-list-tile @click="editCategory(ca._id)">
                   <v-list-tile-title>Editar</v-list-tile-title>
@@ -57,13 +62,11 @@
           </div>
 
           <div class="childContainer"
-            v-bind:class="{ hidden: ca.hidden }"
-          >
+            v-bind:class="{ hidden: ca.hidden }">
             <div class="childWrapper category"
               v-for="nested in ca.nestedCategories"
-              v-bind:class="{ selected: nested.selected }"
-            >
-              <div class="child white--text category"
+              v-bind:class="{ 'selectedLight': categorySelectedLight(nested), 'selectedDark': categorySelectedDark(nested), 'lightHover': $store.state.settings.color.light, 'darkHover': !$store.state.settings.color.light }">
+              <div class="child"
                :key="nested._id"
                 v-bind:value="nested.name"
                 draggable="true"
@@ -74,7 +77,7 @@
                 {{ nested.name }}
               </div>
               <v-menu v-model="showMenu" offset-y absolute full-width>
-                <v-icon slot="activator" class="edit" size="medium"> more_vert </v-icon>
+                <v-icon slot="activator" v-bind:class="{ 'white--text':!$store.state.settings.color.light }" class="edit" size="medium"> more_vert </v-icon>
                 <v-list>
                   <v-list-tile @click="editCategory(nested._id)">
                     <v-list-tile-title>Editar</v-list-tile-title>
@@ -92,7 +95,7 @@
       <div class="addContainer">
         <v-menu top offset-y :close-on-content-click="false" value="addCategoryPopUp">
           <!-- <v-btn slot="activator">A Menu</v-btn> -->
-          <div slot="activator" class="add white--text" >Afegir Categoria</div>
+          <div slot="activator" class="add" >Afegir Categoria</div>
           <v-list>
             <v-form>
               <v-text-field
@@ -112,7 +115,8 @@
             </v-form>
         </v-list>
         </v-menu>
-        <div class="add white--text" @click="toggleBookmarkPopUp">Afegir Marcador</div>
+        <div class="add" @click="toggleBookmarkPopUp">Afegir Marcador</div>
+        <div class="add"  @click="settings">Settings</div>
       </div>
     </v-navigation-drawer>
   </div>
@@ -124,24 +128,27 @@
   export default {
     data () {
       return {
+        text: {
+          CATEGORIES: this.$store.getters.getContent.sidebar.categories,
+          fixedCategories: [
+            {
+              name: this.$store.getters.getContent.sidebar.all,
+              selected: true,
+              value: 'All'
+            },
+            {
+              name: this.$store.getters.getContent.sidebar.unsorted,
+              selected: false,
+              value: 'Unsorted'
+            }
+          ]
+        },
         category: {
           name: '',
           parentCategory: ''
         },
         categories: [{}],
         categoriesTemp: [{}],
-        fixedCategories: [
-          {
-            name: 'Tots',
-            selected: true,
-            value: 'All'
-          },
-          {
-            name: 'Sense Classificar',
-            selected: false,
-            value: 'Unsorted'
-          }
-        ],
         rootCategories: [],
         userID: this.$store.getters.getUserID,
         editCatPopUp: false,
@@ -233,8 +240,8 @@
               this.categoriesTemp[i].nestedCategories[j].selected = false
             }
           }
-          for (var k in this.fixedCategories) {
-            this.fixedCategories[k].selected = false
+          for (var k in this.text.fixedCategories) {
+            this.text.fixedCategories[k].selected = false
           }
           ca.selected = !ca.selected
         }
@@ -251,8 +258,8 @@
               }
             }
           }
-          for (var n in this.fixedCategories) {
-            this.fixedCategories[n].selected = (this.fixedCategories[n].name === tag)
+          for (var n in this.text.fixedCategories) {
+            this.text.fixedCategories[n].selected = (this.text.fixedCategories[n].name === tag)
           }
         }
       },
@@ -292,6 +299,18 @@
           await Element.addMult(this.$store.getters.getSelectedArray, dropCategory._id)
           this.$store.commit('setRefreshElements')
         }
+      },
+
+      categorySelectedLight (ca) {
+        return (ca.selected && this.$store.state.settings.color.light)
+      },
+
+      categorySelectedDark (ca) {
+        return (ca.selected && !this.$store.state.settings.color.light)
+      },
+
+      settings () {
+        this.$store.commit('setSettingsPopUp')
       }
     },
 

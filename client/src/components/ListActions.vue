@@ -97,7 +97,7 @@
           filterOptions: [
             {
               name: 'Títol',
-              value: ['title', 1],
+              value: 'title',
               active: false
             },
             /* {
@@ -107,7 +107,7 @@
             }, */
             {
               name: 'Data',
-              value: ['date', -1],
+              value: 'date',
               active: true
             },
             /* {
@@ -117,7 +117,7 @@
             }, */
             {
               name: 'Categoria',
-              value: ['category', 1],
+              value: 'category',
               active: false
             }
           ],

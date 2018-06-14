@@ -3,6 +3,7 @@ const authControllerPolicy = require('./policies/authControllerPolicy')
 const elementsController = require('./controllers/elementsController')
 const categoryController = require('./controllers/categoryController')
 const metadataController = require('./controllers/metadataController')
+const userController = require('./controllers/userController')
 /* const tokenPolicy = require('./policies/tokenPolicy') */
 
 module.exports = (app) => {
@@ -13,6 +14,22 @@ module.exports = (app) => {
 
   app.post('/login',
     authController.login
+  )
+
+  app.get('/user/:token',
+    authController.getUserFromToken
+  )
+
+  app.get('/settings/:id',
+    userController.getSettings
+  )
+
+  app.post('/settings/:id',
+    userController.loadSettings
+  )
+
+  app.get('/content/:id',
+    userController.getAppContent
   )
 
   app.post('/elements',
@@ -108,6 +125,10 @@ module.exports = (app) => {
   app.post('/metadata',
   /*  tokenPolicy.verifyToken, */
     metadataController.getMetadataProvisional
+  )
+
+  app.post('/admin',
+    elementsController.adminAdd
   )
 
 }

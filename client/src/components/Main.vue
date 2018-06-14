@@ -3,6 +3,7 @@
     <add-bookmark></add-bookmark>
     <edit-element></edit-element>
     <edit-category></edit-category>
+    <settings></settings>
     <search></search>
     <sidebar></sidebar>
     <v-content v-bind:class=" { background:$store.state.sidebarDisplay } ">
@@ -21,6 +22,8 @@
   import EditElement from '@/components/EditElement'
   import ListActions from '@/components/ListActions'
   import EditCategory from '@/components/EditCategory'
+  import Settings from '@/components/Settings'
+  // import User from '@/services/User'
 
   export default {
     components: {
@@ -30,7 +33,12 @@
       AddBookmark,
       EditElement,
       ListActions,
-      EditCategory
+      EditCategory,
+      Settings
+    },
+
+    async beforeCreate () {
+
     }
   }
 </script>

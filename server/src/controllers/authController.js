@@ -33,8 +33,6 @@ module.exports = {
       const user = await User.findOne({
         'email': req.body.email
       })
-      console.log(`user found: ${user}`)
-      console.log(user.password)
 
       if (!user) {
         res.status(403).send({error: 'Login information is not correct'})
@@ -50,5 +48,15 @@ module.exports = {
     } catch (e) {
       res.status(500).send({error: 'Server error'})
     }
+  },
+
+  async getUserFromToken (req, res) {
+    try {
+      let user = await tokenPolicy.getUser(req.params.token)
+      res.send(user)
+    } catch (e) {
+      res.status(403).send({'error': 'Invalid Token'})
+    }
   }
+
 }

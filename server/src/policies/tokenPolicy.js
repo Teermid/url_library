@@ -26,5 +26,9 @@ module.exports = {
       {
         expiresIn: ONE_WEEK
       })
+  },
+
+  async getUser (token) {
+    return await jwt.verify(token, config.authentication.jwtSecret)
   }
 }

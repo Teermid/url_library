@@ -11,7 +11,7 @@ export default new Vuex.Store({
     userID: null,
     userLogged: false,
     searchString: null,
-    categoryFilter: 'All',
+    categoryFilter: '',
     tag: false,
     tagContent: '',
     categoriesList: [],
@@ -21,8 +21,8 @@ export default new Vuex.Store({
     editDisplay: false,
     refreshElements: false,
     refreshChildCategories: false,
-    elementsDisplay: 'card',
-    sortBy: ['date', 1],
+    elementsDisplay: '',
+    sortBy: '',
     sidebarDisplay: true,
     elementId: '',
     elementByIdTrigger: false,
@@ -31,18 +31,18 @@ export default new Vuex.Store({
     selectedArray: [],
     categoryId: '',
     categoryByIdTrigger: false,
-    editCategoryDisplay: false
+    editCategoryDisplay: false,
+    settingsPopUp: false,
+    settings: {},
+    content: {}
   },
+
   mutations: { // syncronous
     setToken (state, content) {
       if (content) {
         state.token = content
         state.userLogged = true
       }
-      /* Necessari?? */
-      // } else  {
-      //   state.userLogged = false
-      // }
     },
 
     setUser (state, content) {
@@ -147,6 +147,26 @@ export default new Vuex.Store({
 
     setEditCategoryDisplay (state) {
       state.editCategoryDisplay = !state.editCategoryDisplay
+    },
+
+    setSettingsPopUp (state) {
+      state.settingsPopUp = !state.settingsPopUp
+    },
+
+    setSettings (state, content) {
+      state.settings = content
+    },
+
+    setColor (state, content) {
+      state.settings.color = content
+    },
+
+    setLanguage (state, content) {
+      state.settings.language = content
+    },
+
+    setContent (state, content) {
+      state.content = content
     }
   },
 
@@ -241,6 +261,14 @@ export default new Vuex.Store({
 
     getCategoryId (state) {
       return state.categoryId
+    },
+
+    getSettings (state) {
+      return state.settings
+    },
+
+    getContent (state) {
+      return state.content
     }
   }
 })

@@ -42,10 +42,9 @@ export default {
           email: this.email,
           password: this.password
         })
-        console.log(response)
-        this.$store.commit('setToken', response.data.token)
         this.$store.commit('setUser', response.data.user)
         this.$store.commit('setUserID', response.data.user._id)
+        localStorage.setItem('authToken', response.data.token)
         this.$router.push('/list')
       } catch (e) {
         console.log('ERROR')

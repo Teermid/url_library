@@ -110,7 +110,6 @@ export default {
       async handler (value) {
         try {
           this.element = (await Element.getElementById(this.$store.getters.getElementId)).data
-          console.log('ElementById -> ' + this.element.categories)
         } catch (e) {
           console.log('error getting element by id')
         }

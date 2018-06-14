@@ -99,6 +99,7 @@ module.exports = {
     }
 
     if (sortBy === 'date') {
+      console.log('INSIDE DATE');
       var finalList = []
       var monthList = []
       try {
