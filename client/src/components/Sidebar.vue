@@ -4,18 +4,22 @@
       <v-card class="pb-2">
         <v-card-text class="pt-3 pb-0">
           <v-icon color="red">warning</v-icon>
-          <p class="subheading f_bold mt-1">Eliminar marcadors de la categoria?</p>
+          <p class="subheading f_bold mt-1">{{ text.popups.deleteBookmarks.header }}</p>
         </v-card-text>
         <v-btn
-          @click="deleteCategory(categoryIdToDelete, true)"
-          depressed
-          color="blue accent-2">
-          NO</v-btn>
-        <v-btn
           @click="deleteCategoryWithBookmarks(categoryIdToDelete)"
+          class="white--text"
           depressed
           color="red accent-2">
-          SÍ</v-btn>
+        {{ text.popups.deleteBookmarks.y }}
+        </v-btn>
+        <v-btn
+          @click="deleteCategory(categoryIdToDelete, true)"
+          class="white--text"
+          depressed
+          color="blue accent-2">
+        {{ text.popups.deleteBookmarks.n }}
+        </v-btn>
       </v-card>
     </v-dialog>
     <v-navigation-drawer v-bind:style="{'background-color':$store.state.settings.color.hex}" v-bind:class="{ 'white--text':!$store.state.settings.color.light }" fixed v-model="$store.state.sidebarDisplay" app class="sidebar">
@@ -95,19 +99,18 @@
       <div class="addContainer">
         <v-menu top offset-y :close-on-content-click="false" value="addCategoryPopUp">
           <!-- <v-btn slot="activator">A Menu</v-btn> -->
-          <div slot="activator" class="add" >Afegir Categoria</div>
+          <div slot="activator" class="add" >{{ text.buttons.addCategory }}</div>
           <v-list>
             <v-form>
               <v-text-field
-                placeholder="Nom"
+                :placeholder="text.popups.addCategory.placeholder"
                 v-model="category.name"
               ></v-text-field>
               <v-select
                 :items="rootCategories"
-                placeholder="Categoria pare"
+                :placeholder="text.popups.addCategory.select"
                 clearable="true"
                 v-model="category.parentCategory"
-                label="Select"
                 item-text="name"
                 item-value="name"
               ></v-select>
@@ -115,7 +118,7 @@
             </v-form>
         </v-list>
         </v-menu>
-        <div class="add" @click="toggleBookmarkPopUp">Afegir Marcador</div>
+        <div class="add" @click="toggleBookmarkPopUp">{{ text.buttons.addBookmark }}</div>
         <div class="add"  @click="settings">Settings</div>
       </div>
     </v-navigation-drawer>
@@ -129,40 +132,64 @@
     data () {
       return {
         text: {
-          CATEGORIES: this.$store.getters.getContent.sidebar.categories,
+          CATEGORIES: null,
           fixedCategories: [
             {
-              name: this.$store.getters.getContent.sidebar.all,
+              name: null,
               selected: true,
               value: 'All'
             },
             {
-              name: this.$store.getters.getContent.sidebar.unsorted,
+              name: null,
               selected: false,
               value: 'Unsorted'
             }
-          ]
+          ],
+          buttons: {
+            addCategory: null,
+            addBookmark: null
+          },
+
+          popups: {
+            addCategory: {
+              placeholder: null
+            },
+            deleteBookmarks: {
+              header: null,
+              y: null,
+              n: null
+            }
+          }
         },
+
         category: {
-          name: '',
-          parentCategory: ''
+          name: null,
+          parentCategory: null
         },
         categories: [{}],
         categoriesTemp: [{}],
         rootCategories: [],
-        userID: this.$store.getters.getUserID,
+        userID: null,
         editCatPopUp: false,
-        categoryIdToDelete: '',
+        categoryIdToDelete: null,
         popupDeleteBookmarks: false
         // hasBeenCalled = false
       }
     },
 
     async beforeMount () {
-      // if (!hasBeenCalled) {
+      this.text.CATEGORIES = this.$store.getters.getContent.sidebar.categories
+      this.text.fixedCategories[0].name = this.$store.getters.getContent.sidebar.all
+      this.text.fixedCategories[1].name = this.$store.getters.getContent.sidebar.unsorted
+      this.text.buttons.addCategory = this.$store.getters.getContent.sidebar.buttons.addCategory
+      this.text.buttons.addBookmark = this.$store.getters.getContent.sidebar.buttons.addBookmark
+      this.text.popups.addCategory.placeholder = this.$store.getters.getContent.popups.addCategory.placeholder
+      this.text.popups.addCategory.select = this.$store.getters.getContent.popups.addCategory.select
+      this.text.popups.deleteBookmarks.header = this.$store.getters.getContent.popups.deleteBookmarks.header
+      this.text.popups.deleteBookmarks.y = this.$store.getters.getContent.popups.deleteBookmarks.y
+      this.text.popups.deleteBookmarks.n = this.$store.getters.getContent.popups.deleteBookmarks.n
+      this.userID = this.$store.getters.getUserID
       this.printCategories()
-      //  this.hasBeenCalled = true
-      // }
     },
 
     methods: {

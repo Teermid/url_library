@@ -2,7 +2,7 @@
   <v-dialog v-model="$store.state.settingsPopUp" origin="top center" max-width="400px" lazy>
     <v-card>
       <v-card-title>
-        <span class="headline px-2">Configuració</span>
+        <span class="headline px-2"> {{ text.header }} </span>
         <v-spacer></v-spacer>
         <v-btn icon slot="activator" @click="close">
           <v-icon color="grey lighten-2">close</v-icon>
@@ -10,13 +10,13 @@
       </v-card-title>
       <v-card-text>
         <v-tabs fixed-tabs>
-          <v-tab>Aplicació</v-tab>
-          <v-tab>Usuari</v-tab>
+          <v-tab> {{ text.app.title }} </v-tab>
+          <v-tab>{{ text.user.title }}</v-tab>
           <v-tab-item>
             <v-card flat>
               <v-card-text>
                 <div class="settingsGroup">
-                  <p>Color de la barra lateral</p>
+                  <p>{{ text.app.color }}</p>
                   <div class="colorContainer">
                     <div class="color" v-for="color in settings.colors" @click="setColor(color)" v-bind:style="{ 'background-color':color.hex }"></div>
                   </div>
@@ -55,6 +55,19 @@ import User from '@/services/User'
 export default {
   data () {
     return {
+      text: {
+        header: null,
+        app: {
+          title: null,
+          color: null,
+          notifications: {
+
+          }
+        },
+        user: {
+          title: null
+        }
+      },
       bookmarkDeleteConfirm: true,
       userSettings: {},
       languageSelected: null,
@@ -80,20 +93,30 @@ export default {
 
         language: [
           {
-            text: 'Català',
+            text: null,
             value: 'catalan'
           },
           {
-            text: 'Castellà',
+            text: null,
             value: 'spanish'
           },
           {
-            text: 'Anglès',
+            text: null,
             value: 'english'
           }
         ]
       }
     }
+  },
+
+  beforeMount () {
+    this.text.header = this.$store.getters.getContent.settings.header
+    this.text.app.title = this.$store.getters.getContent.settings.app.title
+    this.text.app.color = this.$store.getters.getContent.settings.app.color
+    this.text.user.title = this.$store.getters.getContent.settings.user.title
+    this.settings.language[0].text = this.$store.getters.getContent.settings.app.languages.catalan
+    this.settings.language[1].text = this.$store.getters.getContent.settings.app.languages.spanish
+    this.settings.language[2].text = this.$store.getters.getContent.settings.app.languages.english
   },
 
   methods: {

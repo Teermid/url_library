@@ -4,7 +4,7 @@ const elementsController = require('./controllers/elementsController')
 const categoryController = require('./controllers/categoryController')
 const metadataController = require('./controllers/metadataController')
 const userController = require('./controllers/userController')
-/* const tokenPolicy = require('./policies/tokenPolicy') */
+const tokenPolicy = require('./policies/tokenPolicy')
 
 module.exports = (app) => {
   app.post('/register',
@@ -12,7 +12,7 @@ module.exports = (app) => {
     authController.register
   )
 
-  app.post('/login',
+  app.get('/login',
     authController.login
   )
 
@@ -21,114 +21,122 @@ module.exports = (app) => {
   )
 
   app.get('/settings/:id',
+    // tokenPolicy.verifyToken,
     userController.getSettings
   )
 
   app.post('/settings/:id',
+    // tokenPolicy.verifyToken,
     userController.loadSettings
   )
 
   app.get('/content/:id',
+    // tokenPolicy.verifyToken,
     userController.getAppContent
   )
 
   app.post('/elements',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     elementsController.addElements
   )
 
   app.get('/elements',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     elementsController.getData
   )
 
   app.get('/elements/:id',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     elementsController.getElementById
   )
 
   app.put('/elements/:id',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     elementsController.editElement
   )
 
   app.delete('/elements/:id',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     elementsController.deleteElement
   )
 
+  app.get('/element-metadata',
+  // tokenPolicy.verifyToken,
+    elementsController.getMetadata
+  )
+
   app.get('/elements/checkCat/:catID',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     elementsController.checkCategory
   )
 
   app.post('/unsort',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     elementsController.unsort
   )
 
   app.post('/delmult',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     elementsController.deleteMultiple
   )
 
   app.post('/addmult/:catId',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     elementsController.addMultiple
   )
 
   app.post('/category',
-    /* tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     categoryController.addCategory
   )
 
   app.get('/category',
-  /*  tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     categoryController.getCategories
   )
 
   app.get('/category/:catID',
-  /*  tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     categoryController.getCategoryById
   )
 
   app.get('/root-categories',
-  /*  tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     categoryController.getRootCategories
   )
 
   app.get('/child-categories',
-  /*  tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     categoryController.getChildCategories
   )
 
   app.put('/category/:id',
-  /*  tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     categoryController.editCategoryName
   )
 
   app.put('/category/:id/:dropName',
-  /*  tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     categoryController.editCategoryHierarchy
   )
 
   app.delete('/category/:id/:flag',
-  /*  tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     categoryController.deleteCategory
   )
 
   app.get('/categoryEmpty/:id',
-  /*  tokenPolicy.verifyToken, */
+    // tokenPolicy.verifyToken,
     categoryController.isEmpty
   )
 
-  app.post('/metadata',
-  /*  tokenPolicy.verifyToken, */
-    metadataController.getMetadataProvisional
+  app.post('/extension',
+    // tokenPolicy.verifyToken,
+    elementsController.addElementFromExtension
   )
 
-  app.post('/admin',
-    elementsController.adminAdd
-  )
+  // app.get('/cookie',
+  //   authController.getCookie
+  // )
 
 }

@@ -1,0 +1,91 @@
+{
+    "sidebar": {
+
+      "all": "Tots",
+      "unsorted": "Sense Classificar",
+      "categories": "CATEGORIES",
+      "buttons": {
+        "addCategory": "Afegir Categoria",
+        "addBookmark": "Afegir Marcador"
+      }
+    },
+    "popups": {
+
+      "addCategory": {
+        "placeholder":"Nom",
+        "select": "Categoria pare"
+      },
+
+      "addBookmark": {
+        "header": "Nou Marcador",
+        "url": "URL del lloc",
+        "category": "Categoria/es",
+        "title": "Títol",
+        "description": "Descripció"
+      },
+
+      "deleteBookmarks": {
+        "header": "Eliminar marcadors de la categoria?",
+        "y": "Sí",
+        "n": "No"
+      },
+
+      "deleteConfirmation": {
+        "header": "Eliminar marcador?",
+        "y": "Sí",
+        "n": "No"
+      }
+    },
+
+    "errors": {
+
+      "addBookmark": {
+        "link": "Camp obligatori",
+        "link_2": "La URL no és vàlida",
+        "title": "El títol no pot contindre més de 60 caràcters",
+        "description": "La descripció no pot contindre més de 120 caracters"
+      }
+    },
+
+    "searchBar": {
+      "placeholder": "Cerca.."
+    },
+
+    "filters": {
+        "display": {
+          "card": "Tarjetes",
+          "grid": "Quadrícula",
+          "list": "Llista"
+        },
+
+        "order": {
+          "title": "Títol",
+          "date": "Data",
+          "category": "Categoria"
+        },
+
+        "multipleSelect": {
+          "all": "Tots",
+          "unsort": "Desclassificar",
+          "delete": "Eliminar"
+        }
+    },
+
+    "settings": {
+      "header": "Configuració",
+      "app": {
+        "title": "APLICACIÓ",
+        "color": "Color de la barra lateral",
+        "notifications": {
+        },
+        "languages": {
+          "catalan": "Català",
+          "spanish": "Castellà",
+          "english": "Anglès"
+        }
+      },
+      "user": {
+        "title": "USUARI"
+      }
+    }
+}

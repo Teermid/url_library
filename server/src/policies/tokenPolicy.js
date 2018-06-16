@@ -11,7 +11,7 @@ module.exports = {
       const bearer = authHeader.split(' ')
       const token = bearer[1]
       const response = await jwt.verify(token, config.authentication.jwtSecret)
-      if (response.id) {
+      if (response._id) {
         next()
       } else {
         res.send(403)
@@ -28,7 +28,15 @@ module.exports = {
       })
   },
 
-  async getUser (token) {
-    return await jwt.verify(token, config.authentication.jwtSecret)
+  async getUser (authToken) {
+    try {
+      const bearer = authToken.split(' ')
+      const token = bearer[1]
+      return await jwt.verify(token, config.authentication.jwtSecret)
+    } catch (e) {
+      return await jwt.verify(authToken, config.authentication.jwtSecret)
+    }
+
+
   }
 }

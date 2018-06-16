@@ -23,7 +23,11 @@
       <v-toolbar-side-icon color="grey--text" @click.stop="toggleSidebar"></v-toolbar-side-icon>
       <v-icon class="ml-3" color="grey lighten-1" size="25px">search</v-icon>
       <v-layout row align-center>
-        <input class="black--text" type="text" placeholder="Cerca.." v-model="search"
+        <input
+          class="black--text"
+          type="text"
+          :placeholder="text.placeholder"
+          v-model="search"
           style="
             padding:10px;
             border:none;
@@ -43,9 +47,16 @@
     },
     data () {
       return {
+        'text': {
+          'placeholder': null
+        },
         search: '',
         drawer: true
       }
+    },
+
+    beforeMount () {
+      this.text.placeholder = this.$store.getters.getContent.searchBar.placeholder
     },
 
     methods: {

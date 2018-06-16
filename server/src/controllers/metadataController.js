@@ -13,8 +13,14 @@ module.exports = {
   },
 
   async getMetadataProvisional (req, res) {
-    console.log('req.body.link ->' +  req.body.link);
-    res.send(await getMetadata(req.body.link))
+    console.log('------- GET METADATA --------');
+    console.log(req.query.url);
+    try {
+      res.send(await getMetadata(req.query.url))
+    } catch (e) {
+      res.status(403).send({error: 'error getting metdata'})
+    }
+
   }
 
 }

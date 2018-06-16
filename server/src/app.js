@@ -1,5 +1,7 @@
 const express = require('express')
+const session = require('express-session')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const morgan = require('morgan')
 const config = require('./config/config')
@@ -23,7 +25,8 @@ db.on('error', function (err) {
 app.use(
   morgan('combined'),
   bodyParser.json(),
-  cors()
+  cors(),
+  cookieParser(),
 )
 
 routing(app)

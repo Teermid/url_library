@@ -4,21 +4,21 @@
     <v-card class="pb-2">
       <v-card-text class="pt-3 pb-0">
         <v-icon color="red">warning</v-icon>
-        <p class="subheading f_bold mt-1">Eliminar marcador?</p>
+        <p class="subheading f_bold mt-1">{{ text.deleteConfirmation.header }}</p>
       </v-card-text>
-      <v-btn
-        @click="deleteVerification = !deleteVerification"
-        depressed
-        color="blue accent-2"
-        class="white--text">
-        Cancelar</v-btn>
-      <v-btn
-        @click="confirmDeletion()"
-        depressed
-        color="red accent-2"
-        class="white--text">
-        Confirmar</v-btn>
-    </v-card>
+        <v-btn
+          @click="confirmDeletion()"
+          depressed
+          color="red accent-2"
+          class="white--text">
+          {{ text.deleteConfirmation.y }}</v-btn>
+        <v-btn
+          @click="deleteVerification = !deleteVerification"
+          depressed
+          color="blue accent-2"
+          class="white--text">
+          {{ text.deleteConfirmation.n }}</v-btn>
+      </v-card>
   </v-dialog>
 
   <div class="chunk" v-for="chunk in data">
@@ -156,14 +156,21 @@ export default {
   },
   data () {
     return {
+      text: {
+        deleteConfirmation: {
+          header: null,
+          y: null,
+          n: null
+        }
+      },
       data: [],
-      userID: this.$store.getters.getUserID,
+      userID: null,
       categoryFilter: 'All',
-      searchValue: '',
-      sortBy: '',
+      searchValue: null,
+      sortBy: null,
       popUpEdit: false,
       deleteVerification: false,
-      idToDelete: '',
+      idToDelete: null,
       selectionFilterSelected: false,
       selectedArray: [],
       categories: []
@@ -171,8 +178,13 @@ export default {
   },
 
   async beforeMount () {
-    alert(this.$store.getters.getCategoryFilter)
-    this.getData(this.$store.getters.getCategoryFilter, false, null, this.userID, this.$store.getters.getSortBy)
+    this.text.deleteConfirmation.header = this.$store.getters.getContent.popups.deleteConfirmation.header
+    this.text.deleteConfirmation.y = this.$store.getters.getContent.popups.deleteConfirmation.y
+    this.text.deleteConfirmation.n = this.$store.getters.getContent.popups.deleteConfirmation.n
+    this.categoryFilter = this.$store.getters.getCategoryFilter
+    this.sortBy = this.$store.getters.getSortBy
+    this.userID = this.$store.getters.getUserID
+    this.getData(this.categoryFilter, false, null, this.userID, this.sortBy)
     this.getCategories()
   },
 
@@ -194,7 +206,7 @@ export default {
 
     async confirmDeletion () {
       await Elements.deleteElement(this.idToDelete)
-      this.getData(this.categoryFilter, 'true', this.searchValue, this.userID, this.this.$store.getters.getSortBy)
+      this.getData(this.categoryFilter, 'true', this.searchValue, this.userID, this.sortBy)
       this.deleteVerification = false
     },
 
@@ -275,7 +287,7 @@ export default {
     '$store.state.searchString': {
       async handler (value) {
         this.searchValue = value
-        this.getData(null, 'true', this.searchValue, this.userID, this.$store.getters.getSortBy)
+        this.getData(null, 'true', this.searchValue, this.userID, this.sortBy)
       }
     },
 
@@ -288,7 +300,7 @@ export default {
         }
         // TODO: Comprovar si ens trobem a una categoria root per permetre l'opció de filtrar per categories nidades
 
-        this.getData(this.categoryFilter, 'false', null, this.userID, this.$store.getters.getSortBy)
+        this.getData(this.categoryFilter, 'false', null, this.userID, this.sortBy)
       }
     },
 
@@ -301,7 +313,7 @@ export default {
 
     '$store.state.refreshElements': {
       async handler () {
-        this.getData(this.categoryFilter, 'false', null, this.userID, this.$store.getters.getSortBy)
+        this.getData(this.categoryFilter, 'false', null, this.userID, this.sortBy)
       }
     },
 

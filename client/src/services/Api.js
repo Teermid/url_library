@@ -4,7 +4,7 @@ export default () => {
   return axios.create({
     baseURL: 'http://localhost:8081',
     headers: {
-      Authoritzation: 'Bearer ' + localStorage.getItem('authHeader') || null
+      Authoritzation: 'Bearer ' + localStorage.getItem('authToken') || null
     }
   })
 }

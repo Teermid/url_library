@@ -5,7 +5,12 @@ export default {
     return api().post('register', credentials)
   },
   login (credentials) {
-    return api().post('login', credentials)
+    return api().get('login', {
+      params: {
+        email: credentials.email,
+        password: credentials.password
+      }
+    })
   },
   getUserFromToken (jwt) {
     return api().get(`user/${jwt}`)

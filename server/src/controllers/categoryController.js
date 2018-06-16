@@ -1,12 +1,23 @@
 const Category = require('../models/Category')
 const Element = require('../models/Element')
+const tokenPolicy = require('../policies/tokenPolicy')
 
 module.exports = {
 
   async getCategories (req, res) {
+    let { _id } = await tokenPolicy.getUser(req.headers['authoritzation'])
     try {
       const category = await Category.find({
-        'owner': req.query.userID
+        'owner': _id,
+        $or: [
+          {
+            'kind': 'root'
+          },
+          {
+            'kind': 'child',
+            'parentCategory': null
+          }
+        ]
       }, {__v: 0})
       res.send(category)
     } catch (e) {
@@ -33,7 +44,6 @@ module.exports = {
           {
             'kind': 'child',
             'parentCategory': null
-
           }
         ]
 

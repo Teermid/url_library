@@ -1,5 +1,5 @@
 const User = require('../models/User')
-const content = require('../content/content')
+const content = require('../content/index')
 
 module.exports = {
   async getSettings (req, res) {
@@ -16,10 +16,6 @@ module.exports = {
   },
 
   async getAppContent (req, res) {
-    console.log(' ----------------- GET APP CONTENT -----------------');
-    let user = await User.findById(req.params.id)
-    if (user.settings.language.value === 'catalan') {
-      res.send(content.catalan)
+    res.send(await content.getContent(req.params.id))
     }
   }
-}

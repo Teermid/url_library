@@ -32,14 +32,9 @@
         <v-icon color="grey">layers</v-icon>
       </v-btn>
 
-      <v-btn slot="activator" @click="selectAll" v-if="$store.state.multSelect">
-        Tots
-      </v-btn>
-
+      <v-btn slot="activator" @click="selectAll" v-if="$store.state.multSelect">Tots</v-btn>
       <v-btn depressed slot="activator" @click="unsort" v-if="$store.state.multSelect">Desclassificar</v-btn>
-
       <v-btn depressed slot="activator" @click="deleteMult" v-if="$store.state.multSelect">Eliminar</v-btn>
-
       <v-btn icon slot="activator" @click="multSelect" v-if="$store.state.multSelect">
         <v-icon color="grey">close</v-icon>
       </v-btn>
@@ -72,23 +67,26 @@
     export default {
       data () {
         return {
-          search: '',
-          Object: [],
-          category: this.$store.getters.getCategoryFilter,
-          categoriesList: this.$store.getters.getCategoriesList,
+          text: {
+            all: null,
+            unsort: null,
+            delete: null
+          },
+          category: null,
+          categoriesList: null,
           displayOptions: [
             {
-              name: 'Tarjetes',
+              name: null,
               value: 'card',
               active: true
             },
             {
-              name: 'Quadricula',
+              name: null,
               value: 'grid',
               active: false
             },
             {
-              name: 'Llista',
+              name: null,
               value: 'list',
               active: false
             }
@@ -96,7 +94,7 @@
 
           filterOptions: [
             {
-              name: 'Títol',
+              name: null,
               value: 'title',
               active: false
             },
@@ -106,7 +104,7 @@
               active: false
             }, */
             {
-              name: 'Data',
+              name: null,
               value: 'date',
               active: true
             },
@@ -116,13 +114,26 @@
               active: false
             }, */
             {
-              name: 'Categoria',
+              name: null,
               value: 'category',
               active: false
             }
-          ],
-          checkbox: false
+          ]
         }
+      },
+
+      beforeMount () {
+        this.category = this.$store.getters.getCategoryFilter
+        this.categoriesList = this.$store.getters.getCategoriesList
+        this.displayOptions[0].name = this.$store.getters.getContent.filters.display.card
+        this.displayOptions[1].name = this.$store.getters.getContent.filters.display.grid
+        this.displayOptions[2].name = this.$store.getters.getContent.filters.display.list
+        this.filterOptions[0].name = this.$store.getters.getContent.filters.order.title
+        this.filterOptions[1].name = this.$store.getters.getContent.filters.order.date
+        this.filterOptions[2].name = this.$store.getters.getContent.filters.order.category
+        this.text.all = this.$store.getters.getContent.filters.multipleSelect.all
+        this.text.unsort = this.$store.getters.getContent.filters.multipleSelect.unsort
+        this.text.delete = this.$store.getters.getContent.filters.multipleSelect.delete
       },
 
       methods: {

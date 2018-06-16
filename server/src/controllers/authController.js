@@ -28,21 +28,19 @@ module.exports = {
   },
 
   async login (req, res) {
-    console.log(`inside login`)
     try {
       const user = await User.findOne({
-        'email': req.body.email
+        'email': req.query.email
       })
-
       if (!user) {
-        res.status(403).send({error: 'Login information is not correct'})
-      } else if (!(await bcryptPolicy.comparePasswords(req.body.password, user.password))) {
-        res.status(403).send({error: 'Login information is not correct'})
+        res.status(403).send({error: 'Mail is not correct'})
+      } else if (!(await bcryptPolicy.comparePasswords(req.query.password, user.password))) {
+        res.status(403).send({error: 'Password is not correct'})
       } else {
-        const userJson = user.toJSON()
+        let token = tokenPolicy.jwtSignUser(user.toJSON())
         res.send({
-          user: userJson,
-          token: tokenPolicy.jwtSignUser(userJson)
+          user: user,
+          token: token
         })
       }
     } catch (e) {

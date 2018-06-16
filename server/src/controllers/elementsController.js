@@ -2,6 +2,7 @@ const Element = require('../models/Element')
 const Category = require('../models/Category')
 const Metadata = require('./metadataController')
 const queries = require('./queries/getQueries')
+const tokenPolicy = require('../policies/tokenPolicy')
 var category = null
 
 function escapeRegExp (text) {
@@ -68,6 +69,29 @@ module.exports = {
     }
   },
 
+  async addElementFromExtension (req, res) {
+    try {
+      console.log(req.body.metadata)
+      const categories = await Category.find({'_id': {'$in': req.body.categories}})
+      const { _id } = await tokenPolicy.getUser(req.headers['authoritzation'])
+      const element = new Element(
+        {
+          title: req.body.metadata.title,
+          link: req.body.metadata.url,
+          description: 'DA MUMEN NO DASKRIPCIÓ',
+          imageURL: req.body.metadata.image,
+          categories: categories || [],
+          owner: _id
+        })
+
+      await element.save()
+      res.status(200).send('ok')
+    } catch (e) {
+      console.log('NO FURULLA');
+    }
+
+  },
+
   async getElementById (req, res) {
     try {
       const element = await Element.findById(req.params.id)
@@ -79,8 +103,7 @@ module.exports = {
 
   async editElement (req, res) {
     try {
-      const elementTemp = await Element.findById(req.params.id)
-      var oldDate = elementTemp.timestamp
+      const { timestamp, createdAt } = await Element.findById(req.params.id)
       await Element.findByIdAndRemove(req.params.id)
       const element = new Element(req.body)
       element.timestamp = oldDate
@@ -98,6 +121,22 @@ module.exports = {
     /*  res.status(200).send({msg: 'Element deleted'}) */
     } catch (e) {
       res.status(500).send({error: 'error geting element by id (elementsController)'})
+    }
+  },
+
+  async getMetadata (req, res) {
+    try {
+      const response = await Element.find({'link': req.query.url})
+      console.log(response);
+      console.log('length -> ' + response.length);
+      if (response.length > 0) {
+        console.log('EL PUTU MARCADOR JA ESTA PUTU GUARDAT JODER');
+        res.send(true)
+      } else {
+        res.send(await Metadata.getMetadata(req.query.url))
+      }
+    } catch (e) {
+      res.send('error')
     }
   },
 

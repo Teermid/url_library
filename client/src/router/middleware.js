@@ -10,7 +10,6 @@ async function loadData (user, content) {
   store.state.elementsDisplay = user.settings.view
   store.state.sortBy = user.settings.sortBy
   store.state.categoryFilter = user.settings.category
-  alert(store.state.categoryFilter)
 }
 
 export default {
@@ -22,7 +21,8 @@ export default {
         await loadData(user, content)
         next()
       } catch (e) {
-        alert('INVALID TOKEN')
+        localStorage.removeItem('authToken')
+        next({path: '/login', name: 'login'})
       }
     } else {
       next({path: '/login', name: 'login'})

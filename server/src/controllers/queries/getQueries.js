@@ -1,6 +1,7 @@
 const Element = require('../../models/Element')
 const Category = require('../../models/Category')
 const User = require('../../models/User')
+const content = require('../../content/index')
 const alphabet = [
   {"chunk": "Caracters", "regex":"^[^a-z0-9_]"},
   {"chunk": "0-9", "regex":"^[0-9]"},
@@ -18,7 +19,7 @@ module.exports = {
       const elements = await Element.find({
         'owner': userID,
         'title': searchValue
-      }).sort({ timestamp: -1 })
+      }).sort({ createdAt: -1 })
       return this.finalList(elements)
     } catch (e) {
       return ({error: 'error in query_1'})
@@ -32,7 +33,7 @@ module.exports = {
         'owner': userID,
         'categories': [],
         'title': searchValue
-      }).sort({ timestamp: -1 })
+      }).sort({ createdAt: -1 })
       return this.finalList(elements)
     } catch (e) {
       return ({error: 'error in query_2'})
@@ -53,7 +54,7 @@ module.exports = {
           'title': searchValue
         }]
 
-      }).sort({ timestamp: -1 })
+      }).sort({ createdAt: -1 })
       return this.finalList(elements)
     } catch (e) {
       return ({error: 'error in query_3'})
@@ -68,14 +69,22 @@ module.exports = {
     if (sortBy === 'category') {
       try {
         const categoryList = await Category.find({'owner': userID})
-        unsortedElements = await Element.find({'owner': userID,'categories': []}).sort({ timestamp: -1 })
+        unsortedElements = await Element.find({'owner': userID,'categories': []}).sort({ createdAt: -1 })
         if (unsortedElements.length !== 0) {
-          finalList.push({'title': 'Unsorted', 'elements': unsortedElements})
+          finalList.push(
+            {
+              'title': 'Unsorted',
+              'elements': unsortedElements
+            })
         }
         for (var i = 0; i < categoryList.length; i++) {
-          elements = await Element.find({'owner': userID, 'categories.name': categoryList[i].name}).sort({ timestamp: -1 })
+          elements = await Element.find({'owner': userID, 'categories.name': categoryList[i].name}).sort({ createdAt: -1 })
           if (elements.length !== 0) {
-            finalList.push({'title': categoryList[i].name, 'elements': elements})
+            finalList.push(
+              {
+                'title': categoryList[i].name,
+                'elements': elements
+              })
           }
         }
         return(finalList)
@@ -89,7 +98,11 @@ module.exports = {
         for(i = 0; i < alphabet.length; i++) {
           elements = await Element.find({'owner': userID, 'title': new RegExp(alphabet[i].regex, "i")}).sort({ title: 1 })
           if (elements.length !== 0) {
-            finalList.push({'title': alphabet[i].chunk, 'elements': elements})
+            finalList.push(
+              {
+                'title': alphabet[i].chunk,
+                'elements': elements
+              })
           }
         }
         return(finalList)
@@ -109,10 +122,14 @@ module.exports = {
           {
             'owner': userID,
             'timestamp.date': new Date().setHours(0, 0, 0, 0)
-          }).sort({ timestamp: -1 })
+          }).sort({ createdAt: -1 })
 
         if (elementsToday.length !== 0) {
-          finalList.push({'title': 'Avui', 'elements': elementsToday})
+          finalList.push(
+            {
+              'title': 'Avui',
+              'elements': elementsToday
+            })
         }
 
         let elementsThisMonth = await Element.find(
@@ -120,10 +137,14 @@ module.exports = {
             'owner': userID,
             'timestamp.date': { $ne: new Date().setHours(0, 0, 0, 0) },
             'timestamp.month': new Date().getMonth()
-          }).sort({ timestamp: -1 })
+          }).sort({ createdAt: -1 })
 
         if (elementsThisMonth.length !== 0) {
-          finalList.push({'title': 'Aquest mes', 'elements': elementsThisMonth})
+          finalList.push(
+            {
+              'title': 'Aquest mes',
+              'elements': elementsThisMonth
+            })
         }
 
 
@@ -135,10 +156,14 @@ module.exports = {
                     'owner': userID,
                     'timestamp.month': j,
                     'timestamp.year': i,
-                  }).sort({ timestamp: -1 })
+                  }).sort({ createdAt: -1 })
 
                 if (elementsPerMonth.length !== 0) {
-                  monthList.push({'title': this.getMonthName(j), 'elements': elementsPerMonth})
+                  monthList.push(
+                    {
+                      'title': this.getMonthName(j),
+                      'elements': elementsPerMonth
+                    })
 
                 }
               }
@@ -187,7 +212,7 @@ module.exports = {
             'owner': userID,
             'categories': [],
             'timestamp.date': new Date().setHours(0, 0, 0, 0)
-          }).sort({ timestamp: -1 })
+          }).sort({ createdAt: -1 })
 
         if (elementsToday.length !== 0) {
           finalList.push({'title': 'Avui', 'elements': elementsToday})
@@ -199,7 +224,7 @@ module.exports = {
             'categories': [],
             'timestamp.date': { $ne: new Date().setHours(0, 0, 0, 0) },
             'timestamp.month': new Date().getMonth()
-          }).sort({ timestamp: -1 })
+          }).sort({ createdAt: -1 })
 
         if (elementsThisMonth.length !== 0) {
           finalList.push({'title': 'Aquest mes', 'elements': elementsThisMonth})
@@ -215,7 +240,7 @@ module.exports = {
                     'categories': [],
                     'timestamp.month': j,
                     'timestamp.year': i,
-                  }).sort({ timestamp: -1 })
+                  }).sort({ createdAt: -1 })
 
                 if (elementsPerMonth.length !== 0) {
                   monthList.push({'title': this.getMonthName(j), 'elements': elementsPerMonth})
@@ -278,7 +303,7 @@ module.exports = {
             }, {
               'categories.parentCategory': category
             }]
-          }).sort({ timestamp: -1 })
+          }).sort({ createdAt: -1 })
 
         if (elementsToday.length !== 0) {
           finalList.push({'title': 'Avui', 'elements': elementsToday})
@@ -294,7 +319,7 @@ module.exports = {
             }, {
               'categories.parentCategory': category
             }]
-          }).sort({ timestamp: -1 })
+          }).sort({ createdAt: -1 })
 
         if (elementsThisMonth.length !== 0) {
           finalList.push({'title': 'Aquest mes', 'elements': elementsThisMonth})
@@ -313,7 +338,7 @@ module.exports = {
                     }, {
                       'categories.parentCategory': category
                     }]
-                  }).sort({ timestamp: -1 })
+                  }).sort({ createdAt: -1 })
 
                 if (elementsPerMonth.length !== 0) {
                   monthList.push({'title': this.getMonthName(j), 'elements': elementsPerMonth})

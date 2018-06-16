@@ -33,6 +33,10 @@ let elementSchema = mongoose.Schema({
   owner: {
     type: String
   },
+  createdAt: {
+    type: Date,
+    default: new Date()
+  },
   timestamp: {
     date: {
       type: Date,
