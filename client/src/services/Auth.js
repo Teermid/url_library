@@ -12,7 +12,7 @@ export default {
       }
     })
   },
-  getUserFromToken (jwt) {
-    return api().get(`user/${jwt}`)
+  getUserFromToken () {
+    return api().get(`user`)
   }
 }

@@ -6,21 +6,14 @@ module.exports = {
   async register (req, res) {
     try {
       const userBeforeHash = new User(req.body)
-      console.log('User model created -> ' + userBeforeHash)
       const userAfterHash = await bcryptPolicy.getHash(userBeforeHash)
-      console.log('user with hash -> ' + userAfterHash)
-      userAfterHash.save(function (err) {
-        if (err) {
-          console.log('error creating user')
-          res.send(err)
-        }
-      })
+      const userFinal = await userAfterHash.save()
 
-      const userJson = userAfterHash.toJSON()
+      console.log('userFinal ===> ' + userFinal)
       /* Loging automàtic al registrar-se: */
       res.send({
-        user: userJson,
-        token: tokenPolicy.jwtSignUser(userJson)
+        user: userFinal,
+        token: tokenPolicy.jwtSignUser(userFinal._id)
       })
     } catch (e) {
       res.status(400).send({error: 'Error creating the account'})
@@ -37,7 +30,7 @@ module.exports = {
       } else if (!(await bcryptPolicy.comparePasswords(req.query.password, user.password))) {
         res.status(403).send({error: 'Password is not correct'})
       } else {
-        let token = tokenPolicy.jwtSignUser(user.toJSON())
+        let token = tokenPolicy.jwtSignUser(user._id)
         res.send({
           user: user,
           token: token
@@ -49,8 +42,12 @@ module.exports = {
   },
 
   async getUserFromToken (req, res) {
+    console.log('GET USER FROM TOKEN');
+    console.log(req.headers['authoritzation'])
     try {
-      let user = await tokenPolicy.getUser(req.params.token)
+      let { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
+      console.log('id --------------> ' + _id);
+      let user = await User.findById(_id)
       res.send(user)
     } catch (e) {
       res.status(403).send({'error': 'Invalid Token'})

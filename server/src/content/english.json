@@ -1,0 +1,101 @@
+{
+    "sidebar": {
+
+      "all": "All",
+      "unsorted": "Unsorted",
+      "categories": "CATEGORIES",
+      "buttons": {
+        "addCategory": "Add Category",
+        "addBookmark": "Add Bookmark"
+      }
+    },
+
+    "popups": {
+
+      "addCategory": {
+        "placeholder":"Name",
+        "select": "Root category"
+      },
+
+      "addBookmark": {
+        "header": "New Bookmark",
+        "url": "site URL",
+        "category": "Categories",
+        "title": "Title",
+        "description": "Description"
+      },
+
+      "deleteBookmarks": {
+        "header": "Delete category bookmark(s)?",
+        "y": "Yes",
+        "n": "No"
+      },
+
+      "deleteConfirmation": {
+        "header": "Delete bookmark?",
+        "y": "Yes",
+        "n": "No"
+      }
+    },
+
+    "searchBar": {
+      "placeholder": "Search.."
+    },
+
+    "errors": {
+
+      "addBookmark": {
+        "link": "Required",
+        "link_2": "Invalid URL",
+        "title": "Title can't contain more than 60 characters",
+        "description": "Description can't contain more than 120 characters"
+      }
+    },
+
+    "filters": {
+        "display": {
+          "card": "Cards",
+          "grid": "Grid",
+          "list": "List"
+        },
+
+        "order": {
+          "title": "Title",
+          "date": "Date",
+          "category": "Category"
+        },
+
+        "multipleSelect": {
+          "all": "Select all",
+          "unsort": "Unsort",
+          "delete": "Delete"
+        }
+    },
+
+    "snackbars": {
+      "added": "Bookark added",
+      "exist": "Bookmark is already saved",
+      "nodata": "URL unaccessible",
+      "deleteOne": "Bookmark removed",
+      "deleteMult": " bookmark(s) removed",
+      "unsort": " bookmark(s) unsorted"
+    },
+
+    "settings": {
+      "header": "Configuration",
+      "app": {
+        "title": "APPLICATION",
+        "color": "Sidebar color",
+        "notifications": "Notifications",
+        "languages": {
+          "catalan": "Catalan",
+          "spanish": "Spanish",
+          "english": "English"
+        }
+      },
+
+      "user": {
+        "title": "USER"
+      }
+    }
+}

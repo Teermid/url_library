@@ -9,15 +9,10 @@
           </v-btn>
        </v-card-title>
        <v-card-text class="px-4">
-         <v-form v-model="valid" ref="form" lazy-validation>
-
+         <v-form v-model="valid" ref="form" lazy-validation>  
             <v-text-field
               disabled="true"
               label="Link"
-              v-model="element.link"
-              :rules="[v => !!v || 'Item is required']"
-              required
-              clearable
             ></v-text-field>
 
             <v-select
@@ -75,13 +70,13 @@ export default {
         userID: '',
         title: '',
         categories: null,
-        link: '',
+        url: '',
         description: ''
         // error: 'NO ERRORS'
       },
       valid: true,
       loading: false,
-      linkRules: [
+      urlRules: [
         v => !!v || 'Link is required'
       ],
       titleRules: [
@@ -93,7 +88,6 @@ export default {
       categories: []
     }
   },
-
   methods: {
     async editElement () {
       await Element.editElement(this.element)
@@ -115,15 +109,10 @@ export default {
         }
       }
     },
-    '$store.state.categoriesList': {
-      handler: function () {
-        let categoriesTemp = this.$store.getters.getCategoriesList
-        for (var i = 0; i < categoriesTemp.length; i++) {
-          if (categoriesTemp[i].nestedCategories.length === 0) {
-            categoriesTemp[i].nestedCategories = null
-          }
-        }
-        this.categories = categoriesTemp
+    '$store.state.customCategories': {
+      handler (value) {
+      // this.categories = this.$store.getters.getCustomCategories
+        this.categories = value
       }
     }
   }

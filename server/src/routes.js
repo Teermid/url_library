@@ -16,7 +16,7 @@ module.exports = (app) => {
     authController.login
   )
 
-  app.get('/user/:token',
+  app.get('/user',
     authController.getUserFromToken
   )
 
@@ -30,7 +30,7 @@ module.exports = (app) => {
     userController.loadSettings
   )
 
-  app.get('/content/:id',
+  app.get('/content',
     // tokenPolicy.verifyToken,
     userController.getAppContent
   )
@@ -55,9 +55,9 @@ module.exports = (app) => {
     elementsController.editElement
   )
 
-  app.delete('/elements/:id',
+  app.post('/elements-delete',
     // tokenPolicy.verifyToken,
-    elementsController.deleteElement
+    elementsController.deleteElements
   )
 
   app.get('/element-metadata',
@@ -73,11 +73,6 @@ module.exports = (app) => {
   app.post('/unsort',
     // tokenPolicy.verifyToken,
     elementsController.unsort
-  )
-
-  app.post('/delmult',
-    // tokenPolicy.verifyToken,
-    elementsController.deleteMultiple
   )
 
   app.post('/addmult/:catId',
@@ -100,9 +95,9 @@ module.exports = (app) => {
     categoryController.getCategoryById
   )
 
-  app.get('/root-categories',
+  app.get('/custom-categories',
     // tokenPolicy.verifyToken,
-    categoryController.getRootCategories
+    categoryController.getCustomCategories
   )
 
   app.get('/child-categories',
@@ -129,14 +124,4 @@ module.exports = (app) => {
     // tokenPolicy.verifyToken,
     categoryController.isEmpty
   )
-
-  app.post('/extension',
-    // tokenPolicy.verifyToken,
-    elementsController.addElementFromExtension
-  )
-
-  // app.get('/cookie',
-  //   authController.getCookie
-  // )
-
 }

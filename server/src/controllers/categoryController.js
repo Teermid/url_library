@@ -5,10 +5,10 @@ const tokenPolicy = require('../policies/tokenPolicy')
 module.exports = {
 
   async getCategories (req, res) {
-    let { _id } = await tokenPolicy.getUser(req.headers['authoritzation'])
+    let { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
     try {
-      const category = await Category.find({
-        'owner': _id,
+      const categories = await Category.find({
+       'owner': _id,
         $or: [
           {
             'kind': 'root'
@@ -19,14 +19,13 @@ module.exports = {
           }
         ]
       }, {__v: 0})
-      res.send(category)
+      res.send(categories)
     } catch (e) {
       res.status(500).send({error: 'error getting categories'})
     }
   },
 
   async getCategoryById (req, res) {
-    console.log('HITTED -> ' + req.params.catID);
     try {
       res.send(await Category.findById(req.params.catID))
     } catch (e) {
@@ -34,20 +33,10 @@ module.exports = {
     }
   },
 
-  async getRootCategories (req, res) {
+  async getCustomCategories (req, res) {
+    let { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
     try {
-      const category = await Category.find({
-        $or: [
-          {
-            'kind': 'root'
-          },
-          {
-            'kind': 'child',
-            'parentCategory': null
-          }
-        ]
-
-      }, {name: 1, _id: 0})
+      const category = await Category.find({owner: _id}, {nestedCategories: 0, selected:0, hidden:0, __v:0})
       res.send(category)
     } catch (e) {
       res.status(500).send({error: 'error getting root categories'})
@@ -162,8 +151,6 @@ module.exports = {
 
   async editCategoryHierarchy (req, res) {
     console.log('editCategoryHierarchy');
-    console.log(req.params.id);
-    console.log(req.params.dropName);
 
     try {
       await Category.update(
@@ -211,10 +198,8 @@ module.exports = {
 
 
   async deleteCategory (req, res) {
-    console.log('FLAG -> ' + req.params.flag);
     try {
       if (req.params.flag === 'true') {
-        console.log('INSIDE FLAG IS FUCKING TRUE!!!!!!!!!!!!!!!!!!!!!');
         await Element.remove({'categories._id': req.params.id})
       }
       const toDelete = await Category.findById(req.params.id)

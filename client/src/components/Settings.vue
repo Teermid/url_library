@@ -24,8 +24,7 @@
                 <div class="settingsGroup">
                   <div id="deleteConfirm">
                     <v-checkbox
-                       :label="`Confirmar eliminació marcadors`"
-                       v-model="bookmarkDeleteConfirm"
+                       :label="text.app.notifications"
                      ></v-checkbox>
                   </div>
                 </div>
@@ -60,9 +59,7 @@ export default {
         app: {
           title: null,
           color: null,
-          notifications: {
-
-          }
+          notifications: null
         },
         user: {
           title: null
@@ -113,6 +110,7 @@ export default {
     this.text.header = this.$store.getters.getContent.settings.header
     this.text.app.title = this.$store.getters.getContent.settings.app.title
     this.text.app.color = this.$store.getters.getContent.settings.app.color
+    this.text.app.notifications = this.$store.getters.getContent.settings.app.notifications
     this.text.user.title = this.$store.getters.getContent.settings.user.title
     this.settings.language[0].text = this.$store.getters.getContent.settings.app.languages.catalan
     this.settings.language[1].text = this.$store.getters.getContent.settings.app.languages.spanish
@@ -150,6 +148,7 @@ export default {
     languageSelected: async function () {
       this.$store.commit('setLanguage', this.languageSelected)
       await User.loadSettings(this.$store.state.user._id, this.$store.state.settings)
+      this.$store.commit('setContent', (await User.getAppContent()).data)
     },
 
     '$store.state.settingsPopUp': {

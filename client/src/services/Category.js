@@ -13,8 +13,8 @@ export default {
     return api().get(`category/${id}`)
   },
 
-  getRootCategories () {
-    return api().get('root-categories')
+  getCustomCategories () {
+    return api().get('custom-categories')
   },
 
   getChildCategories () {

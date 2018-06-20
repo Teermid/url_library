@@ -42,7 +42,7 @@
       </div>
 
       <div class="categoryList">
-        <div class="categoryContainer" v-for="ca in categoriesTemp" :key="ca._id" v-if="!ca.parentCategory">
+        <div class="categoryContainer" v-for="ca in categoriesSidebar" :key="ca._id" v-if="!ca.parentCategory">
 
           <div class="rootWrapper category"
             v-bind:class="{ 'selectedLight': categorySelectedLight(ca), 'selectedDark': categorySelectedDark(ca), 'lightHover': $store.state.settings.color.light, 'darkHover': !$store.state.settings.color.light }"
@@ -167,7 +167,7 @@
           parentCategory: null
         },
         categories: [{}],
-        categoriesTemp: [{}],
+        categoriesSidebar: [{}],
         rootCategories: [],
         userID: null,
         editCatPopUp: false,
@@ -194,11 +194,11 @@
 
     methods: {
       async printCategories () {
-        this.categoriesTemp = (await Category.getCategory(this.userID)).data
         this.categories = (await Category.getCategory(this.userID)).data
-        this.rootCategories = (await Category.getRootCategories()).data
+        this.categoriesSidebar = (await Category.getCategory(this.userID)).data
+        this.customCategories = (await Category.getCustomCategories()).data
         this.$store.commit('setCategoriesList', this.categories)
-        this.$store.commit('setRootCategoriesList', this.rootCategories)
+        this.$store.commit('setCustomCategories', this.customCategories)
       },
 
       displayCategory (ca) {
@@ -261,10 +261,10 @@
 
       select (ca, tag) {
         if (ca) {
-          for (var i in this.categoriesTemp) {
-            this.categoriesTemp[i].selected = false
-            for (var j in this.categoriesTemp[i].nestedCategories) {
-              this.categoriesTemp[i].nestedCategories[j].selected = false
+          for (var i in this.categoriesSidebar) {
+            this.categoriesSidebar[i].selected = false
+            for (var j in this.categoriesSidebar[i].nestedCategories) {
+              this.categoriesSidebar[i].nestedCategories[j].selected = false
             }
           }
           for (var k in this.text.fixedCategories) {
@@ -274,14 +274,14 @@
         }
 
         if (tag) {
-          for (var l in this.categoriesTemp) {
-            this.categoriesTemp[l].selected = (this.categoriesTemp[l].name === tag)
-            for (var m in this.categoriesTemp[l].nestedCategories) {
-              if (this.categoriesTemp[l].nestedCategories[m].name === tag) {
-                this.categoriesTemp[l].nestedCategories[m].selected = true
-                this.categoriesTemp[l].hidden = false
+          for (var l in this.categoriesSidebar) {
+            this.categoriesSidebar[l].selected = (this.categoriesSidebar[l].name === tag)
+            for (var m in this.categoriesSidebar[l].nestedCategories) {
+              if (this.categoriesSidebar[l].nestedCategories[m].name === tag) {
+                this.categoriesSidebar[l].nestedCategories[m].selected = true
+                this.categoriesSidebar[l].hidden = false
               } else {
-                this.categoriesTemp[l].nestedCategories[m].selected = false
+                this.categoriesSidebar[l].nestedCategories[m].selected = false
               }
             }
           }
@@ -302,17 +302,12 @@
       async drop (dropCategory, event) {
         event.preventDefault()
         let msg = JSON.parse(event.dataTransfer.getData('text'))
-        if (msg.transmitter === 'category') {
-          let allow = false
+        if (msg.transmitter === 'category' && (msg.content.name !== dropCategory.name)) {
           let dragCategory = msg.content
           let dragId = dragCategory._id
           let dropName = dropCategory.name
 
           if ((dragCategory.kind === 'child') && ((dropCategory.kind === 'child' && !dropCategory.parentCategory) || dropCategory.kind === 'root')) {
-            allow = true
-          }
-
-          if (allow) {
             await Category.editCategoryHierarchy(dragId, dropName)
             this.printCategories()
           }
@@ -321,10 +316,12 @@
         if (msg.transmitter === 'Bookmark') {
           await Element.addMult([msg.content], dropCategory._id)
           this.$store.commit('setRefreshElements')
+          this.$store.commit('resetSelectedArray')
         }
         if (msg.transmitter === 'multBookmarks') {
           await Element.addMult(this.$store.getters.getSelectedArray, dropCategory._id)
           this.$store.commit('setRefreshElements')
+          this.$store.commit('resetSelectedArray')
         }
       },
 

@@ -48,18 +48,18 @@ module.exports = {
   },
 
   async addElements (req, res) {
-    const { title, description, image, logo } = await Metadata.getMetadata(req.body.link)
-
     try {
+      const { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
+      const categories = await Category.find( {'_id': {'$in': req.body.categories}})
+      console.log('URL =======> ' + req.body.url);
       const element = new Element(
         {
-          title: req.body.title || title,
-          link: req.body.link,
-          description: req.body.description || description,
-          categories: req.body.categories || [],
-          imageURL: image,
-          iconURL: logo,
-          owner: req.body.userID
+          title: req.body.title,
+          url: req.body.url,
+          description: req.body.description,
+          categories: categories || null,
+          imageURL: req.body.image,
+          owner: _id
         })
 
       const response = await element.save()
@@ -67,29 +67,6 @@ module.exports = {
     } catch (error) {
       res.send(error)
     }
-  },
-
-  async addElementFromExtension (req, res) {
-    try {
-      console.log(req.body.metadata)
-      const categories = await Category.find({'_id': {'$in': req.body.categories}})
-      const { _id } = await tokenPolicy.getUser(req.headers['authoritzation'])
-      const element = new Element(
-        {
-          title: req.body.metadata.title,
-          link: req.body.metadata.url,
-          description: 'DA MUMEN NO DASKRIPCIÓ',
-          imageURL: req.body.metadata.image,
-          categories: categories || [],
-          owner: _id
-        })
-
-      await element.save()
-      res.status(200).send('ok')
-    } catch (e) {
-      console.log('NO FURULLA');
-    }
-
   },
 
   async getElementById (req, res) {
@@ -103,34 +80,31 @@ module.exports = {
 
   async editElement (req, res) {
     try {
-      const { timestamp, createdAt } = await Element.findById(req.params.id)
-      await Element.findByIdAndRemove(req.params.id)
-      const element = new Element(req.body)
-      element.timestamp = oldDate
-      await element.save()
-      res.send(element)
+      await Element.update(
+        {'_id': (req.params.id)},
+        req.body
+      )
+
+      res.status(200).send('element updated')
     } catch (e) {
       res.status(500).send({error: 'error saving edited element (elementsController)'})
     }
   },
 
-  async deleteElement (req, res) {
+  async deleteElements (req, res) {
     try {
-      const response = await Element.findByIdAndRemove(req.params.id)
+      const response = await Element.remove({'_id': {'$in': req.body}})
+      console.log(response);
       res.send(response)
-    /*  res.status(200).send({msg: 'Element deleted'}) */
     } catch (e) {
-      res.status(500).send({error: 'error geting element by id (elementsController)'})
+      res.status(403).send({error: 'error deleting element/s'})
     }
   },
 
   async getMetadata (req, res) {
     try {
-      const response = await Element.find({'link': req.query.url})
-      console.log(response);
-      console.log('length -> ' + response.length);
+      const response = await Element.find({'url': req.query.url})
       if (response.length > 0) {
-        console.log('EL PUTU MARCADOR JA ESTA PUTU GUARDAT JODER');
         res.send(true)
       } else {
         res.send(await Metadata.getMetadata(req.query.url))
@@ -155,41 +129,32 @@ module.exports = {
 
   async unsort (req, res) {
     try {
-      await Element.update(
+      const count = await Element.update(
         {'_id': {'$in': req.body}},
         { $set: {'categories': []}},
         { multi: true }
       )
-      res.send('success')
+      console.log('after unsort ===> ' + count.nModified);
+      res.send(count)
     } catch (e) {
-      res.status(500).send({error: 'error deleting multiple element (elementsController)'})
-    }
-  },
-
-  async deleteMultiple (req, res) {
-    try {
-      await Element.remove({'_id': {'$in': req.body}})
-      res.send('success')
-    } catch (e) {
-      res.status(500).send({error: 'error deleting multiple element (elementsController)'})
+      res.status(500).send({error: 'error unsorting element'})
     }
   },
 
   async addMultiple (req, res) {
     try {
-      var category = await Category.findOne({'_id': req.params.catId})
-      category.nestedCategories = null
-      for (let i in req.body) {
-        if (!await Element.findOne({$and: [ {'_id': req.body[i]}, {'categories.name': category.name} ]})) {
-          await Element.update(
-            {'_id': req.body[i]},
-            {$push: { categories: category }}
-          )
-        }
-      }
+      const category = await Category.findOne({'_id': req.params.catId})
+      await Element.update(
+        {
+          '_id': { $in: req.body },
+          'categories.name' : { $ne: category.name }
+        },
+        { $push: {'categories': category} },
+        { multi: true }
+      )
       res.send('success')
     } catch (e) {
-      res.status(500).send({error: 'error adding categories to multiple elements (elementsController)'})
+      res.status(500).send({error: 'error sorting multiple elements to a category'})
     }
   },
 

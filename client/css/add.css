@@ -1,0 +1,19 @@
+.hidded {
+  max-height: 110px;
+  overflow: hidden;
+  transition: max-height 0.5s;
+}
+
+.displayed {
+  max-height: 100vh !important;
+}
+
+.spinner {
+  right: 25px;
+  bottom: 55px;
+  position: absolute;
+}
+
+.inputFix input {
+  padding-right: 25px;
+}

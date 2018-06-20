@@ -9,7 +9,7 @@ export default {
     return api().post(`settings/${userID}`, settings)
   },
 
-  getAppContent (userID) {
-    return api().get(`content/${userID}`)
+  getAppContent () {
+    return api().get(`content`)
   }
 }

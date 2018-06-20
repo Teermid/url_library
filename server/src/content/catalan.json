@@ -9,6 +9,7 @@
         "addBookmark": "Afegir Marcador"
       }
     },
+
     "popups": {
 
       "addCategory": {
@@ -37,6 +38,10 @@
       }
     },
 
+    "searchBar": {
+      "placeholder": "Cerca.."
+    },
+
     "errors": {
 
       "addBookmark": {
@@ -45,10 +50,6 @@
         "title": "El títol no pot contindre més de 60 caràcters",
         "description": "La descripció no pot contindre més de 120 caracters"
       }
-    },
-
-    "searchBar": {
-      "placeholder": "Cerca.."
     },
 
     "filters": {
@@ -71,19 +72,28 @@
         }
     },
 
+    "snackbars": {
+      "added": "Marcador afegit",
+      "exist": "El marcador ja existeix",
+      "nodata": "La url no és accessible",
+      "deleteOne": "Marcador eliminat",
+      "deleteMult": " marcador/s eliminats",
+      "unsort": " marcadors declassificats"
+    },
+
     "settings": {
       "header": "Configuració",
       "app": {
         "title": "APLICACIÓ",
         "color": "Color de la barra lateral",
-        "notifications": {
-        },
+        "notifications": "Notificacions",
         "languages": {
           "catalan": "Català",
           "spanish": "Castellà",
           "english": "Anglès"
         }
       },
+
       "user": {
         "title": "USUARI"
       }

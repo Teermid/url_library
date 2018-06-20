@@ -5,7 +5,7 @@ let elementSchema = mongoose.Schema({
   title: {
     type: String
   },
-  link: {
+  url: {
     type: String
   },
   description: {
@@ -16,18 +16,8 @@ let elementSchema = mongoose.Schema({
     owner: String,
     kind: String,
     parentCategory: String,
-    nestedCategories: {
-      type: String,
-      default: null
-    },
-    selected: Boolean,
-    hidden: Boolean,
-    disabled: Boolean
   }],
   imageURL: {
-    type: String
-  },
-  iconURL: {
     type: String
   },
   owner: {

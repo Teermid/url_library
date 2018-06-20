@@ -5,11 +5,13 @@ import App from './App'
 import router from './router'
 import { sync } from 'vuex-router-sync'
 import store from '@/store/store'
+import Cookies from 'vue-cookies'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css' // Ensure you are using css-loader
 
 Vue.config.productionTip = false
 Vue.use(Vuetify)
+Vue.use(Cookies)
 
 sync(store, router)
 

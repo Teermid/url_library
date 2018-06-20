@@ -32,9 +32,9 @@
         <v-icon color="grey">layers</v-icon>
       </v-btn>
 
-      <v-btn slot="activator" @click="selectAll" v-if="$store.state.multSelect">Tots</v-btn>
-      <v-btn depressed slot="activator" @click="unsort" v-if="$store.state.multSelect">Desclassificar</v-btn>
-      <v-btn depressed slot="activator" @click="deleteMult" v-if="$store.state.multSelect">Eliminar</v-btn>
+      <v-btn :loading="loaders.all" slot="activator" @click="selectAll" v-if="$store.state.multSelect">{{ text.all }}</v-btn>
+      <v-btn :disabled="disabled" :loading="loaders.unsort" depressed slot="activator" @click="unsort" v-if="$store.state.multSelect">{{ text.unsort }}</v-btn>
+      <v-btn :disabled="disabled" :loading="loaders.delete" depressed slot="activator" @click="deleteMult" v-if="$store.state.multSelect">{{ text.delete }}</v-btn>
       <v-btn icon slot="activator" @click="multSelect" v-if="$store.state.multSelect">
         <v-icon color="grey">close</v-icon>
       </v-btn>
@@ -59,6 +59,16 @@
         </v-list>
       </v-menu> -->
     </div>
+    <v-snackbar
+      bottom
+      right
+      timeout=3000
+      v-model="snackbar">
+      {{ snackbarFinal }}
+      <v-btn dark flat color="pink" @click.native="snackbar = false">
+        <v-icon>close</v-icon>
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -70,7 +80,18 @@
           text: {
             all: null,
             unsort: null,
-            delete: null
+            delete: null,
+            snackbar: {
+              mult: null,
+              unsort: null
+            }
+          },
+          snackbarFinal: null,
+          disabled: true,
+          loaders: {
+            all: false,
+            unsort: false,
+            delete: false
           },
           category: null,
           categoriesList: null,
@@ -134,6 +155,8 @@
         this.text.all = this.$store.getters.getContent.filters.multipleSelect.all
         this.text.unsort = this.$store.getters.getContent.filters.multipleSelect.unsort
         this.text.delete = this.$store.getters.getContent.filters.multipleSelect.delete
+        this.text.snackbar.mult = this.$store.getters.getContent.snackbars.deleteMult
+        this.text.snackbar.unsort = this.$store.getters.getContent.snackbars.unsort
       },
 
       methods: {
@@ -166,18 +189,27 @@
         },
 
         selectAll () {
-          this.$store.commit('setSelectAll', true)
+          this.$store.commit('setSelectAll')
         },
 
-        unsort () {
-          Elements.unsort(this.$store.getters.getSelectedArray)
-          this.$store.commit('setRefreshElements')
-        },
-
-        deleteMult () {
-          Elements.deleteMult(this.$store.getters.getSelectedArray)
+        async unsort () {
+          this.loaders.unsort = true
+          const response = (await Elements.unsort(this.$store.getters.getSelectedArray)).data
+          this.snackbarFinal = response.nModified + this.text.snackbar.unsort
           this.$store.commit('setRefreshElements')
           this.$store.commit('resetSelectedArray')
+          this.loaders.unsort = false
+          this.snackbar = true
+        },
+
+        async deleteMult () {
+          this.loaders.delete = true
+          const response = (await Elements.delete(this.$store.getters.getSelectedArray)).data
+          this.snackbarFinal = response.n + this.text.snackbar.mult
+          this.$store.commit('setRefreshElements')
+          this.$store.commit('resetSelectedArray')
+          this.loaders.delete = false
+          this.snackbar = true
         }
 
       },
@@ -191,6 +223,12 @@
             } else {
               this.filterOptions[2].disabled = true
             }
+          }
+        },
+
+        '$store.state.selectedArray': {
+          async handler (value) {
+            this.disabled = (value.length === 0)
           }
         }
       }

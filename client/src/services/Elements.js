@@ -13,6 +13,14 @@ export default {
     })
   },
 
+  getMetadata (url) {
+    return api().get('element-metadata', {
+      params: {
+        url: encodeURI(url)
+      }
+    })
+  },
+
   addElements (content) {
     return api().post('elements', content)
   },
@@ -33,8 +41,8 @@ export default {
     return api().put(`elements/${element._id}`, element)
   },
 
-  deleteElement (elementid) {
-    return api().delete(`elements/${elementid}`)
+  delete (elements) {
+    return api().post(`elements-delete`, elements)
   },
 
   unsort (ids) {

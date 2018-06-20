@@ -20,7 +20,7 @@ module.exports = {
         'owner': userID,
         'title': searchValue
       }).sort({ createdAt: -1 })
-      return this.finalList(elements)
+      return this.finalList(elements, elements.length)
     } catch (e) {
       return ({error: 'error in query_1'})
     }
@@ -34,7 +34,7 @@ module.exports = {
         'categories': [],
         'title': searchValue
       }).sort({ createdAt: -1 })
-      return this.finalList(elements)
+      return this.finalList(elements, elements.length)
     } catch (e) {
       return ({error: 'error in query_2'})
     }
@@ -55,7 +55,7 @@ module.exports = {
         }]
 
       }).sort({ createdAt: -1 })
-      return this.finalList(elements)
+      return this.finalList(elements, elements.length)
     } catch (e) {
       return ({error: 'error in query_3'})
     }
@@ -356,8 +356,8 @@ module.exports = {
   },
 
   // ------------------------------------------
-  finalList (elements) {
-    return [{'title': 'RESULTS', 'elements': elements}]
+  finalList (elements, count) {
+    return [{'title': count + ' RESULTS', 'elements': elements}]
   },
 
   getMonthName (index) {

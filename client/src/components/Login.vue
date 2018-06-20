@@ -42,10 +42,10 @@ export default {
           email: this.email,
           password: this.password
         })
-        this.$store.commit('setUser', response.data.user)
-        this.$store.commit('setUserID', response.data.user._id)
-        localStorage.setItem('authToken', response.data.token)
-        this.$router.push('/list')
+        await this.$store.commit('setUser', response.data.user)
+        await this.$store.commit('setUserID', response.data.user._id)
+        console.log('setting cookie -> ' + this.$cookies.set('SESSION', response.data.token))
+        console.log('redirecting -> ' + this.$router.push('/list'))
       } catch (e) {
         console.log('ERROR')
         // this.error = e.response.data.error

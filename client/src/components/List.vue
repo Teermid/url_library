@@ -29,7 +29,7 @@
         <div class="multSelectIcon shadow" v-if="$store.state.multSelect" v-bind:class=" { multSelectIconSelected : el.selected } "></div>
         <div class="selectionFilter" v-if="$store.state.multSelect" @click="select(el)"></div>
         <div class="selectionFilterSelected" v-if="el.selected"></div>
-        <a class="hover" v-bind:href="el.link">
+        <a class="hover" v-bind:href="el.url">
           <v-card-media v-bind:src="el.imageURL" height="150px"></v-card-media>
         </a>
         <v-card-title class="pt-2">
@@ -82,7 +82,7 @@
         <div class="multSelectIcon shadow" v-if="$store.state.multSelect" v-bind:class=" { multSelectIconSelected : el.selected } "></div>
         <div class="selectionFilter" v-if="$store.state.multSelect" @click="select(el)"></div>
         <div class="selectionFilterSelected" v-if="el.selected"></div>
-        <a v-bind:href="el.link"><v-card-media v-bind:src="el.imageURL" height="115px"></v-card-media></a>
+        <a v-bind:href="el.url"><v-card-media v-bind:src="el.imageURL" height="115px"></v-card-media></a>
         <v-card-title class="pb-0 pt-2">
           <div class="info_container">
             <div class="ma-0 black--text f_left f_black float-f_left title_">{{ el.title }}</div>
@@ -143,6 +143,16 @@
       </v-card>
     </div>
   </div>
+  <v-snackbar
+    bottom
+    right
+    timeout=3000
+    v-model="snackbar">
+    {{ text.snackbar }}
+    <v-btn dark flat color="pink" @click.native="snackbar = false">
+      <v-icon>close</v-icon>
+    </v-btn>
+  </v-snackbar>
 </div>
 </template>
 
@@ -161,7 +171,8 @@ export default {
           header: null,
           y: null,
           n: null
-        }
+        },
+        snackbar: null
       },
       data: [],
       userID: null,
@@ -181,6 +192,7 @@ export default {
     this.text.deleteConfirmation.header = this.$store.getters.getContent.popups.deleteConfirmation.header
     this.text.deleteConfirmation.y = this.$store.getters.getContent.popups.deleteConfirmation.y
     this.text.deleteConfirmation.n = this.$store.getters.getContent.popups.deleteConfirmation.n
+    this.text.snackbar = this.$store.getters.getContent.snackbars.deleteOne
     this.categoryFilter = this.$store.getters.getCategoryFilter
     this.sortBy = this.$store.getters.getSortBy
     this.userID = this.$store.getters.getUserID
@@ -191,6 +203,13 @@ export default {
   methods: {
     async getData (cat, isSearch, searchVal, userID, sortBy) {
       this.data = (await Elements.getData(cat, isSearch, searchVal, userID, sortBy)).data
+      let counter = 0
+      for (var i = 0; i < this.data.length; i++) {
+        for (var j = 0; j < this.data[i].elements.length; j++) {
+          counter++
+        }
+      }
+      this.$store.commit('setNumberOfBookmarks', counter)
     },
 
     async getCategories () {
@@ -205,9 +224,10 @@ export default {
     },
 
     async confirmDeletion () {
-      await Elements.deleteElement(this.idToDelete)
+      await Elements.delete([this.idToDelete])
       this.getData(this.categoryFilter, 'true', this.searchValue, this.userID, this.sortBy)
       this.deleteVerification = false
+      this.snackbar = true
     },
 
     editElement (id) {

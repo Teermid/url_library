@@ -15,7 +15,7 @@ export default new Vuex.Store({
     tag: false,
     tagContent: '',
     categoriesList: [],
-    rootCategoriesList: [],
+    customCategories: [],
     refreshCategories: false,
     popUpDisplay: false,
     editDisplay: false,
@@ -34,7 +34,8 @@ export default new Vuex.Store({
     editCategoryDisplay: false,
     settingsPopUp: false,
     settings: {},
-    content: {}
+    content: {},
+    numberOfBookmarks: null
   },
 
   mutations: { // syncronous
@@ -77,8 +78,8 @@ export default new Vuex.Store({
       state.categoriesList = content
     },
 
-    setRootCategoriesList (state, content) {
-      state.rootCategoriesList = content
+    setCustomCategories (state, content) {
+      state.customCategories = content
     },
 
     setRefreshCategories (state) {
@@ -126,7 +127,7 @@ export default new Vuex.Store({
     },
 
     setSelectAll (state, content) {
-      state.selectAll = content
+      state.selectAll = (content === undefined) ? !state.selectAll : content
     },
 
     setSelectedArray (state, content) {
@@ -167,6 +168,10 @@ export default new Vuex.Store({
 
     setContent (state, content) {
       state.content = content
+    },
+
+    setNumberOfBookmarks (state, content) {
+      state.numberOfBookmarks = content
     }
   },
 
@@ -207,8 +212,8 @@ export default new Vuex.Store({
       return state.categoriesList
     },
 
-    getRootCategoriesList (state) {
-      return state.rootCategoriesList
+    getCustomCategories (state) {
+      return state.customCategories
     },
 
     getRefreshCategories (state) {
@@ -269,6 +274,10 @@ export default new Vuex.Store({
 
     getContent (state) {
       return state.content
+    },
+
+    getNumberOfBookmarks (state) {
+      return state.numberOfBookmarks
     }
   }
 })

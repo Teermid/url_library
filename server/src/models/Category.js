@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-// const CategoryModel = require('./Category')
+const CategoryModel = require('./Category')
 
 let categorySchema = mongoose.Schema({
   name: {
@@ -39,11 +39,6 @@ let categorySchema = mongoose.Schema({
   hidden: {
     type: Boolean,
     default: false
-  },
-
-  disabled: {
-    type: Boolean,
-    default: false
   }
 
 })
@@ -75,7 +70,7 @@ categorySchema.pre('remove', async function (next) {
       await this.model('Category').update(
         { 'parentCategory': this.name },
         { $set: { parentCategory: null } },
-        { mult: true }
+        { multi: true }
       )
 
       await this.model('Element').update(

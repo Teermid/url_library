@@ -18,7 +18,7 @@
             <v-btn
               @click="editCategory"
               depressed
-              :loading="loading"
+              :loading="loader"
               color="blue darken-1"
               class="white--text"
             >
@@ -36,16 +36,19 @@ import Category from '@/services/Category'
 export default {
   data () {
     return {
-      category: ''
+      category: '',
+      loader: false
     }
   },
 
   methods: {
     async editCategory () {
       // alert(this.category._id + ' | ' + this.category.name)
+      this.loader = true
       await Category.editCategoryName(this.category)
       this.$store.commit('setEditCategoryDisplay')
       this.$store.commit('setRefreshElements')
+      this.loader = false
     },
 
     close () {

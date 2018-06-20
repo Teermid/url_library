@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const content = require('../content/index')
+const tokenPolicy = require('../policies/tokenPolicy')
 
 module.exports = {
   async getSettings (req, res) {
@@ -16,6 +17,7 @@ module.exports = {
   },
 
   async getAppContent (req, res) {
-    res.send(await content.getContent(req.params.id))
+    const { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
+    res.send(await content.getContent(_id))
     }
   }

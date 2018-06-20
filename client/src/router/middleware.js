@@ -14,14 +14,17 @@ async function loadData (user, content) {
 
 export default {
   async userLogged (to, from, next) {
-    if (localStorage.getItem('authToken')) {
+    // if (localStorage.getItem('authToken')) {
+    let authToken = document.cookie.split('=')
+    if (authToken[1]) {
       try {
-        let user = (await Auth.getUserFromToken(localStorage.getItem('authToken'))).data
+        console.log('middleware -> ' + authToken[1])
+        let user = (await Auth.getUserFromToken()).data
         let content = (await User.getAppContent(user._id)).data
         await loadData(user, content)
         next()
       } catch (e) {
-        localStorage.removeItem('authToken')
+        // localStorage.removeItem('authToken')
         next({path: '/login', name: 'login'})
       }
     } else {

@@ -19,16 +19,15 @@ module.exports = {
     }
   },
 
-  jwtSignUser(user) {
-    console.log('INSIDE JWTSIGNUSER');
+  jwtSignUser(_id) {
     const ONE_WEEK = 60 * 60 * 24 * 7
-    return jwt.sign(user, config.authentication.jwtSecret,
+    return jwt.sign({_id}, config.authentication.jwtSecret,
       {
         expiresIn: ONE_WEEK
       })
   },
 
-  async getUser (authToken) {
+  async getUserID (authToken) {
     try {
       const bearer = authToken.split(' ')
       const token = bearer[1]
