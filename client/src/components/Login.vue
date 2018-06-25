@@ -36,23 +36,28 @@ export default {
   },
 
   methods: {
+
     async Login () {
       try {
+        // Petició d'inici de sessió
         const response = await auth.login({
           email: this.email,
           password: this.password
         })
+        // Emmagatzemem dades de l'usuari
         await this.$store.commit('setUser', response.data.user)
-        await this.$store.commit('setUserID', response.data.user._id)
-        console.log('setting cookie -> ' + this.$cookies.set('SESSION', response.data.token))
-        console.log('redirecting -> ' + this.$router.push('/list'))
+        // Estat de l'usuari actiu
+        await this.$store.commit('setUserLogged', true)
+        // Guardem cookie al cercador
+        await this.$cookies.set('session', response.data.token)
+        // Redirigim usuari
+        this.$router.push('/list')
       } catch (e) {
         console.log('ERROR')
-        // this.error = e.response.data.error
       }
     }
-
   },
+
   watch: {
     email (value) {
     }

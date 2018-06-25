@@ -14,21 +14,17 @@
           <v-tab>{{ text.user.title }}</v-tab>
           <v-tab-item>
             <v-card flat>
-              <v-card-text>
-                <div class="settingsGroup">
+              <v-card-text class="appSettings pt-4">
                   <p>{{ text.app.color }}</p>
                   <div class="colorContainer">
                     <div class="color" v-for="color in settings.colors" @click="setColor(color)" v-bind:style="{ 'background-color':color.hex }"></div>
                   </div>
-                </div>
-                <div class="settingsGroup">
-                  <div id="deleteConfirm">
+                  <div class="notificationsCheck">
                     <v-checkbox
                        :label="text.app.notifications"
+                       v-model="notifications"
                      ></v-checkbox>
-                  </div>
-                </div>
-                <div class="settingsGroup">
+                   </div>
                   <v-select
                     @click="changeLanguage"
                     :items="settings.language"
@@ -39,7 +35,7 @@
                     item-value="value"
                     return-object
                   ></v-select>
-                </div>
+                <v-btn @click="apply">APPLY</v-btn>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -65,7 +61,7 @@ export default {
           title: null
         }
       },
-      bookmarkDeleteConfirm: true,
+      notifications: null,
       userSettings: {},
       languageSelected: null,
       settings: {
@@ -80,10 +76,6 @@ export default {
           },
           {
             hex: '#f6f6f6',
-            light: true
-          },
-          {
-            hex: '#d1e2d7',
             light: true
           }
         ],
@@ -115,6 +107,7 @@ export default {
     this.settings.language[0].text = this.$store.getters.getContent.settings.app.languages.catalan
     this.settings.language[1].text = this.$store.getters.getContent.settings.app.languages.spanish
     this.settings.language[2].text = this.$store.getters.getContent.settings.app.languages.english
+    this.notifications = this.$store.getters.getNotifications
   },
 
   methods: {
@@ -140,20 +133,22 @@ export default {
 
     async setColor (color) {
       this.$store.commit('setColor', color)
+    },
+
+    async apply () {
+      this.$store.commit('setLanguage', this.languageSelected)
+      this.$store.commit('setNotifications', this.notifications)
       await User.loadSettings(this.$store.state.user._id, this.$store.state.settings)
+      this.$store.commit('setContent', (await User.getAppContent()).data)
+      this.$router.go()
     }
   },
 
   watch: {
-    languageSelected: async function () {
-      this.$store.commit('setLanguage', this.languageSelected)
-      await User.loadSettings(this.$store.state.user._id, this.$store.state.settings)
-      this.$store.commit('setContent', (await User.getAppContent()).data)
-    },
-
     '$store.state.settingsPopUp': {
       async handler (value) {
         this.userSettings = this.$store.getters.getSettings
+        this.notifications = this.userSettings.notifications
         this.prepareSettings()
       }
     }

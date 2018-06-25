@@ -9,7 +9,7 @@
   --card-content-container-height: 335px;
 
   --grid-content-container-width: 230px;
-  --grid-content-container-height: 190px;
+  --grid-content-container-height: 200px;
 
   --list-content-container-height: 110px;
 
@@ -20,6 +20,8 @@
   overflow-y: scroll;
   height: calc(100vh - 120px);
 }
+
+/* ------------------- CARD ---------------------- */
 
 #card-content-body {
   display: grid;
@@ -37,7 +39,6 @@
 .chunk > p {
   border-bottom: 1px solid #e5e5e5;
   color: #969696;
-  font-size: 16px;
 }
 
 .shadow {
@@ -47,7 +48,7 @@
 }
 
 .description {
-  max-height: 65px;
+  max-height: 80px;
   min-height: 65px;
   margin-top:20px;
   overflow: hidden;
@@ -56,6 +57,13 @@
 .title_ {
   max-height: 48px;
   overflow: hidden;
+}
+
+.cardOptions {
+  padding: 0px !important;
+  position:absolute;
+  top: 290px;
+  left: calc(50% - 25px);
 }
 
 /* ------------------- GRID ---------------------- */
@@ -68,25 +76,17 @@
   /*overflow-y: hidden;*/
 }
 
-.multSelectIcon {
-  width: 30px;
-   height: 30px;
-   border-radius: 100% !important;
-   position: absolute;
-   background-color: white;
-   z-index: 1;
-   left: calc(100% - 35px);
-   top:5px
-}
-
-.multSelectIconSelected {
-  background-color: lightblue;
+.gridOptions {
+  display: inline-block;
+  position: absolute;
+  top: 105px;
+  left: calc(100% - 35px);
 }
 
 /* ----------------- LIST ------------------------ */
 #list-content-body {
   display: grid;
-  grid-gap: 5px;
+  grid-gap: 10px;
   grid-template-columns: 100%;
   grid-auto-rows: var(--list-content-container-height);
   /*overflow-y: hidden;*/
@@ -155,7 +155,7 @@
   left: calc(100% - 45px);
 }
 
-/* --------------------------------------------- */
+/* ----------------- GENERAL ------------------------ */
 
 .selectionFilter {
   z-index:2;
@@ -175,18 +175,21 @@
   border-radius: 3px;
 }
 
-.options {
-  padding: 0px !important;
-  position:absolute;
-  top: 290px;
-  left: calc(50% - 25px);
-
-
+.multSelectIcon {
+  width: 30px;
+  height: 30px;
+  border-radius: 100% !important;
+  position: absolute;
+  background-color: white;
+  z-index: 1;
+  left: calc(100% - 35px);
+  top:5px
 }
 
-/* .hover:hover ~ .options {
-  visibility:visible;
-} */
+.multSelectIconSelected {
+  background-color: lightblue;
+}
+
 
 .buttonCustom {
   height: 30px;

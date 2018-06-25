@@ -32,6 +32,10 @@ let userSchema = mongoose.Schema({
       type: String,
       default: 'date'
     },
+    notifications: {
+      type: Boolean,
+      default: true
+    },
     language: {
       value: {
         type: String,

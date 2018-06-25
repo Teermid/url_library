@@ -17,7 +17,8 @@ module.exports = {
   },
 
   async getAppContent (req, res) {
-    const { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
+    console.log('------------------- GET APP CONTENT ------------------');
+    const _id = await tokenPolicy.getUserID(req.headers['authoritzation'])
     res.send(await content.getContent(_id))
     }
   }

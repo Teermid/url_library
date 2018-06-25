@@ -3,6 +3,7 @@
     <add-bookmark></add-bookmark>
     <edit-element></edit-element>
     <edit-category></edit-category>
+    <element-view></element-view>
     <settings></settings>
     <search></search>
     <sidebar></sidebar>
@@ -20,10 +21,10 @@
   import List from '@/components/List.vue'
   import AddBookmark from '@/components/addBookmark'
   import EditElement from '@/components/EditElement'
+  import ElementView from '@/components/ElementView'
   import ListActions from '@/components/ListActions'
   import EditCategory from '@/components/EditCategory'
   import Settings from '@/components/Settings'
-  // import User from '@/services/User'
 
   export default {
     components: {
@@ -32,13 +33,10 @@
       List,
       AddBookmark,
       EditElement,
+      ElementView,
       ListActions,
       EditCategory,
       Settings
-    },
-
-    async beforeCreate () {
-
     }
   }
 </script>

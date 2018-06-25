@@ -61,7 +61,7 @@ module.exports = {
     }
   },
 
-  async query_4 (userID, sortBy) {
+  async query_4 (userID, sortBy, content) {
     console.log('QUERY 4');
     var elements
     var finalList = []
@@ -118,6 +118,7 @@ module.exports = {
       try {
         let { timestamp: firstConnection } = await User.findById(userID)
 
+
         let elementsToday = await Element.find(
           {
             'owner': userID,
@@ -127,22 +128,37 @@ module.exports = {
         if (elementsToday.length !== 0) {
           finalList.push(
             {
-              'title': 'Avui',
+              'title': content.today,
               'elements': elementsToday
             })
         }
 
+        let elementsThisWeek = await Element.find(
+          {
+            'owner': '5b2fe835ce1873333ca7ff74',
+            'createdAt': { $gt: (new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)) },
+            'timestamp.date': { $ne : new Date().setHours(0, 0, 0, 0)}
+          }).sort({ createdAt: -1 })
+
+          if (elementsThisWeek.length !== 0) {
+            finalList.push(
+              {
+                'title': content.thisWeek,
+                'elements': elementsThisWeek
+              })
+          }
+
         let elementsThisMonth = await Element.find(
           {
             'owner': userID,
-            'timestamp.date': { $ne: new Date().setHours(0, 0, 0, 0) },
+            'createdAt': { $lt: (new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)) },
             'timestamp.month': new Date().getMonth()
           }).sort({ createdAt: -1 })
 
         if (elementsThisMonth.length !== 0) {
           finalList.push(
             {
-              'title': 'Aquest mes',
+              'title': content.thisMonth,
               'elements': elementsThisMonth
             })
         }
@@ -161,7 +177,7 @@ module.exports = {
                 if (elementsPerMonth.length !== 0) {
                   monthList.push(
                     {
-                      'title': this.getMonthName(j),
+                      'title': content.monthNames[j],
                       'elements': elementsPerMonth
                     })
 
@@ -177,7 +193,7 @@ module.exports = {
     }
   },
 
-  async query_5 (userID, sortBy) {
+  async query_5 (userID, sortBy, content) {
     console.log('QUERY 5');
     var elements
     var finalList = []
@@ -215,7 +231,7 @@ module.exports = {
           }).sort({ createdAt: -1 })
 
         if (elementsToday.length !== 0) {
-          finalList.push({'title': 'Avui', 'elements': elementsToday})
+          finalList.push({'title': content.today, 'elements': elementsToday})
         }
 
         let elementsThisMonth = await Element.find(
@@ -227,7 +243,7 @@ module.exports = {
           }).sort({ createdAt: -1 })
 
         if (elementsThisMonth.length !== 0) {
-          finalList.push({'title': 'Aquest mes', 'elements': elementsThisMonth})
+          finalList.push({'title': content.thisMonth, 'elements': elementsThisMonth})
         }
 
 
@@ -243,7 +259,7 @@ module.exports = {
                   }).sort({ createdAt: -1 })
 
                 if (elementsPerMonth.length !== 0) {
-                  monthList.push({'title': this.getMonthName(j), 'elements': elementsPerMonth})
+                  monthList.push({'title': content.monthNames[j], 'elements': elementsPerMonth})
 
                 }
               }
@@ -257,7 +273,7 @@ module.exports = {
     }
   },
 
-  async query_6 (userID, category, sortBy) {
+  async query_6 (userID, category, sortBy, content) {
     console.log('QUERY 6');
     var elements
     var finalList = []
@@ -306,7 +322,7 @@ module.exports = {
           }).sort({ createdAt: -1 })
 
         if (elementsToday.length !== 0) {
-          finalList.push({'title': 'Avui', 'elements': elementsToday})
+          finalList.push({'title': content.today, 'elements': elementsToday})
         }
 
         let elementsThisMonth = await Element.find(
@@ -322,7 +338,7 @@ module.exports = {
           }).sort({ createdAt: -1 })
 
         if (elementsThisMonth.length !== 0) {
-          finalList.push({'title': 'Aquest mes', 'elements': elementsThisMonth})
+          finalList.push({'title': content.thisMonth, 'elements': elementsThisMonth})
         }
 
         for (var i = new Date().getFullYear(); i >= firstConnection.getFullYear(); i--) {
@@ -341,7 +357,7 @@ module.exports = {
                   }).sort({ createdAt: -1 })
 
                 if (elementsPerMonth.length !== 0) {
-                  monthList.push({'title': this.getMonthName(j), 'elements': elementsPerMonth})
+                  monthList.push({'title': content.monthNames[j], 'elements': elementsPerMonth})
 
                 }
               }

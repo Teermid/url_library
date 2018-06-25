@@ -9,7 +9,7 @@
           </v-btn>
        </v-card-title>
        <v-card-text class="px-4">
-         <v-form v-model="valid" ref="form" lazy-validation>  
+         <v-form v-model="valid" ref="form" lazy-validation>
             <v-text-field
               disabled="true"
               label="Link"
@@ -28,6 +28,7 @@
 
             <v-text-field
               label="Títol"
+              rows="5"
               v-model="element.title"
               :rules="titleRules"
               :counter="120"
@@ -37,11 +38,11 @@
             <v-text-field
               label="Descripció"
               multi-line
-              rows="3"
+              rows="5"
               height="80px"
               v-model="element.description"
               :rules="descriptionRules"
-              :counter="500"
+              :counter="1500"
               clearable
             ></v-text-field>
             <v-btn
@@ -83,7 +84,7 @@ export default {
         v => (v.length <= 120) || 'El títol no pot contindre més de 60 caracters'
       ],
       descriptionRules: [
-        v => (v.length <= 500) || 'La descripció no pot contindre més de 120 caracters'
+        v => (v.length <= 1500) || 'La descripció no pot contindre més de 120 caracters'
       ],
       categories: []
     }

@@ -1,0 +1,25 @@
+.viewContent {
+  background-color: white;
+  width: 100%;
+  float: left;
+}
+.portrait {
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 170px;
+}
+
+.viewTitle {
+  text-align: left;
+  padding: 0px 30px;
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.viewDescription {
+  padding: 0px 30px;
+  margin: 15px 0px;
+  text-align: justify;
+}

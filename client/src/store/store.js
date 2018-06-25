@@ -35,7 +35,8 @@ export default new Vuex.Store({
     settingsPopUp: false,
     settings: {},
     content: {},
-    numberOfBookmarks: null
+    numberOfBookmarks: null,
+    elementView: false
   },
 
   mutations: { // syncronous
@@ -166,12 +167,20 @@ export default new Vuex.Store({
       state.settings.language = content
     },
 
+    setNotifications (state, content) {
+      state.settings.notifications = content
+    },
+
     setContent (state, content) {
       state.content = content
     },
 
     setNumberOfBookmarks (state, content) {
       state.numberOfBookmarks = content
+    },
+
+    displayElementView (state, content) {
+      state.elementView = content
     }
   },
 

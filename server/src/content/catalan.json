@@ -86,7 +86,7 @@
       "app": {
         "title": "APLICACIÓ",
         "color": "Color de la barra lateral",
-        "notifications": "Notificacions",
+        "notifications": "Mostrar notificacions",
         "languages": {
           "catalan": "Català",
           "spanish": "Castellà",
@@ -97,5 +97,25 @@
       "user": {
         "title": "USUARI"
       }
+    },
+
+    "server": {
+      "today": "AVUI",
+      "thisWeek": "AQUESTA SETMANA",
+      "thisMonth": "AQUEST MES",
+      "monthNames": [
+         "GENER",
+         "FEBRER",
+         "MARÇ",
+         "ABRIL",
+         "MAIG",
+         "JUNY",
+         "JULIOL",
+         "AGOST",
+         "SETEMBRE",
+         "OCTUBRE",
+         "NOVOEMBRE",
+         "DECEMBRE"
+      ]
     }
 }

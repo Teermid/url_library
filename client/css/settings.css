@@ -1,12 +1,16 @@
 .colorContainer {
-  width:100%;
+  width:fit-content;
   float:left;
+  margin-left: 20px;
 }
 
 .color {
   width:30px;
   height: 30px;
   float:left;
+  border-radius: 100%;
+  margin-right: 5px;
+  border:1px solid #cacaca;
 }
 
 .selected {
@@ -20,11 +24,16 @@
   float:left;
 }
 
-.settingsGroup p {
-  text-align: left;
+.appSettings p {
+  width: fit-content;
+  float: left;
+  margin: 0px;
+  height: 30px;
+  line-height: 30px;
 }
 
-#deleteConfirm {
+.notificationsCheck {
+  margin-top:20px;
   float:left;
   width:100%;
 }

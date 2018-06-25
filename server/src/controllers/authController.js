@@ -22,31 +22,34 @@ module.exports = {
 
   async login (req, res) {
     try {
+      // Cerquem un usuari a partir del mail especificat per el client
       const user = await User.findOne({
         'email': req.query.email
       })
+      //Usuari no trobat -> Mail incorrecte
       if (!user) {
         res.status(403).send({error: 'Mail is not correct'})
+      // Usuari trobat, comparem contrasenyes
       } else if (!(await bcryptPolicy.comparePasswords(req.query.password, user.password))) {
+        // Contrasenya incorrecta
         res.status(403).send({error: 'Password is not correct'})
       } else {
-        let token = tokenPolicy.jwtSignUser(user._id)
+        // Contrasenya correcte -> generem token i l'enviem conjuntament amb l'usuari
         res.send({
           user: user,
-          token: token
+          token: tokenPolicy.jwtSignUser(user._id)
         })
       }
+      //Error del servidor
     } catch (e) {
       res.status(500).send({error: 'Server error'})
     }
   },
 
   async getUserFromToken (req, res) {
-    console.log('GET USER FROM TOKEN');
     console.log(req.headers['authoritzation'])
     try {
-      let { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
-      console.log('id --------------> ' + _id);
+      let _id = await tokenPolicy.getUserID(req.headers['authoritzation'])
       let user = await User.findById(_id)
       res.send(user)
     } catch (e) {

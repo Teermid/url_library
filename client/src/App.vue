@@ -30,7 +30,6 @@ export default {
     padding: 0;
     border: 0;
     outline: 0;
-    font-family: 'Source Sans Pro', sans-serif;
   }
 
   html {
@@ -43,8 +42,8 @@ export default {
 
 
   #app {
-    /*font-family: 'Roboto', sans-serif;*/
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
     color: #2c3e50;
     text-align: center;
   }
@@ -65,6 +64,11 @@ export default {
     font-weight: 400;
   }
 
+  .f_normal {
+    font-weight: 500;
+    font-size:15px;
+  }
+
   .f_black {
     font-weight: 500;
     font-size:16px;
@@ -80,8 +84,9 @@ export default {
   }
 
   .background {
-    /*background-color: #f8f9f9;*/
-    background-color: white;
+    background-color: #f8f9f9;
+    /* background-color: #f3f7f9; */
+
     max-height: 100vh;
     overflow:hidden;
   }

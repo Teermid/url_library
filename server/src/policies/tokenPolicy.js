@@ -8,9 +8,8 @@ module.exports = {
     if (typeof authHeader == 'undefined') {
       res.send(403)
     } else {
-      const bearer = authHeader.split(' ')
-      const token = bearer[1]
-      const response = await jwt.verify(token, config.authentication.jwtSecret)
+      const token = authHeader.split(' ')
+      const response = await jwt.verify(token[1], config.authentication.jwtSecret)
       if (response._id) {
         next()
       } else {
@@ -27,13 +26,11 @@ module.exports = {
       })
   },
 
-  async getUserID (authToken) {
+  async getUserID (authHeader) {
     try {
-      const bearer = authToken.split(' ')
-      const token = bearer[1]
-      return await jwt.verify(token, config.authentication.jwtSecret)
+      const token = authHeader.split(' ')
+      return await jwt.verify(token[1], config.authentication.jwtSecret)
     } catch (e) {
-      return await jwt.verify(authToken, config.authentication.jwtSecret)
     }
 
 

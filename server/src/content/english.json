@@ -97,5 +97,25 @@
       "user": {
         "title": "USER"
       }
+    },
+
+    "server": {
+      "today": "TODAY",
+      "thisWeek": "THIS WEEK",
+      "thisMonth": "THIS MONTH",
+      "monthNames": [
+         "JANUARY",
+         "FEBRUARY",
+         "MARCH",
+         "APRIL",
+         "MAY",
+         "JUNE",
+         "JULY",
+         "AUGUST",
+         "SEPTEMBER",
+         "OCTOBER",
+         "NOVEMBER",
+         "DECEMBER"
+      ]
     }
 }

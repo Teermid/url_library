@@ -1,5 +1,6 @@
 <template>
 <div class="wrapper">
+  <v-progress-circular v-if="!contentLoaded" class="mt-3" size="30" :width="3" indeterminate color="blue"></v-progress-circular>
   <v-dialog v-model="deleteVerification" origin="top center" max-width="250px">
     <v-card class="pb-2">
       <v-card-text class="pt-3 pb-0">
@@ -21,7 +22,7 @@
       </v-card>
   </v-dialog>
 
-  <div class="chunk" v-for="chunk in data">
+  <div class="chunk" v-if="contentLoaded" v-for="chunk in data">
   <p class="f_left">{{ chunk.title }}</p>
     <!-- CARDS -->
     <div v-if="$store.state.elementsDisplay === 'card'" id="card-content-body">
@@ -42,7 +43,7 @@
             <div class="mt-1 black--text f_left f_black float-f_left title_">{{ el.title }}</div>
             <div class="mt-1 mx-0 black--text f_left f_light float-f_left description">{{ el.description }}</div>
           </div>
-          <v-menu class="options" offset-y>
+          <v-menu class="cardOptions" offset-y>
             <v-btn @click="loadCategories(el.categories)" icon slot="activator" light >
               <v-icon color="grey lighten-2">more_horiz</v-icon>
             </v-btn>
@@ -53,69 +54,63 @@
               <v-list-tile @click="deleteElement(el._id)">
                 <v-list-tile-title> Eliminar </v-list-tile-title>
               </v-list-tile>
-              <!-- <v-menu offset-x open-on-hover :close-on-content-click="false">
-                <v-list-tile slot="activator" @click="">
-                  <v-list-tile-title>Categories</v-list-tile-title>
-                  <v-list-tile-action class="justify-end">
-                    <v-icon>keyboard_arrow_right</v-icon>
-                  </v-list-tile-action>
-                </v-list-tile>
-                <v-list>
-                  <v-list-tile v-for="cat in childCategoryList" :key="cat._id" @click="loadCategories(cat)">
-                    <v-list-tile-title>
-                      <v-checkbox :label="cat.name" v-model="cat.selected"></v-checkbox>
-                    </v-list-tile-title>
-                  </v-list-tile>
-                </v-list>
-              </v-menu> -->
+              <v-list-tile @click="viewElement(el._id)">
+                <v-list-tile-title> Veure </v-list-tile-title>
+              </v-list-tile>
             </v-list>
           </v-menu>
-
          </v-card-title>
        </v-card>
     </div>
 
     <!-- GRID -->
     <div v-if="$store.state.elementsDisplay === 'grid'" id="grid-content-body">
-      <!-- <v-card class="white shadow" v-for="el in elements" :key="el.id" flat draggable="true" v-on:dragstart="drag(el._id, $event)"> -->
       <v-card class="white shadow" v-for="el in chunk.elements" :key="el.id" flat draggable="true" v-on:dragstart="drag(el._id, $event)">
+
         <div class="multSelectIcon shadow" v-if="$store.state.multSelect" v-bind:class=" { multSelectIconSelected : el.selected } "></div>
         <div class="selectionFilter" v-if="$store.state.multSelect" @click="select(el)"></div>
         <div class="selectionFilterSelected" v-if="el.selected"></div>
         <a v-bind:href="el.url"><v-card-media v-bind:src="el.imageURL" height="115px"></v-card-media></a>
-        <v-card-title class="pb-0 pt-2">
+        <v-card-title class="pb-0 pl-2 pr-3 pt-2">
+          <div class="tagsContainer">
+            <div class="tag" v-for="tag in el.categories" @click="tagClicked(tag.name)">
+              {{ tag.name }}
+            </div>
+          </div>
           <div class="info_container">
-            <div class="ma-0 black--text f_left f_black float-f_left title_">{{ el.title }}</div>
-             <!-- <v-menu bottom f_left>
-                <v-btn icon slot="activator" light>
-                  <v-icon color="grey lighten-2">more_horiz</v-icon>
-                </v-btn>
-                <v-list class="white">
-                  <v-list-tile @click="deleteElement(el._id)">
-                    <v-list-tile-title> Eliminar </v-list-tile-title>
-                  </v-list-tile>
-                  <v-list-tile @click="editElement(el._id)">
-                    <v-list-tile-title> Editar </v-list-tile-title>
-                  </v-list-tile>
-                </v-list>
-              </v-menu> -->
-
+            <div class="ma-0 black--text f_left f_normal float-f_left title_">{{ el.title }}</div>
            </div>
          </v-card-title>
          <v-card-actions>
          </v-card-actions>
+         <v-menu class="gridOptions" offset-y>
+           <v-btn @click="loadCategories(el.categories)" icon slot="activator" light flat ripple=false>
+             <v-icon color="grey lighten-2">more_vert</v-icon>
+           </v-btn>
+           <v-list class="white">
+             <v-list-tile @click="editElement(el._id)">
+               <v-list-tile-title> Editar </v-list-tile-title>
+             </v-list-tile>
+             <v-list-tile @click="deleteElement(el._id)">
+               <v-list-tile-title> Eliminar </v-list-tile-title>
+             </v-list-tile>
+             <v-list-tile @click="viewElement(el._id)">
+               <v-list-tile-title> Veure </v-list-tile-title>
+             </v-list-tile>
+           </v-list>
+         </v-menu>
        </v-card>
     </div>
 
     <!-- LIST -->
 
     <div v-if="$store.state.elementsDisplay === 'list'" id="list-content-body">
-      <v-card class="white listContainer" v-for="el in chunk.elements" :key="el.id" flat draggable="true" v-on:dragstart="drag(el._id, $event)">
+      <v-card class="white shadow listContainer" v-for="el in chunk.elements" :key="el.id" flat draggable="true" v-on:dragstart="drag(el._id, $event)">
         <div class="selectionFilter" v-if="$store.state.multSelect" @click="select(el)"></div>
         <div class="selectionFilterSelected" v-if="el.selected"></div>
         <div class="imageContainer" v-bind:style="{ backgroundImage: 'url(' + el.imageURL + ')'}"></div>
         <div class="infoContainer">
-          <div class="titleContainer f_left f_black">
+          <div class="titleContainer f_left f_normal">
             <p> {{ el.title }} </p>
           </div>
           <div class="descriptionContainer f_left f_light">
@@ -144,6 +139,7 @@
     </div>
   </div>
   <v-snackbar
+    v-if="$store.state.settings.notifications"
     bottom
     right
     timeout=3000
@@ -158,7 +154,7 @@
 
 <script>
 import Elements from '@/services/Elements'
-import Category from '@/services/Category'
+// import Category from '@/services/Category'
 import EditElement from '@/components/EditElement'
 export default {
   components: {
@@ -174,6 +170,7 @@ export default {
         },
         snackbar: null
       },
+      contentLoaded: false,
       data: [],
       userID: null,
       categoryFilter: 'All',
@@ -197,7 +194,7 @@ export default {
     this.sortBy = this.$store.getters.getSortBy
     this.userID = this.$store.getters.getUserID
     this.getData(this.categoryFilter, false, null, this.userID, this.sortBy)
-    this.getCategories()
+    // this.getCategories()
   },
 
   methods: {
@@ -209,12 +206,13 @@ export default {
           counter++
         }
       }
+      this.contentLoaded = true
       this.$store.commit('setNumberOfBookmarks', counter)
     },
 
-    async getCategories () {
-      this.categories = (await Category.getCategory(this.userID)).data
-    },
+    // async getCategories () {
+    //   this.categories = (await Category.getCategory(this.userID)).data
+    // },
 
     async deleteElement (id) {
       // await Elements.deleteElement(id)
@@ -234,6 +232,11 @@ export default {
       this.$store.commit('setElementId', id)
       this.$store.commit('setElementByIdTrigger')
       this.$store.commit('setEditDisplay')
+    },
+
+    viewElement (id) {
+      this.$store.commit('setElementId', id)
+      this.$store.commit('displayElementView', true)
     },
 
     navigateTo (route) {
@@ -307,7 +310,7 @@ export default {
     '$store.state.searchString': {
       async handler (value) {
         this.searchValue = value
-        this.getData(null, 'true', this.searchValue, this.userID, this.sortBy)
+        this.getData(this.categoryFilter, 'true', this.searchValue, this.userID, this.sortBy)
       }
     },
 

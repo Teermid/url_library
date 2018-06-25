@@ -5,6 +5,7 @@ const categoryController = require('./controllers/categoryController')
 const metadataController = require('./controllers/metadataController')
 const userController = require('./controllers/userController')
 const tokenPolicy = require('./policies/tokenPolicy')
+const Element = require('./models/Element')
 
 module.exports = (app) => {
   app.post('/register',
@@ -41,7 +42,7 @@ module.exports = (app) => {
   )
 
   app.get('/elements',
-    // tokenPolicy.verifyToken,
+    tokenPolicy.verifyToken,
     elementsController.getData
   )
 
@@ -124,4 +125,23 @@ module.exports = (app) => {
     // tokenPolicy.verifyToken,
     categoryController.isEmpty
   )
+
+  app.get('/testing', async function (req, res) {
+
+    let elem = await Element.findById('5b2ff16ece1873333ca7ff76')
+    console.log(new Date().getDay())
+
+    let thisWeek = [new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)]
+
+    let elementsThisWeek = await Element.find(
+      {
+        'owner': '5b2fe835ce1873333ca7ff74',
+        'createdAt': { $gt: thisWeek },
+        'timestamp.date': { $ne : new Date().setHours(0, 0, 0, 0)}
+      }).sort({ createdAt: -1 })
+
+      res.send(elementsThisWeek)
+  })
+
+
 }

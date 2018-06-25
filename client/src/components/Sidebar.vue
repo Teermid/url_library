@@ -33,6 +33,7 @@
           v-bind:class="{ 'selectedLight': categorySelectedLight(ca), 'selectedDark': categorySelectedDark(ca), 'lightHover': $store.state.settings.color.light, 'darkHover': !$store.state.settings.color.light }"
           @click="displayCategory(ca)"
           v-bind:value="ca.value">
+          <v-icon class="mr-3" size="24px" v-bind:class="{ 'white--text':!$store.state.settings.color.light }"> {{ ca.icon }} </v-icon>
           {{ ca.name }}
         </div>
       </div>
@@ -99,7 +100,10 @@
       <div class="addContainer">
         <v-menu top offset-y :close-on-content-click="false" value="addCategoryPopUp">
           <!-- <v-btn slot="activator">A Menu</v-btn> -->
-          <div slot="activator" class="add" >{{ text.buttons.addCategory }}</div>
+          <div slot="activator" class="add" >
+            <v-icon class="mr-3" size="24px" v-bind:class="{ 'white--text':!$store.state.settings.color.light }"> create_new_folder </v-icon>
+            {{ text.buttons.addCategory }}
+          </div>
           <v-list>
             <v-form>
               <v-text-field
@@ -107,7 +111,7 @@
                 v-model="category.name"
               ></v-text-field>
               <v-select
-                :items="rootCategories"
+                :items="categories"
                 :placeholder="text.popups.addCategory.select"
                 clearable="true"
                 v-model="category.parentCategory"
@@ -118,8 +122,14 @@
             </v-form>
         </v-list>
         </v-menu>
-        <div class="add" @click="toggleBookmarkPopUp">{{ text.buttons.addBookmark }}</div>
-        <div class="add"  @click="settings">Settings</div>
+        <div class="add" @click="toggleBookmarkPopUp">
+          <v-icon class="mr-3" size="24px" v-bind:class="{ 'white--text':!$store.state.settings.color.light }"> bookmark </v-icon>
+          {{ text.buttons.addBookmark }}
+        </div>
+        <div class="add" @click="settings">
+          <v-icon class="mr-3" size="24px" v-bind:class="{ 'white--text':!$store.state.settings.color.light }">settings</v-icon>
+          Settings
+        </div>
       </div>
     </v-navigation-drawer>
   </div>
@@ -137,12 +147,14 @@
             {
               name: null,
               selected: true,
-              value: 'All'
+              value: 'All',
+              icon: 'cloud'
             },
             {
               name: null,
               selected: false,
-              value: 'Unsorted'
+              value: 'Unsorted',
+              icon: 'inbox'
             }
           ],
           buttons: {
@@ -168,7 +180,6 @@
         },
         categories: [{}],
         categoriesSidebar: [{}],
-        rootCategories: [],
         userID: null,
         editCatPopUp: false,
         categoryIdToDelete: null,
@@ -301,12 +312,15 @@
 
       async drop (dropCategory, event) {
         event.preventDefault()
+        // Missatge de l'element arrossegat
         let msg = JSON.parse(event.dataTransfer.getData('text'))
+        // Si l'element és categoria i no s'està arrossegant cap a ella mateixa..
         if (msg.transmitter === 'category' && (msg.content.name !== dropCategory.name)) {
+          // Emmagatzemem el contingut necessari en variables
           let dragCategory = msg.content
           let dragId = dragCategory._id
           let dropName = dropCategory.name
-
+          // Si la categoria arrossegada és child i s'arrossega cap a una parent o child sense categories niades..
           if ((dragCategory.kind === 'child') && ((dropCategory.kind === 'child' && !dropCategory.parentCategory) || dropCategory.kind === 'root')) {
             await Category.editCategoryHierarchy(dragId, dropName)
             this.printCategories()

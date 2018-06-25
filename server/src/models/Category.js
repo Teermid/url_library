@@ -59,13 +59,6 @@ categorySchema.pre('remove', async function (next) {
         { 'kind': 'root', 'nestedCategories': [] },
         { $set: { kind: 'child' } }
       )
-
-      // Eliminem la categoria del array de categories dels Elements
-      await this.model('Element').update(
-        { 'categories._id': this._id },
-        { $pull: { 'categories': { _id: this._id } } },
-        { multi: true }
-      )
     } else {
       await this.model('Category').update(
         { 'parentCategory': this.name },
@@ -78,6 +71,14 @@ categorySchema.pre('remove', async function (next) {
         { $set: { 'categories.$.parentCategory': null } }
       )
     }
+
+    // Eliminem la categoria del array de categories dels Elements
+    await this.model('Element').update(
+      { 'categories._id': this._id },
+      { $pull: { 'categories': { _id: this._id } } },
+      { multi: true }
+    )
+    
   } catch (e) {
     next()
   }

@@ -3,7 +3,7 @@ const Category = require('../models/Category')
 const Metadata = require('./metadataController')
 const queries = require('./queries/getQueries')
 const tokenPolicy = require('../policies/tokenPolicy')
-var category = null
+const Content = require('../content/index')
 
 function escapeRegExp (text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
@@ -11,33 +11,32 @@ function escapeRegExp (text) {
 
 module.exports = {
   async getData (req, res) {
-    console.log('HITED');
-    category = req.query.categoryValue || category
+
+    const { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
+    const { server: content } = await Content.getContent(_id)
+    const category = req.query.categoryValue
     const searchValue = (req.query.searchValue == null || req.query.searchValue == '') ? '' : new RegExp(escapeRegExp(req.query.searchValue), 'gi')
-    console.log('searchValue -> ' + searchValue);
     const isSearch = req.query.isSearch
-    const userID = req.query.userID
     const sortBy = req.query.sortBy || null
-    console.log(sortBy);
     let response = null
 
     if (isSearch === 'true' && searchValue !== '' && category === 'All') {
-      response = await queries.query_1(userID, searchValue)
+      response = await queries.query_1(_id, searchValue)
     }
     if (isSearch === 'true' && searchValue !== '' && category === 'Unsorted') {
-      response = await queries.query_2(userID, searchValue)
+      response = await queries.query_2(_id, searchValue)
     }
     if (isSearch === 'true' && searchValue !== '' && category !== 'All' && category !== 'Unsorted') {
-      response = await queries.query_3(userID, category, searchValue)
+      response = await queries.query_3(_id, category, searchValue)
     }
     if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category === 'All') {
-      response = await queries.query_4(userID, sortBy)
+      response = await queries.query_4(_id, sortBy, content)
     }
     if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category === 'Unsorted') {
-      response = await queries.query_5(userID, sortBy)
+      response = await queries.query_5(_id, sortBy, content)
     }
     if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category !== 'All' && category !== 'Unsorted') {
-      response = await queries.query_6(userID, category, sortBy)
+      response = await queries.query_6(_id, category, sortBy, content)
     }
 
     if (response.error) {
@@ -49,7 +48,7 @@ module.exports = {
 
   async addElements (req, res) {
     try {
-      const { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
+      const _id = await tokenPolicy.getUserID(req.headers['authoritzation'])
       const categories = await Category.find( {'_id': {'$in': req.body.categories}})
       console.log('URL =======> ' + req.body.url);
       const element = new Element(

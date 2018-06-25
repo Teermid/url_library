@@ -4,7 +4,7 @@
     <div id="content-header-filters">
       <v-menu v-if="!$store.state.multSelect">
         <v-btn icon slot="activator">
-          <v-icon color="grey">filter_list</v-icon>
+          <v-icon color="grey">sort</v-icon>
         </v-btn>
         <v-card>
           <v-list>
@@ -60,6 +60,7 @@
       </v-menu> -->
     </div>
     <v-snackbar
+      v-if="$store.state.settings.notifications"
       bottom
       right
       timeout=3000

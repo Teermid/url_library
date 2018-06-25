@@ -12,6 +12,8 @@
            <v-text-field
              label="Name"
              v-model="category.name"
+             :error="error"
+             :error-messages="errorText"
              required
              clearable
            ></v-text-field>
@@ -37,18 +39,25 @@ export default {
   data () {
     return {
       category: '',
-      loader: false
+      loader: false,
+      error: false,
+      errorText: null
     }
   },
 
   methods: {
     async editCategory () {
-      // alert(this.category._id + ' | ' + this.category.name)
       this.loader = true
-      await Category.editCategoryName(this.category)
-      this.$store.commit('setEditCategoryDisplay')
-      this.$store.commit('setRefreshElements')
-      this.loader = false
+      let response = (await Category.editCategoryName(this.category)).data
+      if (response.error) {
+        this.error = true
+        this.errorText = 'Category already exists'
+        this.loader = false
+      } else {
+        this.$store.commit('setEditCategoryDisplay')
+        this.$store.commit('setRefreshElements')
+        this.loader = false
+      }
     },
 
     close () {
@@ -58,6 +67,7 @@ export default {
   watch: {
     '$store.state.categoryByIdTrigger': {
       async handler (value) {
+        this.error = false
         try {
           this.category = (await Category.getCategoryById(this.$store.getters.getCategoryId)).data
         } catch (e) {
