@@ -1,0 +1,68 @@
+.landingWrapper {
+  width: 100%;
+  height: 100vh;
+  background-color: #0093E9;
+  overflow: hidden;
+  scroll:none;
+  background-image: -webkit-linear-gradient(34deg, #0093E9 0%, #80D0C7 100%);
+  background-image: -o-linear-gradient(34deg, #0093E9 0%, #80D0C7 100%);
+  background-image: linear-gradient(124deg, #0093E9 0%, #80D0C7 100%);
+
+}
+
+.imgWrapper {
+  left: 40vh;
+  width: 60%;
+  position: absolute;
+  top: calc(62vh + 7px);
+}
+
+.landingContent {
+  width:100%;
+  float:left;
+}
+
+.landingContent h1 {
+  font-size: 100px;
+  font-weight: 700;
+  text-shadow: 5px 5px #3a8ab382;
+  color: white;
+  margin-top: 7%;
+}
+
+.landingContent :nth-child(2) {
+  margin: 20px 0px 70px 0px;
+  color: white;
+  font-size: 24px;
+  text-shadow: 2px 2px #3a8ab3eb;
+}
+
+.landingContent :nth-child(4) {
+  color: white;
+  font-size: 15px;
+  margin: 30px 0px 5px 0px;
+}
+
+.landingButton {
+  margin: 0 auto;
+  width:190px;
+  line-height: 35px;
+  border-radius: 50px;
+  padding:10px;
+  font-size: 16px;
+  border: 1px solid white;
+  transition: .3s;
+  cursor:pointer;
+  color: white;
+}
+
+.landingButton:hover {
+  color: #38aedb;
+  background-color: white;
+}
+
+.landingContent a {
+  color: white;
+  text-decoration: underline;
+  cursor: pointer;
+}

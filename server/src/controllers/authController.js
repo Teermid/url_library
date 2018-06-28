@@ -16,7 +16,7 @@ module.exports = {
         token: tokenPolicy.jwtSignUser(userFinal._id)
       })
     } catch (e) {
-      res.status(400).send({error: 'Error creating the account'})
+      res.status(500).send({error: 'Error creating the account'})
     }
   },
 
@@ -28,11 +28,11 @@ module.exports = {
       })
       //Usuari no trobat -> Mail incorrecte
       if (!user) {
-        res.status(403).send({error: 'Mail is not correct'})
+        res.status(403).send({error: 'Email incorrecte'})
       // Usuari trobat, comparem contrasenyes
       } else if (!(await bcryptPolicy.comparePasswords(req.query.password, user.password))) {
         // Contrasenya incorrecta
-        res.status(403).send({error: 'Password is not correct'})
+        res.status(403).send({error: 'Contrasenya incorrecte'})
       } else {
         // Contrasenya correcte -> generem token i l'enviem conjuntament amb l'usuari
         res.send({

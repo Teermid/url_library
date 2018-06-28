@@ -1,24 +1,33 @@
 <template>
   <div>
-    <div class="">
-        <h1>Register</h1>
-
+    <div class="sessionWrapper">
+      <div class="form">
+        <h2>SAVIFY</h2>
         <input
+          placeholder="E-mail"
           v-model="email"
           type="email"
           name="email"
           value="email">
         <br>
         <input
+          placeholder="Contrasenya"
+          v-model="password"
+          type="password"
+          name="password"
+          value="password">
+        <input
+          placeholder="Confirmar contrasenya"
           v-model="password"
           type="password"
           name="password"
           value="password">
         <br>
-        <button @click="register">
-          Register
-        </button>
-        <p v-html="error" />
+        <div @click="Login" class="loginButton">
+          Registrar-se
+        </div>
+        <p @click="goRegister">Accés</p>
+      </div>
     </div>
   </div>
 </template>
@@ -59,3 +68,4 @@ export default {
   }
 }
 </script>
+<style src="../../css/session.css"></style>

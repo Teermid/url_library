@@ -51,7 +51,7 @@ export default {
     if (!authToken[1]) {
       next()
     } else {
-      next({path: '/list', name: 'list'})
+      next({path: '/home', name: 'home'})
     }
   }
 }

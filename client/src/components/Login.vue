@@ -1,42 +1,52 @@
 <template>
   <div>
-    <div>
-        <h1>Login</h1>
+    <div class="sessionWrapper">
+      <div class="form">
+        <h2>SAVIFY</h2>
         <input
+          placeholder="E-mail"
           v-model="email"
           type="email"
           name="email"
           value="email">
         <br>
         <input
+          placeholder="Contrasenya"
           v-model="password"
           type="password"
           name="password"
           value="password">
         <br>
-        <button @click="Login">
-          Login
-        </button>
-        <p v-html="error" />
+        <div @click="Login" class="loginButton">
+          Accedir
+        </div>
+        <p @click="goRegister">Registre</p>
+      </div>
     </div>
+    <v-snackbar
+      bottom
+      timeout=3000
+      v-model="snackbar">
+        {{ error }}
+      <v-btn dark flat color="pink" @click.native="snackbar = false">
+        <v-icon>close</v-icon>
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
 import auth from '@/services/Auth'
-
 export default {
   data () {
     return {
       email: '',
       password: '',
-      error: ''
-
+      error: '',
+      snackbar: false
     }
   },
-
   methods: {
-
     async Login () {
       try {
         // Petició d'inici de sessió
@@ -51,16 +61,16 @@ export default {
         // Guardem cookie al cercador
         await this.$cookies.set('session', response.data.token)
         // Redirigim usuari
-        this.$router.push('/list')
+        this.$router.push('/home')
       } catch (e) {
-        console.log('ERROR')
+        this.error = e.response.data.error
+        this.snackbar = true
       }
-    }
-  },
-
-  watch: {
-    email (value) {
+    },
+    goRegister () {
+      this.$router.push('/register')
     }
   }
 }
 </script>
+<style src="../../css/session.css"></style>
