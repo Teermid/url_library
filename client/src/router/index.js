@@ -11,7 +11,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/app',
+      path: '/',
       name: 'app',
       component: Landing,
       beforeEnter: guard.checkUserUnlogged

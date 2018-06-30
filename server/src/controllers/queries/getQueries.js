@@ -135,7 +135,7 @@ module.exports = {
 
         let elementsThisWeek = await Element.find(
           {
-            'owner': '5b2fe835ce1873333ca7ff74',
+            'owner': userID,
             'createdAt': { $gt: (new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)) },
             'timestamp.date': { $ne : new Date().setHours(0, 0, 0, 0)}
           }).sort({ createdAt: -1 })
@@ -234,11 +234,27 @@ module.exports = {
           finalList.push({'title': content.today, 'elements': elementsToday})
         }
 
+        let elementsThisWeek = await Element.find(
+          {
+            'owner': userID,
+            'categories': [],
+            'createdAt': { $gt: (new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)) },
+            'timestamp.date': { $ne : new Date().setHours(0, 0, 0, 0)}
+          }).sort({ createdAt: -1 })
+
+          if (elementsThisWeek.length !== 0) {
+            finalList.push(
+              {
+                'title': content.thisWeek,
+                'elements': elementsThisWeek
+              })
+          }
+
         let elementsThisMonth = await Element.find(
           {
             'owner': userID,
             'categories': [],
-            'timestamp.date': { $ne: new Date().setHours(0, 0, 0, 0) },
+            'createdAt': { $lt: (new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)) },
             'timestamp.month': new Date().getMonth()
           }).sort({ createdAt: -1 })
 
@@ -325,10 +341,22 @@ module.exports = {
           finalList.push({'title': content.today, 'elements': elementsToday})
         }
 
+        let elementsThisWeek = await Element.find(
+          {
+            'owner': userID,
+            'createdAt': { $gt: (new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)) },
+            'timestamp.date': { $ne : new Date().setHours(0, 0, 0, 0)},
+            '$or': [{
+              'categories.name': category
+            }, {
+              'categories.parentCategory': category
+            }]
+          }).sort({ createdAt: -1 })
+
         let elementsThisMonth = await Element.find(
           {
             'owner': userID,
-            'timestamp.date': { $ne: new Date().setHours(0, 0, 0, 0) },
+            'createdAt': { $lt: (new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)) },
             'timestamp.month': new Date().getMonth(),
             '$or': [{
               'categories.name': category
@@ -374,35 +402,5 @@ module.exports = {
   // ------------------------------------------
   finalList (elements, count) {
     return [{'title': count + ' RESULTS', 'elements': elements}]
-  },
-
-  getMonthName (index) {
-    switch (index) {
-      case 0:
-        return 'Gener'
-      case 1:
-        return 'Febrer'
-      case 2:
-        return 'Març'
-      case 3:
-        return 'Abril'
-      case 4:
-        return 'Maig'
-      case 5:
-        return 'Juny'
-      case 6:
-        return 'Juliol'
-      case 7:
-        return 'Agost'
-      case 8:
-        return 'Setembre'
-      case 9:
-        return 'Octubre'
-      case 10:
-        return 'Novembre'
-      case 11:
-        return 'Decembre'
-    }
   }
-
 }

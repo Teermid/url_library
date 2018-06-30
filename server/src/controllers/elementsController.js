@@ -155,29 +155,5 @@ module.exports = {
     } catch (e) {
       res.status(500).send({error: 'error sorting multiple elements to a category'})
     }
-  },
-
-  async adminAdd (req, res) {
-    try {
-      for (var i = 1; i <= 20; i++) {
-        const { title, description, image, logo } = await Metadata.getMetadata(req.body.url)
-          const element = new Element(
-            {
-              title: req.body.title || title,
-              link: req.body.url,
-              description: req.body.description || description,
-              categories: req.body.categories || [],
-              imageURL: image,
-              iconURL: logo,
-              owner: req.body.userID
-            })
-          await element.save()
-          console.log('Element ' + i + ' added');
-      }
-      res.send('SUCCESS')
-    } catch (error) {
-      res.send('ERROR')
-    }
   }
-
 }

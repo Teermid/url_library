@@ -42,7 +42,7 @@ module.exports = (app) => {
   )
 
   app.get('/elements',
-    tokenPolicy.verifyToken,
+    // tokenPolicy.verifyToken,
     elementsController.getData
   )
 
