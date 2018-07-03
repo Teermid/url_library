@@ -2,44 +2,33 @@
   <v-dialog v-model="$store.state.settingsPopUp" origin="top center" max-width="400px" lazy>
     <v-card>
       <v-card-title>
+        <img class="customIcon" src="../../css/svg/conf_icon.svg">
         <span class="headline px-2"> {{ text.header }} </span>
         <v-spacer></v-spacer>
         <v-btn icon slot="activator" @click="close">
           <v-icon color="grey lighten-2">close</v-icon>
         </v-btn>
       </v-card-title>
-      <v-card-text>
-        <v-tabs fixed-tabs>
-          <v-tab> {{ text.app.title }} </v-tab>
-          <v-tab>{{ text.user.title }}</v-tab>
-          <v-tab-item>
-            <v-card flat>
-              <v-card-text class="appSettings pt-4">
-                  <p>{{ text.app.color }}</p>
-                  <div class="colorContainer">
-                    <div class="color" v-for="color in settings.colors" @click="setColor(color)" v-bind:style="{ 'background-color':color.hex }"></div>
-                  </div>
-                  <div class="notificationsCheck">
-                    <v-checkbox
-                       :label="text.app.notifications"
-                       v-model="notifications"
-                     ></v-checkbox>
-                   </div>
-                  <v-select
-                    @click="changeLanguage"
-                    :items="settings.language"
-                    v-model="languageSelected"
-                    label="Idioma"
-                    single-line
-                    item-text="text"
-                    item-value="value"
-                    return-object
-                  ></v-select>
-                <v-btn @click="apply">APPLY</v-btn>
-              </v-card-text>
-            </v-card>
-          </v-tab-item>
-        </v-tabs>
+      <v-card-text class="appSettings pt-4">
+        <p>{{ text.app.color }}</p>
+        <div class="colorContainer">
+          <div class="color" v-for="color in settings.colors" @click="setColor(color)" v-bind:style="{ 'background-color':color.hex }"></div>
+        </div>
+        <div class="notificationsCheck">
+          <v-checkbox
+            :label="text.app.notifications"
+            v-model="notifications"
+          ></v-checkbox>
+        </div>
+        <v-select
+          :items="settings.language"
+          v-model="languageSelected"
+          label="Idioma"
+          single-line
+          item-value="value"
+          return-object
+        ></v-select>
+        <v-btn @click="apply">APPLY</v-btn>
       </v-card-text>
     </v-card>
   </v-dialog>

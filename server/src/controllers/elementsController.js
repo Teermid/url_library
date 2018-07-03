@@ -13,7 +13,7 @@ module.exports = {
   async getData (req, res) {
 
     const { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
-    const { server: content } = await Content.getContent(_id)
+    const { sorting: content } = await Content.getContent(_id)
     const category = req.query.categoryValue
     const searchValue = (req.query.searchValue == null || req.query.searchValue == '') ? '' : new RegExp(escapeRegExp(req.query.searchValue), 'gi')
     const isSearch = req.query.isSearch
@@ -50,12 +50,11 @@ module.exports = {
     try {
       const _id = await tokenPolicy.getUserID(req.headers['authoritzation'])
       const categories = await Category.find( {'_id': {'$in': req.body.categories}})
-      console.log('URL =======> ' + req.body.url);
       const element = new Element(
         {
-          title: req.body.title,
+          title: (req.body.title).substring(0, 100),
           url: req.body.url,
-          description: req.body.description,
+          description: (req.body.description).substring(0, 1000),
           categories: categories || null,
           imageURL: req.body.image,
           owner: _id
@@ -155,5 +154,32 @@ module.exports = {
     } catch (e) {
       res.status(500).send({error: 'error sorting multiple elements to a category'})
     }
-  }
+  },
+
+  async adminAdd (req, res) {
+    console.log('INSIDE ADMIND ADD');
+    console.log(req.body.url);
+    console.log(req.body.userID);
+    try {
+      const { title, description, image, logo } = await Metadata.getMetadata(req.body.url)
+      console.log('AFTER METADATA');
+      for (var i = 1; i <= 20; i++) {
+          const element = new Element(
+            {
+              title: title,
+              link: req.body.url,
+              description: description,
+              categories: [],
+              imageURL: image,
+              iconURL: logo,
+              owner: req.body.userID
+            })
+          await element.save()
+          console.log('Element ' + i + ' added');
+      }
+      res.send('SUCCESS')
+    } catch (error) {
+      res.send('ERROR')
+    }
+   }
 }

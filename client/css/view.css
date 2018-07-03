@@ -19,6 +19,8 @@
 }
 
 .viewDescription {
+  max-height: 300px;
+  overflow: scroll;
   padding: 0px 30px;
   margin: 15px 0px;
   text-align: justify;

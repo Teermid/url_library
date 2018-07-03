@@ -33,6 +33,10 @@ export default {
     return api().put(`category/${dragId}/${dropName}`)
   },
 
+  removeNested (dragId) {
+    return api().delete(`category-nested/${dragId}`)
+  },
+
   deleteCategory (id, content) {
     console.log('content -> ' + content)
     return api().delete(`category/${id}/${content}`)

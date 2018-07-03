@@ -1,12 +1,13 @@
 <template>
   <v-dialog v-model="$store.state.editDisplay" origin="top center" max-width="500px">
     <v-card>
-      <v-card-title>
-         <span class="headline px-2">Editar Marcador</span>
-         <v-spacer></v-spacer>
-          <v-btn icon slot="activator" @click="close">
-            <v-icon color="grey lighten-2">close</v-icon>
-          </v-btn>
+      <v-card-title class="px-4">
+        <img class="customIcon" src="../../css/svg/edit_icon.svg">
+        <span class="headline px-2">Editar Marcador</span>
+        <v-spacer></v-spacer>
+        <v-btn icon slot="activator" @click="close">
+          <v-icon color="grey lighten-2">close</v-icon>
+        </v-btn>
        </v-card-title>
        <v-card-text class="px-4">
          <v-form v-model="valid" ref="form" lazy-validation>
@@ -31,7 +32,7 @@
               rows="5"
               v-model="element.title"
               :rules="titleRules"
-              :counter="120"
+              :counter="100"
               clearable
             ></v-text-field>
 
@@ -42,7 +43,7 @@
               height="80px"
               v-model="element.description"
               :rules="descriptionRules"
-              :counter="1500"
+              :counter="1000"
               clearable
             ></v-text-field>
             <v-btn
@@ -81,10 +82,10 @@ export default {
         v => !!v || 'Link is required'
       ],
       titleRules: [
-        v => (v.length <= 120) || 'El títol no pot contindre més de 60 caracters'
+        v => (v.length <= 100) || 'El títol no pot contindre més de 60 caracters'
       ],
       descriptionRules: [
-        v => (v.length <= 1500) || 'La descripció no pot contindre més de 120 caracters'
+        v => (v.length <= 1000) || 'La descripció no pot contindre més de 120 caracters'
       ],
       categories: []
     }

@@ -1,3 +1,7 @@
+.sidebar {
+  overflow: hidden;
+}
+
 #node {
   text-align: left;
 }
@@ -24,9 +28,18 @@
 .categoryList {
   float:left;
   width:100%;
-  min-height: 60vh;
+  height: 60vh;
   overflow-y:scroll;
   margin-bottom:20px;
+}
+
+.categoryList::-webkit-scrollbar {
+    width: 7px;
+}
+
+.categoryList::-webkit-scrollbar-thumb {
+  background-color: #cecece;
+  border-radius: 20px;
 }
 
 .categoryContainer {
@@ -42,7 +55,7 @@
 }
 
 .category:hover .edit {
-  display:inherit;
+  display:inherit !important;
 }
 
 .root {

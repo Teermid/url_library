@@ -26,15 +26,15 @@
       },
 
       "deleteBookmarks": {
-        "header": "Eliminar marcadors de la categoria?",
-        "y": "Sí",
+        "header": "Eliminar categoria amb marcador/s?",
+        "y": "D'acord",
         "n": "No"
       },
 
       "deleteConfirmation": {
         "header": "Eliminar marcador?",
-        "y": "Sí",
-        "n": "No"
+        "y": "Eliminar",
+        "n": "Cancelar"
       }
     },
 
@@ -99,7 +99,8 @@
       }
     },
 
-    "server": {
+    "sorting": {
+      "unsorted": "SENSE CLASSIFICAR",
       "today": "AVUI",
       "thisWeek": "AQUESTA SETMANA",
       "thisMonth": "AQUEST MES",

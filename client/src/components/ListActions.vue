@@ -1,5 +1,35 @@
 <template>
   <div id="content-header" class="content-wrapper">
+    <v-dialog v-model="deleteVerification" origin="top center" max-width="400px">
+      <v-card class="pb-2">
+        <v-card-title>
+          <img class="customIcon" src="../../css/svg/delete_icon.svg">
+          <span class="subheading px-2">Eliminar marcadors?</span>
+          <v-spacer></v-spacer>
+          <v-btn icon slot="activator" @click="deleteVerification = !deleteVerification">
+            <v-icon color="grey lighten-2">close</v-icon>
+          </v-btn>
+         </v-card-title>
+        <v-card-text class="pt-3 pb-0">
+          <div style="height:50px;">
+            <div
+              @click="deleteMult()"
+              class="customButton white--text"
+              id="deleteButton">
+              <span v-if="!loaders.delete">Eliminar</span>
+              <v-progress-circular v-if="loaders.delete" class="mt-2" :size="20" :width="2" indeterminate color="white"></v-progress-circular>
+            </div>
+            <div
+              @click="deleteVerification = !deleteVerification"
+              class="customButton"
+              id="cancelButton">
+              Cancelar
+            </div>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <div v-model="category" id="content-header-category"> {{ category }} </div>
     <div id="content-header-filters">
       <v-menu v-if="!$store.state.multSelect">
@@ -34,7 +64,7 @@
 
       <v-btn :loading="loaders.all" slot="activator" @click="selectAll" v-if="$store.state.multSelect">{{ text.all }}</v-btn>
       <v-btn :disabled="disabled" :loading="loaders.unsort" depressed slot="activator" @click="unsort" v-if="$store.state.multSelect">{{ text.unsort }}</v-btn>
-      <v-btn :disabled="disabled" :loading="loaders.delete" depressed slot="activator" @click="deleteMult" v-if="$store.state.multSelect">{{ text.delete }}</v-btn>
+      <v-btn :disabled="disabled" depressed slot="activator" @click="deleteVerification = !deleteVerification" v-if="$store.state.multSelect">{{ text.delete }}</v-btn>
       <v-btn icon slot="activator" @click="multSelect" v-if="$store.state.multSelect">
         <v-icon color="grey">close</v-icon>
       </v-btn>
@@ -87,6 +117,7 @@
               unsort: null
             }
           },
+          deleteVerification: false,
           snackbarFinal: null,
           disabled: true,
           loaders: {
@@ -210,6 +241,7 @@
           this.$store.commit('setRefreshElements')
           this.$store.commit('resetSelectedArray')
           this.loaders.delete = false
+          this.deleteVerification = !this.deleteVerification
           this.snackbar = true
         }
 

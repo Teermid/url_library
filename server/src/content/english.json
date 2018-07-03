@@ -26,15 +26,15 @@
       },
 
       "deleteBookmarks": {
-        "header": "Delete category bookmark(s)?",
-        "y": "Yes",
+        "header": "Delete category with bookmark(s)?",
+        "y": "OK",
         "n": "No"
       },
 
       "deleteConfirmation": {
         "header": "Delete bookmark?",
-        "y": "Yes",
-        "n": "No"
+        "y": "Delete",
+        "n": "Cancel"
       }
     },
 
@@ -99,7 +99,8 @@
       }
     },
 
-    "server": {
+    "sorting": {
+      "unsorted": "SENSE CLASSIFICAR",
       "today": "TODAY",
       "thisWeek": "THIS WEEK",
       "thisMonth": "THIS MONTH",

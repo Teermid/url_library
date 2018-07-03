@@ -1,8 +1,10 @@
 <template>
   <v-dialog v-model="$store.state.editCategoryDisplay" origin="top center" max-width="500px">
     <v-card>
-      <v-card-title>
-         <v-spacer></v-spacer>
+      <v-card-title class="px-4">
+        <img class="customIcon" src="../../css/svg/edit_icon.svg">
+        <span class="headline px-2">Editar nom</span>
+        <v-spacer></v-spacer>
           <v-btn icon slot="activator" @click="close">
             <v-icon color="grey lighten-2">close</v-icon>
           </v-btn>
@@ -12,7 +14,6 @@
            <v-text-field
              label="Name"
              v-model="category.name"
-             :error="error"
              :error-messages="errorText"
              required
              clearable
@@ -50,12 +51,12 @@ export default {
       this.loader = true
       let response = (await Category.editCategoryName(this.category)).data
       if (response.error) {
-        this.error = true
         this.errorText = 'Category already exists'
         this.loader = false
       } else {
         this.$store.commit('setEditCategoryDisplay')
         this.$store.commit('setRefreshElements')
+        this.errorText = null
         this.loader = false
       }
     },
@@ -67,7 +68,7 @@ export default {
   watch: {
     '$store.state.categoryByIdTrigger': {
       async handler (value) {
-        this.error = false
+        this.errorText = null
         try {
           this.category = (await Category.getCategoryById(this.$store.getters.getCategoryId)).data
         } catch (e) {

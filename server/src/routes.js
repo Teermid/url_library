@@ -116,6 +116,10 @@ module.exports = (app) => {
     categoryController.editCategoryHierarchy
   )
 
+  app.delete('/category-nested/:id',
+    categoryController.removeNested
+  )
+
   app.delete('/category/:id/:flag',
     // tokenPolicy.verifyToken,
     categoryController.deleteCategory
@@ -126,22 +130,9 @@ module.exports = (app) => {
     categoryController.isEmpty
   )
 
-  app.get('/testing', async function (req, res) {
-
-    let elem = await Element.findById('5b2ff16ece1873333ca7ff76')
-    console.log(new Date().getDay())
-
-    let thisWeek = [new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)]
-
-    let elementsThisWeek = await Element.find(
-      {
-        'owner': '5b2fe835ce1873333ca7ff74',
-        'createdAt': { $gt: thisWeek },
-        'timestamp.date': { $ne : new Date().setHours(0, 0, 0, 0)}
-      }).sort({ createdAt: -1 })
-
-      res.send(elementsThisWeek)
-  })
+  app.post('/admin-add',
+    elementsController.adminAdd
+  )
 
 
 }

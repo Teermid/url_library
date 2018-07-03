@@ -1,33 +1,46 @@
 <template>
 <div class="wrapper">
   <v-progress-circular v-if="!contentLoaded" class="mt-3" size="30" :width="3" indeterminate color="blue"></v-progress-circular>
-  <v-dialog v-model="deleteVerification" origin="top center" max-width="250px">
+  <v-dialog v-model="deleteVerification" origin="top center" max-width="400px">
     <v-card class="pb-2">
+      <v-card-title>
+        <img class="customIcon" src="../../css/svg/delete_icon.svg">
+        <span class="subheading px-2">{{ text.deleteConfirmation.header }}</span>
+        <v-spacer></v-spacer>
+        <v-btn icon slot="activator" @click="deleteVerification = !deleteVerification">
+          <v-icon color="grey lighten-2">close</v-icon>
+        </v-btn>
+       </v-card-title>
       <v-card-text class="pt-3 pb-0">
-        <v-icon color="red">warning</v-icon>
-        <p class="subheading f_bold mt-1">{{ text.deleteConfirmation.header }}</p>
+        <div style="height:50px;">
+          <div
+            @click="confirmDeletion()"
+            class="customButton white--text"
+            id="deleteButton">
+            {{ text.deleteConfirmation.y }}</div>
+          <div
+            @click="deleteVerification = !deleteVerification"
+            class="customButton"
+            id="cancelButton">
+            {{ text.deleteConfirmation.n }}</div>
+        </div>
       </v-card-text>
-        <v-btn
-          @click="confirmDeletion()"
-          depressed
-          color="red accent-2"
-          class="white--text">
-          {{ text.deleteConfirmation.y }}</v-btn>
-        <v-btn
-          @click="deleteVerification = !deleteVerification"
-          depressed
-          color="blue accent-2"
-          class="white--text">
-          {{ text.deleteConfirmation.n }}</v-btn>
-      </v-card>
+    </v-card>
   </v-dialog>
 
+  <div class="noContent" v-if="noContent">
+    <img src="../../css/svg/no_content.svg">
+    <div> Cap marcador trobat </div>
+  </div>
+
   <div class="chunk" v-if="contentLoaded" v-for="chunk in data">
-  <p class="f_left">{{ chunk.title }}</p>
+  <p class="f_left uppercase">{{ chunk.title }}</p>
     <!-- CARDS -->
     <div v-if="$store.state.elementsDisplay === 'card'" id="card-content-body">
       <v-card class="white shadow" v-for="el in chunk.elements" :key="el.id" flat draggable="true" v-on:dragstart="drag(el._id, $event)">
-        <div class="multSelectIcon shadow" v-if="$store.state.multSelect" v-bind:class=" { multSelectIconSelected : el.selected } "></div>
+        <div class="multSelectIcon shadow" v-if="$store.state.multSelect" v-bind:class=" { multSelectIconSelected : el.selected } ">
+          <v-icon class="mt-1" v-bind:class=" { 'white--text' : el.selected } ">done</v-icon>
+        </div>
         <div class="selectionFilter" v-if="$store.state.multSelect" @click="select(el)"></div>
         <div class="selectionFilterSelected" v-if="el.selected"></div>
         <a class="hover" v-bind:href="el.url">
@@ -48,14 +61,17 @@
               <v-icon color="grey lighten-2">more_horiz</v-icon>
             </v-btn>
             <v-list class="white">
+              <v-list-tile @click="viewElement(el._id)">
+                <v-icon color="grey" class="mr-2">visibility</v-icon>
+                <v-list-tile-title> Veure </v-list-tile-title>
+              </v-list-tile>
               <v-list-tile @click="editElement(el._id)">
+                <v-icon color="grey" class="mr-2">edit</v-icon>
                 <v-list-tile-title> Editar </v-list-tile-title>
               </v-list-tile>
               <v-list-tile @click="deleteElement(el._id)">
+                <v-icon color="grey" class="mr-2">delete</v-icon>
                 <v-list-tile-title> Eliminar </v-list-tile-title>
-              </v-list-tile>
-              <v-list-tile @click="viewElement(el._id)">
-                <v-list-tile-title> Veure </v-list-tile-title>
               </v-list-tile>
             </v-list>
           </v-menu>
@@ -66,8 +82,9 @@
     <!-- GRID -->
     <div v-if="$store.state.elementsDisplay === 'grid'" id="grid-content-body">
       <v-card class="white shadow" v-for="el in chunk.elements" :key="el.id" flat draggable="true" v-on:dragstart="drag(el._id, $event)">
-
-        <div class="multSelectIcon shadow" v-if="$store.state.multSelect" v-bind:class=" { multSelectIconSelected : el.selected } "></div>
+        <div class="multSelectIcon shadow" v-if="$store.state.multSelect" v-bind:class=" { multSelectIconSelected : el.selected } ">
+          <v-icon class="mt-1" v-bind:class=" { 'white--text' : el.selected } ">done</v-icon>
+        </div>
         <div class="selectionFilter" v-if="$store.state.multSelect" @click="select(el)"></div>
         <div class="selectionFilterSelected" v-if="el.selected"></div>
         <a v-bind:href="el.url"><v-card-media v-bind:src="el.imageURL" height="115px"></v-card-media></a>
@@ -88,14 +105,17 @@
              <v-icon color="grey lighten-2">more_vert</v-icon>
            </v-btn>
            <v-list class="white">
+             <v-list-tile @click="viewElement(el._id)">
+               <v-icon color="grey" class="mr-2">visibility</v-icon>
+               <v-list-tile-title> Veure </v-list-tile-title>
+             </v-list-tile>
              <v-list-tile @click="editElement(el._id)">
+               <v-icon color="grey" class="mr-2">edit</v-icon>
                <v-list-tile-title> Editar </v-list-tile-title>
              </v-list-tile>
              <v-list-tile @click="deleteElement(el._id)">
+               <v-icon color="grey" class="mr-2">delete</v-icon>
                <v-list-tile-title> Eliminar </v-list-tile-title>
-             </v-list-tile>
-             <v-list-tile @click="viewElement(el._id)">
-               <v-list-tile-title> Veure </v-list-tile-title>
              </v-list-tile>
            </v-list>
          </v-menu>
@@ -106,6 +126,9 @@
 
     <div v-if="$store.state.elementsDisplay === 'list'" id="list-content-body">
       <v-card class="white shadow listContainer" v-for="el in chunk.elements" :key="el.id" flat draggable="true" v-on:dragstart="drag(el._id, $event)">
+        <div class="multSelectIcon shadow" v-if="$store.state.multSelect" v-bind:class=" { multSelectIconSelected : el.selected } ">
+          <v-icon class="mt-1" v-bind:class=" { 'white--text' : el.selected } ">done</v-icon>
+        </div>
         <div class="selectionFilter" v-if="$store.state.multSelect" @click="select(el)"></div>
         <div class="selectionFilterSelected" v-if="el.selected"></div>
         <div class="imageContainer" v-bind:style="{ backgroundImage: 'url(' + el.imageURL + ')'}"></div>
@@ -127,11 +150,17 @@
             <v-icon color="grey lighten-2">more_vert</v-icon>
           </v-btn>
           <v-list class="white">
-            <v-list-tile @click="deleteElement(el._id)">
-              <v-list-tile-title> Eliminar </v-list-tile-title>
+            <v-list-tile @click="viewElement(el._id)">
+              <v-icon color="grey" class="mr-2">visibility</v-icon>
+              <v-list-tile-title> Veure </v-list-tile-title>
             </v-list-tile>
             <v-list-tile @click="editElement(el._id)">
+              <v-icon color="grey" class="mr-2">edit</v-icon>
               <v-list-tile-title> Editar </v-list-tile-title>
+            </v-list-tile>
+            <v-list-tile @click="deleteElement(el._id)">
+              <v-icon color="grey" class="mr-2">delete</v-icon>
+              <v-list-tile-title> Eliminar </v-list-tile-title>
             </v-list-tile>
           </v-list>
         </v-menu>
@@ -170,6 +199,7 @@ export default {
         },
         snackbar: null
       },
+      noContent: false,
       contentLoaded: false,
       data: [],
       userID: null,
@@ -199,7 +229,9 @@ export default {
 
   methods: {
     async getData (cat, isSearch, searchVal, userID, sortBy) {
+      // this.contentLoaded = false
       this.data = (await Elements.getData(cat, isSearch, searchVal, userID, sortBy)).data
+      this.noContent = (this.data.length === 0)
       let counter = 0
       for (var i = 0; i < this.data.length; i++) {
         for (var j = 0; j < this.data[i].elements.length; j++) {
@@ -210,13 +242,11 @@ export default {
       this.$store.commit('setNumberOfBookmarks', counter)
     },
 
-    // async getCategories () {
-    //   this.categories = (await Category.getCategory(this.userID)).data
-    // },
+    toggleBookmarkPopUp () {
+      this.$store.commit('setPopUpDisplay')
+    },
 
     async deleteElement (id) {
-      // await Elements.deleteElement(id)
-      // this.getElements(this.categoryFilter, 'true', this.searchValue, this.userID, this.sortBy)
       this.idToDelete = id
       this.deleteVerification = true
     },

@@ -1,0 +1,113 @@
+/*.list__tile:hover {
+  background-color:lightblue !important;
+}*/
+
+:root {
+  --header-padding: 25px;
+  --modal-width: 450px;
+}
+
+html body, body h1 {
+  margin: 0px;
+  padding: 0;
+  border: 0;
+  outline: 0;
+}
+
+html {
+  min-width: 655px;
+}
+
+html::-webkit-scrollbar {
+  display: none
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+
+#app {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.justify {
+  text-align: justify;
+}
+
+.f_left {
+  text-align: left;
+}
+
+.f_light {
+  font-weight: 300;
+}
+
+.f_regular {
+  font-weight: 400;
+}
+
+.f_normal {
+  font-weight: 500;
+  font-size:15px;
+}
+
+.f_black {
+  font-weight: 500;
+  font-size:16px;
+}
+
+.f_bold {
+  font-weight: 600;
+}
+
+.float-left {
+  float:left !important;
+  width: 100% !important;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
+}
+
+.background {
+  background-color: #f8f9f9;
+  max-height: 100vh;
+  overflow:hidden;
+}
+
+.v-dialog__content {
+  align-items: flex-start;
+  margin-top: 10vh;
+}
+
+.v-menu__activator {
+  display: inherit !important;
+}
+
+.v-input {
+  display: inherit;
+  float:left;
+  width: 100%;
+}
+
+.customIcon {
+  width: 40px;
+  margin-right: 10px;
+}
+
+.customButton {
+  border-radius: 3px;
+  width: 100px;
+  line-height: 38px;
+  height:38px;
+  cursor: pointer;
+  transition: .3s;
+}

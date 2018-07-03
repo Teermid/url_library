@@ -3,7 +3,7 @@
     <div class="viewContent">
       <div class="portrait" v-bind:style="{ backgroundImage: 'url(' + element.imageURL + ')'}"></div>
       <div class="viewTitle">{{ element.title }}</div>
-      <div class="viewDescription"> {{ element.description }} </div>
+      <div class="viewDescription pre-wrap"> {{ element.description }} </div>
     </div>
   </v-dialog>
 </template>

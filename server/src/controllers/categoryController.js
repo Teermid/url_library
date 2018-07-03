@@ -152,23 +152,25 @@ module.exports = {
   async editCategoryHierarchy (req, res) {
     try {
       // Obtenim les dades de la categoria arrossegada
-      const dragCategory = await Category.findById(req.params.id)
+      const dragId = req.params.id
+
+
       // Moficquem el camp parentCategory de la categoria arrossegada
       // Amb el de la categoria a la qual hem arrossegat
       await Category.update(
-        {'_id': dragCategory._id},
+        {'_id': dragId},
         { $set: {'parentCategory': req.params.dropName} }
       )
       // Eliminem la categoria arrossegada del array de categories
       // niades de la qual en formava part
       await Category.update(
-        { 'nestedCategories._id': dragCategory._id },
-        { $pull: { 'nestedCategories': { _id: dragCategory._id } } }
+        { 'nestedCategories._id': dragId },
+        { $pull: { 'nestedCategories': { _id: dragId } } }
       )
       // Modifiquem el camp parentCategoy del array de categories dels elements
       // que contenen la categoria arrossegada
       await Element.update(
-        { 'categories._id': dragCategory._id },
+        { 'categories._id': dragId },
         { $set: { 'categories.$.parentCategory': req.params.dropName } },
         { multi: true }
       )
@@ -181,13 +183,15 @@ module.exports = {
         },
         { $set: {'kind': 'child'} }
       )
+
+      let updatedDraggedCat = await Category.findById(req.params.id)
       // Afegim la categoria arrossegada al array de categories niades
       // de la categoria a la qual s'ha arrossegat. I la convertim a root
       await Category.update(
         {'name': req.params.dropName},
         {
           $set: { 'kind': 'root' },
-          $push: { nestedCategories: dragCategory }
+          $push: { nestedCategories: updatedDraggedCat }
         }
       )
       res.status(200).send({msg: 'OK'})
@@ -196,6 +200,32 @@ module.exports = {
     }
   },
 
+  async removeNested (req, res) {
+    try {
+
+      await Category.update(
+        {'_id': req.params.id},
+        { $set: { 'parentCategory': null } }
+      )
+
+      await Category.update(
+        { 'nestedCategories._id': req.params.id },
+        { $pull: { 'nestedCategories': { _id: req.params.id } } }
+      )
+
+      await Category.update(
+        { 'kind': 'root', 'nestedCategories': [] },
+        { $set: { kind: 'child' } }
+      )
+
+      res.send('success')
+    } catch (e) {
+      res.status(403).send({error: 'Error removing nested category'})
+
+    } finally {
+
+    }
+  },
 
   async deleteCategory (req, res) {
     try {

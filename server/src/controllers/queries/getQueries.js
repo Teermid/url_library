@@ -1,7 +1,6 @@
 const Element = require('../../models/Element')
 const Category = require('../../models/Category')
 const User = require('../../models/User')
-const content = require('../../content/index')
 const alphabet = [
   {"chunk": "Caracters", "regex":"^[^a-z0-9_]"},
   {"chunk": "0-9", "regex":"^[0-9]"},
@@ -73,7 +72,7 @@ module.exports = {
         if (unsortedElements.length !== 0) {
           finalList.push(
             {
-              'title': 'Unsorted',
+              'title': content.unsorted,
               'elements': unsortedElements
             })
         }
@@ -151,7 +150,7 @@ module.exports = {
         let elementsThisMonth = await Element.find(
           {
             'owner': userID,
-            'createdAt': { $lt: (new Date().setHours(0, 0, 0, 0) - ((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)) },
+            'createdAt': { $lt: (new Date().setHours(0, 0, 0, 0) - Math.abs((new Date().getDay() - 1) * 24 * 60 * 60 * 1000)) },
             'timestamp.month': new Date().getMonth()
           }).sort({ createdAt: -1 })
 
@@ -353,6 +352,14 @@ module.exports = {
             }]
           }).sort({ createdAt: -1 })
 
+        if (elementsThisWeek.length !== 0) {
+          finalList.push(
+            {
+              'title': content.thisWeek,
+              'elements': elementsThisWeek
+            })
+        }
+
         let elementsThisMonth = await Element.find(
           {
             'owner': userID,
@@ -401,6 +408,11 @@ module.exports = {
 
   // ------------------------------------------
   finalList (elements, count) {
-    return [{'title': count + ' RESULTS', 'elements': elements}]
+    if (count > 0) {
+      return [{'title': count + ' RESULTS', 'elements': elements}]
+    } else {
+      return []
+    }
+
   }
 }

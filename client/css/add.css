@@ -1,5 +1,5 @@
 .hidded {
-  max-height: 110px;
+  max-height: 105px;
   overflow: hidden;
   transition: max-height 0.5s;
 }

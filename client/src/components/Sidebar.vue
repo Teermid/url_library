@@ -1,27 +1,32 @@
 <template>
   <div id="node">
-    <v-dialog v-model="popupDeleteBookmarks" origin="top center" max-width="250px">
+    <v-dialog v-model="popupDeleteBookmarks" origin="top center" max-width="420px">
       <v-card class="pb-2">
+        <v-card-title>
+          <img class="customIcon" src="../../css/svg/delete_icon.svg">
+          <span class="subheading px-2">{{ text.popups.deleteBookmarks.header }}</span>
+          <v-spacer></v-spacer>
+          <v-btn icon slot="activator" @click="popupDeleteBookmarks = !popupDeleteBookmarks">
+            <v-icon color="grey lighten-2">close</v-icon>
+          </v-btn>
+         </v-card-title>
         <v-card-text class="pt-3 pb-0">
-          <v-icon color="red">warning</v-icon>
-          <p class="subheading f_bold mt-1">{{ text.popups.deleteBookmarks.header }}</p>
+          <div style="height:50px;">
+            <div
+              @click="deleteCategoryWithBookmarks(categoryIdToDelete)"
+              class="customButton white--text"
+              id="deleteButton">
+              {{ text.popups.deleteBookmarks.y }}</div>
+            <div
+              @click="deleteCategory(categoryIdToDelete, true)"
+              class="customButton"
+              id="cancelButton">
+              {{ text.popups.deleteBookmarks.n }}</div>
+          </div>
         </v-card-text>
-        <v-btn
-          @click="deleteCategoryWithBookmarks(categoryIdToDelete)"
-          class="white--text"
-          depressed
-          color="red accent-2">
-        {{ text.popups.deleteBookmarks.y }}
-        </v-btn>
-        <v-btn
-          @click="deleteCategory(categoryIdToDelete, true)"
-          class="white--text"
-          depressed
-          color="blue accent-2">
-        {{ text.popups.deleteBookmarks.n }}
-        </v-btn>
       </v-card>
     </v-dialog>
+
     <v-navigation-drawer v-bind:style="{'background-color':$store.state.settings.color.hex}" v-bind:class="{ 'white--text':!$store.state.settings.color.light }" fixed v-model="$store.state.sidebarDisplay" app class="sidebar">
       <div id="brand" class="f_black subheading">
         SAVIFY
@@ -38,7 +43,7 @@
         </div>
       </div>
 
-      <div class="categoriesTitle body-2 f_black">
+      <div class="categoriesTitle body-2 f_black" v-on:drop="drop('null', $event)" v-on:dragover="$event.preventDefault()">
         {{ text.CATEGORIES}}
       </div>
 
@@ -57,9 +62,11 @@
               <v-icon slot="activator" v-bind:class="{ 'white--text':!$store.state.settings.color.light }" class="edit" size="medium"> more_vert </v-icon>
               <v-list>
                 <v-list-tile @click="editCategory(ca._id)">
+                  <v-icon color="grey" class="mr-2">edit</v-icon>
                   <v-list-tile-title>Editar</v-list-tile-title>
                 </v-list-tile>
                 <v-list-tile @click="deleteCategory(ca._id)">
+                  <v-icon color="grey" class="mr-2">delete</v-icon>
                   <v-list-tile-title>Eliminar</v-list-tile-title>
                 </v-list-tile>
               </v-list>
@@ -98,7 +105,7 @@
       </div>
 
       <div class="addContainer">
-        <v-menu top offset-y :close-on-content-click="false" value="addCategoryPopUp">
+        <v-menu top offset-y left="30" max-width="270" :close-on-content-click="false" value="addCategoryPopUp">
           <!-- <v-btn slot="activator">A Menu</v-btn> -->
           <div slot="activator" class="add" >
             <v-icon class="mr-3" size="24px" v-bind:class="{ 'white--text':!$store.state.settings.color.light }"> create_new_folder </v-icon>
@@ -107,10 +114,12 @@
           <v-list>
             <v-form>
               <v-text-field
+                class="pa-2"
                 :placeholder="text.popups.addCategory.placeholder"
                 v-model="category.name"
               ></v-text-field>
               <v-select
+                class="pa-2"
                 :items="categories"
                 :placeholder="text.popups.addCategory.select"
                 clearable="true"
@@ -316,13 +325,19 @@
         let msg = JSON.parse(event.dataTransfer.getData('text'))
         // Si l'element és categoria i no s'està arrossegant cap a ella mateixa..
         if (msg.transmitter === 'category' && (msg.content.name !== dropCategory.name)) {
-          // Emmagatzemem el contingut necessari en variables
-          let dragCategory = msg.content
-          let dragId = dragCategory._id
-          let dropName = dropCategory.name
-          // Si la categoria arrossegada és child i s'arrossega cap a una parent o child sense categories niades..
-          if ((dragCategory.kind === 'child') && ((dropCategory.kind === 'child' && !dropCategory.parentCategory) || dropCategory.kind === 'root')) {
-            await Category.editCategoryHierarchy(dragId, dropName)
+          //
+          if (dropCategory !== 'null') {
+            // Emmagatzemem el contingut necessari en variables
+            let dragCategory = msg.content
+            let dragId = dragCategory._id
+            let dropName = dropCategory.name
+            // Si la categoria arrossegada és child i s'arrossega cap a una parent o child sense categories niades..
+            if ((dragCategory.kind === 'child') && ((dropCategory.kind === 'child' && !dropCategory.parentCategory) || dropCategory.kind === 'root')) {
+              await Category.editCategoryHierarchy(dragId, dropName)
+              this.printCategories()
+            }
+          } else if (msg.content.parentCategory) {
+            await Category.removeNested(msg.content._id)
             this.printCategories()
           }
         }

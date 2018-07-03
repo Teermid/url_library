@@ -8,7 +8,7 @@
       <a @click="goLogin">Accedeix</a>
     </div>
     <div class="imgWrapper">
-      <img src="../../css/Browser_UI.svg">
+      <img src="../../css/svg/browser_UI.svg">
     </div>
   </div>
 </template>
