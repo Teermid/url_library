@@ -9,23 +9,22 @@ module.exports = {
     }
 
     const {error, value} = Joi.validate(req.body, schema)
-    console.log(`Policy error: ${error}`);
 
     if (error) {
       switch (error.details[0].context.key) {
         case 'email':
           res.status(400).send({
-            error: 'The email is not valid'
+            error: 'Email no vàlid'
           })
           break
         case 'password':
           res.status(400).send({
-            error: 'Password does not match the policy'
+            error: 'La contrassenya ha de contenir entre 8 i 32 caràcters'
           })
           break
         default:
           res.status(400).send({
-            error: 'Unexpected error (authControllerPolicy)'
+            error: 'Error del servidor'
           })
       }
 

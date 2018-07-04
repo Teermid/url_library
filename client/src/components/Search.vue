@@ -82,8 +82,6 @@
       },
 
       async logOut () {
-        alert('logOut')
-        alert(this.$cookies.get('session'))
         await this.$cookies.remove('session')
         this.$router.push('/')
       }

@@ -21,6 +21,7 @@
               v-model="element.categories"
               :items="categories"
               item-text="name"
+              item-value="_id"
               chips
               clearable
               deletableChips

@@ -116,6 +116,7 @@
               <v-text-field
                 class="pa-2"
                 :placeholder="text.popups.addCategory.placeholder"
+                :error-messages="errorText"
                 maxlength="25"
                 v-model="category.name"
               ></v-text-field>
@@ -194,7 +195,8 @@
         userID: null,
         editCatPopUp: false,
         categoryIdToDelete: null,
-        popupDeleteBookmarks: false
+        popupDeleteBookmarks: false,
+        errorText: null
         // hasBeenCalled = false
       }
     },
@@ -237,6 +239,7 @@
       },
 
       async addCategory () {
+        this.errorText =
         this.category.owner = this.$store.getters.getUserID
         try {
           await Category.addCategory(this.category)
@@ -246,7 +249,7 @@
           this.printCategories()
           this.$store.commit('setRefreshChildCategories')
         } catch (e) {
-          alert(e.response.data.error)
+          this.errorText = 'HALA'
         }
       },
 

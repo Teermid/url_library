@@ -48,6 +48,8 @@ export default {
   },
   methods: {
     async Login () {
+      this.error = 'HALA'
+      this.snackbar = true
       try {
         // Petició d'inici de sessió
         const response = await auth.login({
@@ -67,6 +69,7 @@ export default {
         this.snackbar = true
       }
     },
+
     goRegister () {
       this.$router.push('/register')
     }

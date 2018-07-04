@@ -79,11 +79,18 @@ module.exports = {
 
   async editElement (req, res) {
     try {
+      const categories = await Category.find( {'_id': {'$in': req.body.categories}})
       await Element.update(
-        {'_id': (req.params.id)},
-        req.body
-      )
-
+        {'_id': req.params.id},
+        { $set : {
+          title: (req.body.title).substring(0, 100),
+          url: req.body.url,
+          description: (req.body.description).substring(0, 1000),
+          categories: categories || null,
+          imageURL: req.body.image,
+          owner: req.body.owner
+        }
+      })
       res.status(200).send('element updated')
     } catch (e) {
       res.status(500).send({error: 'error saving edited element (elementsController)'})

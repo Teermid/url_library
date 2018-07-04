@@ -5,18 +5,21 @@ const bcryptPolicy = require('../policies/bcryptPolicy')
 module.exports = {
   async register (req, res) {
     try {
-      const userBeforeHash = new User(req.body)
-      const userAfterHash = await bcryptPolicy.getHash(userBeforeHash)
-      const userFinal = await userAfterHash.save()
-
-      console.log('userFinal ===> ' + userFinal)
-      /* Loging automàtic al registrar-se: */
-      res.send({
-        user: userFinal,
-        token: tokenPolicy.jwtSignUser(userFinal._id)
-      })
+      let alreadyExist = await User.find({'email':req.body.email})
+      if (alreadyExist.length > 0) {
+        res.status(400).send({error:'El email ja es troba enregistrat'})
+      } else {
+        const userBeforeHash = new User(req.body)
+        const userAfterHash = await bcryptPolicy.getHash(userBeforeHash)
+        const userFinal = await userAfterHash.save()
+        /* Loging automàtic al registrar-se: */
+        res.send({
+          user: userFinal,
+          token: tokenPolicy.jwtSignUser(userFinal._id)
+        })
+      }
     } catch (e) {
-      res.status(500).send({error: 'Error creating the account'})
+      res.status(500).send({error: 'Error del servidor'})
     }
   },
 
