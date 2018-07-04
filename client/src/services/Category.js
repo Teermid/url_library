@@ -1,8 +1,16 @@
 import api from '@/services/Api'
 
 export default {
-  getCategory (id) {
-    return api().get('category', {
+  getCategories (id) {
+    return api().get('categories', {
+      params: {
+        userID: id
+      }
+    })
+  },
+
+  getCategoriesSidebar (id) {
+    return api().get('categories-sidebar', {
       params: {
         userID: id
       }

@@ -86,9 +86,14 @@ module.exports = (app) => {
     categoryController.addCategory
   )
 
-  app.get('/category',
+  app.get('/categories',
     // tokenPolicy.verifyToken,
     categoryController.getCategories
+  )
+
+  app.get('/categories-sidebar',
+    // tokenPolicy.verifyToken,
+    categoryController.getCategoriesSidebar
   )
 
   app.get('/category/:catID',

@@ -4,9 +4,9 @@
       <v-card class="pb-2">
         <v-card-title>
           <img class="customIcon" src="../../css/svg/exit_icon.svg">
-          <span class="subheading px-2">Sortr de l'aplicació?</span>
+          <span class="subheading px-2">{{ this.text.logout.exit }}</span>
           <v-spacer></v-spacer>
-          <v-btn icon slot="activator" @click="close">
+          <v-btn icon slot="activator" @click="logOutVerification = !logOutVerification">
             <v-icon color="grey lighten-2">close</v-icon>
           </v-btn>
          </v-card-title>
@@ -16,12 +16,12 @@
               @click="logOut"
               class="customButton white--text"
               id="deleteButton">
-              Sortir</div>
+              {{ this.text.logout.y }}</div>
             <div
               @click="logOutVerification = !logOutVerification"
               class="customButton"
               id="cancelButton">
-              Cancelar</div>
+              {{ this.text.logout.n }}</div>
           </div>
         </v-card-text>
       </v-card>
@@ -64,7 +64,12 @@
     data () {
       return {
         'text': {
-          'placeholder': null
+          'placeholder': null,
+          logout: {
+            exit: null,
+            y: null,
+            n: null
+          }
         },
         search: '',
         drawer: true,
@@ -74,6 +79,9 @@
 
     beforeMount () {
       this.text.placeholder = this.$store.getters.getContent.searchBar.placeholder
+      this.text.logout.exit = this.$store.getters.getContent.searchBar.logout.exit
+      this.text.logout.y = this.$store.getters.getContent.searchBar.logout.y
+      this.text.logout.n = this.$store.getters.getContent.searchBar.logout.n
     },
 
     methods: {

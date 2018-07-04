@@ -6,7 +6,8 @@
       "categories": "CATEGORIES",
       "buttons": {
         "addCategory": "Add Category",
-        "addBookmark": "Add Bookmark"
+        "addBookmark": "Add Bookmark",
+        "settings": "Settings"
       }
     },
 
@@ -14,7 +15,8 @@
 
       "addCategory": {
         "placeholder":"Name",
-        "select": "Root category"
+        "select": "Root category",
+        "add": "ADD"
       },
 
       "addBookmark": {
@@ -22,7 +24,17 @@
         "url": "site URL",
         "category": "Categories",
         "title": "Title",
-        "description": "Description"
+        "description": "Description",
+        "add": "ADD"
+      },
+
+      "editBookmark": {
+        "header": "Editar Bookmark",
+        "url": "URL",
+        "category": "Categories",
+        "title": "Title",
+        "description": "Description",
+        "edit": "EDIT"
       },
 
       "deleteBookmarks": {
@@ -32,14 +44,19 @@
       },
 
       "deleteConfirmation": {
-        "header": "Delete bookmark?",
+        "header": "Delete bookmark(s)?",
         "y": "Delete",
         "n": "Cancel"
       }
     },
 
     "searchBar": {
-      "placeholder": "Search.."
+      "placeholder": "Search..",
+      "logout": {
+        "exit": "Exit application?",
+        "y": "Exit",
+        "n": "Cancel"
+      }
     },
 
     "errors": {
@@ -47,8 +64,8 @@
       "addBookmark": {
         "link": "Required",
         "link_2": "Invalid URL",
-        "title": "Title can't contain more than 60 characters",
-        "description": "Description can't contain more than 120 characters"
+        "title": "Title can't contain more than 100 characters",
+        "description": "Description can't contain more than 1000 characters"
       }
     },
 
@@ -82,7 +99,7 @@
     },
 
     "settings": {
-      "header": "Configuration",
+      "header": "Settings",
       "color": "Sidebar color",
       "notifications": "Notifications",
       "languages": {

@@ -7,6 +7,16 @@ module.exports = {
   async getCategories (req, res) {
     let _id = await tokenPolicy.getUserID(req.headers['authoritzation'])
     try {
+      const categories = await Category.find({'owner': _id})
+      res.send(categories)
+    } catch (e) {
+      res.status(500).send({error: 'error getting categories'})
+    }
+  },
+
+  async getCategoriesSidebar (req, res) {
+    let _id = await tokenPolicy.getUserID(req.headers['authoritzation'])
+    try {
       const categories = await Category.find({
        'owner': _id,
         $or: [

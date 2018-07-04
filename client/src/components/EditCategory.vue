@@ -39,6 +39,14 @@ import Category from '@/services/Category'
 export default {
   data () {
     return {
+      text: {
+        deleteConfirmation: {
+          header: null,
+          y: null,
+          n: null
+        },
+        snackbar: null
+      },
       category: '',
       loader: false,
       error: false,
@@ -48,16 +56,20 @@ export default {
 
   methods: {
     async editCategory () {
-      this.loader = true
-      let response = (await Category.editCategoryName(this.category)).data
-      if (response.error) {
-        this.errorText = 'Category already exists'
-        this.loader = false
+      if (this.category.name.length === 0) {
+        this.errorText = 'Nom no vàlid'
       } else {
-        this.$store.commit('setEditCategoryDisplay')
-        this.$store.commit('setRefreshElements')
-        this.errorText = null
-        this.loader = false
+        this.loader = true
+        let response = (await Category.editCategoryName(this.category)).data
+        if (response.error) {
+          this.errorText = 'Category already exists'
+          this.loader = false
+        } else {
+          this.$store.commit('setEditCategoryDisplay')
+          this.$store.commit('setRefreshElements')
+          this.errorText = null
+          this.loader = false
+        }
       }
     },
 

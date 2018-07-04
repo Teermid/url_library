@@ -4,7 +4,7 @@
       <v-card class="pb-2">
         <v-card-title>
           <img class="customIcon" src="../../css/svg/delete_icon.svg">
-          <span class="subheading px-2">Eliminar marcadors?</span>
+          <span class="subheading px-2">{{ text.deleteConfirmation.header }}</span>
           <v-spacer></v-spacer>
           <v-btn icon slot="activator" @click="deleteVerification = !deleteVerification">
             <v-icon color="grey lighten-2">close</v-icon>
@@ -16,14 +16,14 @@
               @click="deleteMult()"
               class="customButton white--text"
               id="deleteButton">
-              <span v-if="!loaders.delete">Eliminar</span>
+              <span v-if="!loaders.delete">{{ text.deleteConfirmation.y }}</span>
               <v-progress-circular v-if="loaders.delete" class="mt-2" :size="20" :width="2" indeterminate color="white"></v-progress-circular>
             </div>
             <div
               @click="deleteVerification = !deleteVerification"
               class="customButton"
               id="cancelButton">
-              Cancelar
+              {{ text.deleteConfirmation.n }}
             </div>
           </div>
         </v-card-text>
@@ -112,6 +112,11 @@
             all: null,
             unsort: null,
             delete: null,
+            deleteConfirmation: {
+              header: null,
+              y: null,
+              n: null
+            },
             snackbar: {
               mult: null,
               unsort: null
@@ -189,6 +194,9 @@
         this.text.delete = this.$store.getters.getContent.filters.multipleSelect.delete
         this.text.snackbar.mult = this.$store.getters.getContent.snackbars.deleteMult
         this.text.snackbar.unsort = this.$store.getters.getContent.snackbars.unsort
+        this.text.deleteConfirmation.header = this.$store.getters.getContent.popups.deleteConfirmation.header
+        this.text.deleteConfirmation.y = this.$store.getters.getContent.popups.deleteConfirmation.y
+        this.text.deleteConfirmation.n = this.$store.getters.getContent.popups.deleteConfirmation.n
       },
 
       methods: {

@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title class="px-4">
         <img class="customIcon" src="../../css/svg/edit_icon.svg">
-        <span class="headline px-2">Editar Marcador</span>
+        <span class="headline px-2">{{ text.header }}</span>
         <v-spacer></v-spacer>
         <v-btn icon slot="activator" @click="close">
           <v-icon color="grey lighten-2">close</v-icon>
@@ -17,7 +17,7 @@
             ></v-text-field>
 
             <v-select
-              label="Categoria"
+              :label="text.category"
               v-model="element.categories"
               :items="categories"
               item-text="name"
@@ -29,7 +29,7 @@
             ></v-select>
 
             <v-text-field
-              label="Títol"
+              :label="text.title"
               rows="5"
               v-model="element.title"
               :rules="titleRules"
@@ -38,7 +38,7 @@
             ></v-text-field>
 
             <v-text-field
-              label="Descripció"
+              :label="text.description"
               multi-line
               rows="5"
               height="80px"
@@ -55,7 +55,7 @@
               color="blue darken-1"
               class="white--text"
             >
-              submit
+              {{ text.edit }}
             </v-btn>
           </v-form>
 
@@ -69,6 +69,17 @@ import Element from '@/services/Elements'
 export default {
   data () {
     return {
+      text: {
+        header: null,
+        url: null,
+        category: null,
+        title: null,
+        description: null,
+        edit: null,
+        snackbar: {
+          edited: null
+        }
+      },
       element: {
         userID: '',
         title: '',
@@ -79,19 +90,29 @@ export default {
       },
       valid: true,
       loading: false,
-      urlRules: [
-        v => !!v || 'Link is required'
-      ],
-      titleRules: [
-        v => (v.length <= 100) || 'El títol no pot contindre més de 60 caracters'
-      ],
-      descriptionRules: [
-        v => (v.length <= 1000) || 'La descripció no pot contindre més de 120 caracters'
-      ],
+      titleRules: null,
+      descriptionRules: null,
       categories: []
     }
   },
+
+  async beforeMount () {
+    this.text.header = this.$store.getters.getContent.popups.editBookmark.header
+    this.text.url = this.$store.getters.getContent.popups.editBookmark.url
+    this.text.category = this.$store.getters.getContent.popups.editBookmark.category
+    this.text.title = this.$store.getters.getContent.popups.editBookmark.title
+    this.text.description = this.$store.getters.getContent.popups.editBookmark.description
+    this.text.edit = this.$store.getters.getContent.popups.editBookmark.edit
+    this.text.snackbar.edited = this.$store.getters.getContent.snackbars.edited
+    this.titleRules = [
+      v => (!v || v.length <= 100) || this.$store.getters.getContent.errors.addBookmark.title
+    ]
+    this.descriptionRules = [
+      v => (!v || v.length <= 1000) || this.$store.getters.getContent.errors.addBookmark.description
+    ]
+  },
   methods: {
+
     async editElement () {
       await Element.editElement(this.element)
       this.$store.commit('setEditDisplay')

@@ -6,7 +6,8 @@
       "categories": "CATEGORIES",
       "buttons": {
         "addCategory": "Afegir Categoria",
-        "addBookmark": "Afegir Marcador"
+        "addBookmark": "Afegir Marcador",
+        "settings": "Configuració"
       }
     },
 
@@ -14,7 +15,8 @@
 
       "addCategory": {
         "placeholder":"Nom",
-        "select": "Categoria pare"
+        "select": "Categoria pare",
+        "add": "AFEGIR"
       },
 
       "addBookmark": {
@@ -22,7 +24,17 @@
         "url": "URL del lloc",
         "category": "Categoria/es",
         "title": "Títol",
-        "description": "Descripció"
+        "description": "Descripció",
+        "add": "AFEGIR"
+      },
+
+      "editBookmark": {
+        "header": "Editar Marcador",
+        "url": "URL",
+        "category": "Categoria/es",
+        "title": "Títol",
+        "description": "Descripció",
+        "edit": "EDITAR"
       },
 
       "deleteBookmarks": {
@@ -32,14 +44,19 @@
       },
 
       "deleteConfirmation": {
-        "header": "Eliminar marcador?",
+        "header": "Eliminar marcador(s)?",
         "y": "Eliminar",
         "n": "Cancelar"
       }
     },
 
     "searchBar": {
-      "placeholder": "Cerca.."
+      "placeholder": "Cerca..",
+      "logout": {
+        "exit": "Sortir de l'aplicació?",
+        "y": "Sortir",
+        "n": "Cancelar"
+      }
     },
 
     "errors": {
@@ -47,8 +64,8 @@
       "addBookmark": {
         "link": "Camp obligatori",
         "link_2": "La URL no és vàlida",
-        "title": "El títol no pot contindre més de 60 caràcters",
-        "description": "La descripció no pot contindre més de 120 caracters"
+        "title": "El títol no pot contindre més de 100 caràcters",
+        "description": "La descripció no pot contindre més de 1000 caracters"
       }
     },
 
@@ -74,6 +91,7 @@
 
     "snackbars": {
       "added": "Marcador afegit",
+      "edited": "Marcador editat",
       "exist": "El marcador ja existeix",
       "nodata": "La url no és accessible",
       "deleteOne": "Marcador eliminat",

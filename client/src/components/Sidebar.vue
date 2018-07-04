@@ -130,7 +130,7 @@
                 item-value="name"
                 no-data-text="Sense resultats"
               ></v-select>
-              <v-btn @click="addCategory">Afegir</v-btn>
+              <v-btn @click="addCategory">{{ this.text.popups.addCategory.add }}</v-btn>
             </v-form>
         </v-list>
         </v-menu>
@@ -140,7 +140,7 @@
         </div>
         <div class="add" @click="settings">
           <v-icon class="mr-3" size="24px" v-bind:class="{ 'white--text':!$store.state.settings.color.light }">settings</v-icon>
-          Settings
+          {{ this.text.buttons.settings }}
         </div>
       </div>
     </v-navigation-drawer>
@@ -171,12 +171,15 @@
           ],
           buttons: {
             addCategory: null,
-            addBookmark: null
+            addBookmark: null,
+            settings: null
           },
 
           popups: {
             addCategory: {
-              placeholder: null
+              placeholder: null,
+              select: null,
+              add: null
             },
             deleteBookmarks: {
               header: null,
@@ -207,8 +210,10 @@
       this.text.fixedCategories[1].name = this.$store.getters.getContent.sidebar.unsorted
       this.text.buttons.addCategory = this.$store.getters.getContent.sidebar.buttons.addCategory
       this.text.buttons.addBookmark = this.$store.getters.getContent.sidebar.buttons.addBookmark
+      this.text.buttons.settings = this.$store.getters.getContent.sidebar.buttons.settings
       this.text.popups.addCategory.placeholder = this.$store.getters.getContent.popups.addCategory.placeholder
       this.text.popups.addCategory.select = this.$store.getters.getContent.popups.addCategory.select
+      this.text.popups.addCategory.add = this.$store.getters.getContent.popups.addCategory.add
       this.text.popups.deleteBookmarks.header = this.$store.getters.getContent.popups.deleteBookmarks.header
       this.text.popups.deleteBookmarks.y = this.$store.getters.getContent.popups.deleteBookmarks.y
       this.text.popups.deleteBookmarks.n = this.$store.getters.getContent.popups.deleteBookmarks.n
@@ -219,8 +224,8 @@
 
     methods: {
       async printCategories () {
-        this.categories = (await Category.getCategory(this.userID)).data
-        this.categoriesSidebar = (await Category.getCategory(this.userID)).data
+        this.categories = (await Category.getCategories(this.userID)).data
+        this.categoriesSidebar = (await Category.getCategoriesSidebar(this.userID)).data
         this.customCategories = (await Category.getCustomCategories()).data
         this.$store.commit('setCategoriesList', this.categories)
         this.$store.commit('setCustomCategories', this.customCategories)

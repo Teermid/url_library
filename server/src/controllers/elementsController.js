@@ -87,7 +87,7 @@ module.exports = {
           url: req.body.url,
           description: (req.body.description).substring(0, 1000),
           categories: categories || null,
-          imageURL: req.body.image,
+          imageURL: req.body.imageURL,
           owner: req.body.owner
         }
       })
