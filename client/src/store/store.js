@@ -11,7 +11,8 @@ export default new Vuex.Store({
     userID: null,
     userLogged: false,
     searchString: null,
-    categoryFilter: '',
+    categoryFilter: 'all',
+    categoryFilterDisplay: '',
     tag: false,
     tagContent: '',
     categoriesList: [],
@@ -21,8 +22,8 @@ export default new Vuex.Store({
     editDisplay: false,
     refreshElements: false,
     refreshChildCategories: false,
-    elementsDisplay: '',
-    sortBy: '',
+    elementsDisplay: 'card',
+    sortBy: 'date',
     sidebarDisplay: true,
     elementId: '',
     elementByIdTrigger: false,
@@ -65,6 +66,10 @@ export default new Vuex.Store({
 
     setCategoryFilter (state, content) {
       state.categoryFilter = content
+    },
+
+    setCategoryFilterDisplay (state, content) {
+      state.categoryFilterDisplay = content
     },
 
     setTag (state) {
@@ -207,6 +212,10 @@ export default new Vuex.Store({
 
     getCategoryFilter (state) {
       return state.categoryFilter
+    },
+
+    getCategoryFilterDisplay (state) {
+      return state.categoryFilterDisplay
     },
 
     getTag (state) {

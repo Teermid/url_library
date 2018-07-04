@@ -36,7 +36,7 @@
         <div class="rootWrapper"
           v-for="ca in text.fixedCategories"
           v-bind:class="{ 'selectedLight': categorySelectedLight(ca), 'selectedDark': categorySelectedDark(ca), 'lightHover': $store.state.settings.color.light, 'darkHover': !$store.state.settings.color.light }"
-          @click="displayCategory(ca)"
+          @click="displayFixedCategory(ca)"
           v-bind:value="ca.value">
           <v-icon class="mr-3" size="24px" v-bind:class="{ 'white--text':!$store.state.settings.color.light }"> {{ ca.icon }} </v-icon>
           {{ ca.name }}
@@ -116,6 +116,7 @@
               <v-text-field
                 class="pa-2"
                 :placeholder="text.popups.addCategory.placeholder"
+                maxlength="25"
                 v-model="category.name"
               ></v-text-field>
               <v-select
@@ -126,6 +127,7 @@
                 v-model="category.parentCategory"
                 item-text="name"
                 item-value="name"
+                no-data-text="Sense resultats"
               ></v-select>
               <v-btn @click="addCategory">Afegir</v-btn>
             </v-form>
@@ -156,13 +158,13 @@
             {
               name: null,
               selected: true,
-              value: 'All',
+              value: 'all',
               icon: 'cloud'
             },
             {
               name: null,
               selected: false,
-              value: 'Unsorted',
+              value: 'unsorted',
               icon: 'inbox'
             }
           ],
@@ -210,6 +212,7 @@
       this.text.popups.deleteBookmarks.n = this.$store.getters.getContent.popups.deleteBookmarks.n
       this.userID = this.$store.getters.getUserID
       this.printCategories()
+      this.displayFixedCategory(this.text.fixedCategories[0])
     },
 
     methods: {
@@ -221,8 +224,15 @@
         this.$store.commit('setCustomCategories', this.customCategories)
       },
 
+      displayFixedCategory (ca) {
+        this.select(ca, null)
+        this.$store.commit('setCategoryFilterDisplay', ca.name)
+        this.$store.commit('setCategoryFilter', ca.value)
+      },
+
       displayCategory (ca) {
         this.select(ca, null)
+        this.$store.commit('setCategoryFilterDisplay', event.currentTarget.getAttribute('value'))
         this.$store.commit('setCategoryFilter', event.currentTarget.getAttribute('value'))
       },
 

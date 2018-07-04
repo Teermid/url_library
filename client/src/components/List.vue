@@ -203,7 +203,7 @@ export default {
       contentLoaded: false,
       data: [],
       userID: null,
-      categoryFilter: 'All',
+      categoryFilter: null,
       searchValue: null,
       sortBy: null,
       popUpEdit: false,
@@ -347,13 +347,11 @@ export default {
     '$store.state.categoryFilter': {
       async handler (value) {
         this.categoryFilter = value
-        if (value !== 'All' && this.sortBy === 'category') {
-          // S'ha d'igualar a valor pe defecte de la configuració d'usuari
-          this.sortBy = 'date'
+        if (value === 'unsorted') {
+          this.getData(this.categoryFilter, 'false', null, this.userID, 'date')
+        } else {
+          this.getData(this.categoryFilter, 'false', null, this.userID, this.sortBy)
         }
-        // TODO: Comprovar si ens trobem a una categoria root per permetre l'opció de filtrar per categories nidades
-
-        this.getData(this.categoryFilter, 'false', null, this.userID, this.sortBy)
       }
     },
 

@@ -1,1 +1,77 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1133 356"><defs><style>.cls-1{isolation:isolate;}.cls-2{fill:#fcfcfc;}.cls-3{opacity:0.05;}.cls-3,.cls-6,.cls-9{mix-blend-mode:multiply;}.cls-4{fill:#fff;}.cls-5{fill:#eaeaea;}.cls-6{opacity:0.1;}.cls-7{fill:#f9f9f9;}.cls-8{fill:#b7b7b7;}.cls-9{opacity:0.15;}.cls-10{fill:#e6e6e6;}.cls-11{fill:#ef7b11;}.cls-12{fill:#dfd31d;}.cls-13{fill:#49a934;}</style><image id="image" width="812" height="78" xlink:href="data:image/png;base64,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"/></defs><title>Recurso 2</title><g class="cls-1"><g id="Capa_2" data-name="Capa 2"><g id="Web_BG" data-name="Web BG"><rect class="cls-2" x="241" y="56.91" width="889" height="290.09"/></g><g id="Web_Content" data-name="Web Content"><g id="Item"><use class="cls-3" transform="translate(282 91)" xlink:href="#image"/><rect class="cls-4" x="286" y="95" width="794" height="60"/><rect class="cls-5" x="332" y="108" width="223" height="6"/><rect class="cls-5" x="332" y="119" width="127" height="6"/><use class="cls-3" transform="translate(282 168)" xlink:href="#image"/><rect class="cls-4" x="286" y="172" width="794" height="60"/><rect class="cls-5" x="332" y="185" width="223" height="6"/><rect class="cls-5" x="332" y="196" width="127" height="6"/></g></g><g id="Sidebar"><image class="cls-6" width="251" height="311" transform="translate(0 45)" xlink:href="data:image/png;base64,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"/><rect class="cls-7" x="8" y="54" width="233" height="293"/><rect class="cls-8" x="39" y="215" width="132" height="11"/><rect class="cls-8" x="39" y="193" width="170" height="11"/><rect class="cls-8" x="39" y="141" width="132" height="11"/><rect class="cls-8" x="39" y="119" width="170" height="11"/></g><g id="Header"><image class="cls-9" width="1128" height="63" transform="translate(5)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABGgAAAA/CAYAAAC8Tv5sAAAACXBIWXMAAAsSAAALEgHS3X78AAADt0lEQVR4Xu3dTY8UVRSA4bfGGUACoiD4EcNCozGauNNEEzf+/7jQhQt3JrJQQQxEYAa7XNxuGRAIH0Pu5nmSSt10V/oHvDl1elnXtSdZlmXZHZ/4EAAAAABPs1atT4kwy+O+24aZvWq/Ol0dJNIAAAAAPK+1OqruVUfrum4e99D/As2yLHuNIHOuuli9W73RiDUiDQAAAMCzWav71V/Vr9Xv1Z1q8+g0zUOBZhtnXq+uVB9Wn1SfVu80JmkAAAAAeHZ3q2vV99UP2/PtHpmm2d8dtq81HTTizJfVN9Vn1dXGBM1BAAAAADyPo8bkzJXqrerH6ufq+rIsh7tJmv8CTWPnzPnqo0ac+bYRZ85lBw0AAADAi9g0esu56u1GqKmxk+Zm9U9tA82xV5vea0zNfN6IM29WryXOAAAAALyIveps9X4P1sf8Vt2o7i3L8ve6rpv9Y682Xa6+qL5q7J85nzgDAAAA8LL2GnHmUmPf7x/Vn41dNNeWZTncBZiz1cfVd9XX1QfVme0PAAAAAPBylkZnObW97jT+2el6dbi3feCgutAYt7mcOAMAAABw0vYazeVyo8FcaLv3dxdhdpHm9PYuzgAAAACcvL0ebjDL7sPj7JsBAAAAePUeajAmZQAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACYTaAAAAAAmE2gAAAAAJhNoAAAAACbbP3Zet9dmewEAAABwsnbdZddhqgeBZlMdVbeqm9vPTNcAAAAAnKxNo73carSYTY1As1b3q+vVT9VSndveAQAAADg5a3W70WCuN5rMujRCzEF1qbpaXaxOJdAAAAAAnLS1OqxuVL80Is3Rsq5ry7LsNaZpzmzvXm8CAAAAeDU2jcmZu9X9dV03y7qOfTTLsuwmZkzOAAAAALxaa9W6DTP/AuNThd0jpY9qAAAAAElFTkSuQmCC"/><path class="cls-10" d="M1130,58H8V11A10,10,0,0,1,18,1H1120a10,10,0,0,1,10,10Z"/><circle class="cls-11" cx="38.99" cy="31.18" r="6.06"/><circle class="cls-12" cx="59.18" cy="31.18" r="6.06"/><circle class="cls-13" cx="79.37" cy="31.18" r="6.06"/><rect class="cls-4" x="112" y="15" width="977" height="31.69" rx="10" ry="10"/></g></g></g></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 1133 356" style="enable-background:new 0 0 1133 356;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FCFCFC;}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:#EAEAEA;}
+	.st3{fill:#A0A8B0;}
+	.st4{fill:#7A8590;}
+	.st5{fill:#E6E6E6;}
+	.st6{fill:#EF7B11;}
+	.st7{fill:#DFD31D;}
+	.st8{fill:#49A934;}
+</style>
+<title>Recurso 2</title>
+<g>
+	<g id="Capa_2_1_">
+		<g id="Web_BG">
+			<rect x="241" y="72.4" class="st0" width="889" height="405.1"/>
+		</g>
+		<g id="Web_Content">
+			<g id="Item">
+				<g>
+					
+						<image style="overflow:visible;opacity:0.15;" width="824" height="90" xlink:href="701F84D.png"  transform="matrix(1 0 0 1 271 98.5)">
+					</image>
+					<g>
+						<rect x="286" y="110.5" class="st1" width="794" height="60"/>
+					</g>
+				</g>
+				<rect x="332" y="123.5" class="st2" width="223" height="6"/>
+				<rect x="332" y="134.5" class="st2" width="127" height="6"/>
+				<g>
+					
+						<image style="overflow:visible;opacity:0.15;" width="824" height="90" xlink:href="701F84F.png"  transform="matrix(1 0 0 1 271 175.5)">
+					</image>
+					<g>
+						<rect x="286" y="187.5" class="st1" width="794" height="60"/>
+					</g>
+				</g>
+				<rect x="332" y="200.5" class="st2" width="223" height="6"/>
+				<rect x="332" y="211.5" class="st2" width="127" height="6"/>
+			</g>
+		</g>
+		<g id="Sidebar">
+			<g>
+				
+					<image style="overflow:visible;opacity:0.2;" width="245" height="420" xlink:href="701F84A.png"  transform="matrix(1 0 0 1 4 63.5)">
+				</image>
+				<g>
+					<rect x="8" y="69.5" class="st3" width="233" height="408"/>
+				</g>
+			</g>
+			<rect x="39" y="230.5" class="st4" width="132" height="10.5"/>
+			<rect x="39" y="208.5" class="st4" width="170" height="10.5"/>
+			<rect x="39" y="156" class="st4" width="132" height="11.5"/>
+			<rect x="39" y="134" class="st4" width="170" height="11"/>
+		</g>
+		<g id="Header">
+			<g>
+				
+					<image style="overflow:visible;opacity:0.2;" width="1152" height="87" xlink:href="701F84B.png"  transform="matrix(1 0 0 1 -7 4.5)">
+				</image>
+				<g>
+					<path class="st5" d="M1130,73.5H8v-47c0-5.5,4.5-10,10-10h1102c5.5,0,10,4.5,10,10V73.5z"/>
+				</g>
+			</g>
+			<circle class="st6" cx="39" cy="46.7" r="6.1"/>
+			<circle class="st7" cx="59.2" cy="46.7" r="6.1"/>
+			<circle class="st8" cx="79.4" cy="46.7" r="6.1"/>
+			<path class="st1" d="M122,30.5h957c5.5,0,10,4.5,10,10v11.7c0,5.5-4.5,10-10,10H122c-5.5,0-10-4.5-10-10V40.5
+				C112,35,116.5,30.5,122,30.5z"/>
+		</g>
+	</g>
+</g>
+</svg>

@@ -13,6 +13,7 @@ module.exports = {
   async getData (req, res) {
 
     const { _id } = await tokenPolicy.getUserID(req.headers['authoritzation'])
+    console.log('SUPADUPA ID -> ' + _id);
     const { sorting: content } = await Content.getContent(_id)
     const category = req.query.categoryValue
     const searchValue = (req.query.searchValue == null || req.query.searchValue == '') ? '' : new RegExp(escapeRegExp(req.query.searchValue), 'gi')
@@ -20,22 +21,22 @@ module.exports = {
     const sortBy = req.query.sortBy || null
     let response = null
 
-    if (isSearch === 'true' && searchValue !== '' && category === 'All') {
+    if (isSearch === 'true' && searchValue !== '' && category === 'all') {
       response = await queries.query_1(_id, searchValue)
     }
-    if (isSearch === 'true' && searchValue !== '' && category === 'Unsorted') {
+    if (isSearch === 'true' && searchValue !== '' && category === 'unsorted') {
       response = await queries.query_2(_id, searchValue)
     }
-    if (isSearch === 'true' && searchValue !== '' && category !== 'All' && category !== 'Unsorted') {
+    if (isSearch === 'true' && searchValue !== '' && category !== 'all' && category !== 'unsorted') {
       response = await queries.query_3(_id, category, searchValue)
     }
-    if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category === 'All') {
+    if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category === 'all') {
       response = await queries.query_4(_id, sortBy, content)
     }
-    if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category === 'Unsorted') {
+    if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category === 'unsorted') {
       response = await queries.query_5(_id, sortBy, content)
     }
-    if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category !== 'All' && category !== 'Unsorted') {
+    if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category !== 'all' && category !== 'unsorted') {
       response = await queries.query_6(_id, category, sortBy, content)
     }
 

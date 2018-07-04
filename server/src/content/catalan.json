@@ -83,24 +83,18 @@
 
     "settings": {
       "header": "Configuració",
-      "app": {
-        "title": "APLICACIÓ",
-        "color": "Color de la barra lateral",
-        "notifications": "Mostrar notificacions",
-        "languages": {
-          "catalan": "Català",
-          "spanish": "Castellà",
-          "english": "Anglès"
-        }
-      },
-
-      "user": {
-        "title": "USUARI"
+      "color": "Color de la barra lateral",
+      "notifications": "Mostrar notificacions",
+      "languages": {
+        "catalan": "Català",
+        "spanish": "Castellà",
+        "english": "Anglès"
       }
     },
 
     "sorting": {
       "unsorted": "SENSE CLASSIFICAR",
+      "thisCategory": "AQUESTA CATEGORIA",
       "today": "AVUI",
       "thisWeek": "AQUESTA SETMANA",
       "thisMonth": "AQUEST MES",

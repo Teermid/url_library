@@ -294,6 +294,42 @@ module.exports = {
     var finalList = []
     var counter = 0
 
+    if (sortBy === 'category') {
+      try {
+        const categoryList = await Category.find(
+          {
+            'owner': userID,
+            'parentCategory': category
+          })
+        const rootCategoryElements = await Element.find(
+          {
+            'owner': userID,
+            'categories.name': category
+          }).sort({ createdAt: -1 })
+
+        if (rootCategoryElements.length !== 0) {
+          finalList.push(
+            {
+              'title': content.thisCategory,
+              'elements': rootCategoryElements
+            })
+        }
+        for (var i = 0; i < categoryList.length; i++) {
+          elements = await Element.find({'owner': userID, 'categories.name': categoryList[i].name}).sort({ createdAt: -1 })
+          if (elements.length !== 0) {
+            finalList.push(
+              {
+                'title': categoryList[i].name,
+                'elements': elements
+              })
+          }
+        }
+        return(finalList)
+      } catch (e) {
+        return({error: 'error geting element by cat (elementsController)'})
+      }
+    }
+
     if (sortBy === 'title') {
       try {
         for(i = 0; i < alphabet.length; i++) {

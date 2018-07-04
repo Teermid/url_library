@@ -83,24 +83,18 @@
 
     "settings": {
       "header": "Configuration",
-      "app": {
-        "title": "APPLICATION",
-        "color": "Sidebar color",
-        "notifications": "Notifications",
-        "languages": {
-          "catalan": "Catalan",
-          "spanish": "Spanish",
-          "english": "English"
-        }
-      },
-
-      "user": {
-        "title": "USER"
+      "color": "Sidebar color",
+      "notifications": "Notifications",
+      "languages": {
+        "catalan": "Catalan",
+        "spanish": "Spanish",
+        "english": "English"
       }
     },
 
     "sorting": {
       "unsorted": "SENSE CLASSIFICAR",
+      "thisCategory": "THIS CATEGORY",
       "today": "TODAY",
       "thisWeek": "THIS WEEK",
       "thisMonth": "THIS MONTH",

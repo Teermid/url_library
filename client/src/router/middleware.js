@@ -7,9 +7,6 @@ async function loadData (user) {
   store.state.userID = user._id
   store.state.settings = user.settings
   store.state.content = content
-  store.state.elementsDisplay = user.settings.view
-  store.state.sortBy = user.settings.sortBy
-  store.state.categoryFilter = user.settings.category
 }
 
 export default {

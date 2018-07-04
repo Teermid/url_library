@@ -176,7 +176,7 @@
       },
 
       beforeMount () {
-        this.category = this.$store.getters.getCategoryFilter
+        this.category = this.$store.getters.getCategoryFilterDisplay
         this.categoriesList = this.$store.getters.getCategoriesList
         this.displayOptions[0].name = this.$store.getters.getContent.filters.display.card
         this.displayOptions[1].name = this.$store.getters.getContent.filters.display.grid
@@ -205,14 +205,6 @@
             this.$store.commit('setSortBy', opt.value)
           }
           opt.active = true
-        },
-
-        itemsDisplay () {
-          this.$store.commit('setGrid')
-        },
-
-        sortBy (param) {
-          this.$store.commit('setSortBy', param)
         },
 
         multSelect () {
@@ -248,14 +240,10 @@
       },
 
       watch: {
-        '$store.state.categoryFilter': {
+        '$store.state.categoryFilterDisplay': {
           async handler (value) {
             this.category = value
-            if (value === 'All') {
-              this.filterOptions[2].disabled = false
-            } else {
-              this.filterOptions[2].disabled = true
-            }
+            this.filterOptions[2].disabled = (value === 'unsorted')
           }
         },
 

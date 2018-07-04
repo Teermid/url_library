@@ -89,13 +89,11 @@ export default {
 
   beforeMount () {
     this.text.header = this.$store.getters.getContent.settings.header
-    this.text.app.title = this.$store.getters.getContent.settings.app.title
-    this.text.app.color = this.$store.getters.getContent.settings.app.color
-    this.text.app.notifications = this.$store.getters.getContent.settings.app.notifications
-    this.text.user.title = this.$store.getters.getContent.settings.user.title
-    this.settings.language[0].text = this.$store.getters.getContent.settings.app.languages.catalan
-    this.settings.language[1].text = this.$store.getters.getContent.settings.app.languages.spanish
-    this.settings.language[2].text = this.$store.getters.getContent.settings.app.languages.english
+    this.text.app.color = this.$store.getters.getContent.settings.color
+    this.text.app.notifications = this.$store.getters.getContent.settings.notifications
+    this.settings.language[0].text = this.$store.getters.getContent.settings.languages.catalan
+    this.settings.language[1].text = this.$store.getters.getContent.settings.languages.spanish
+    this.settings.language[2].text = this.$store.getters.getContent.settings.languages.english
     this.notifications = this.$store.getters.getNotifications
   },
 
