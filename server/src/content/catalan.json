@@ -4,6 +4,10 @@
       "all": "Tots",
       "unsorted": "Sense Classificar",
       "categories": "CATEGORIES",
+      "menu": {
+        "edit": "Editar",
+        "delete": "Eliminar"
+      },
       "buttons": {
         "addCategory": "Afegir Categoria",
         "addBookmark": "Afegir Marcador",
@@ -37,6 +41,12 @@
         "edit": "EDITAR"
       },
 
+      "editCategory": {
+        "header": "Editar nom",
+        "name": "Nom",
+        "edit": "EDITAR"
+      },
+
       "deleteBookmarks": {
         "header": "Eliminar categoria amb marcador/s?",
         "y": "D'acord",
@@ -47,6 +57,18 @@
         "header": "Eliminar marcador(s)?",
         "y": "Eliminar",
         "n": "Cancelar"
+      },
+
+      "settings": {
+        "header": "Configuració",
+        "color": "Color de la barra lateral",
+        "notifications": "Mostrar notificacions",
+        "apply": "Aplicar",
+        "languages": {
+          "catalan": "Català",
+          "spanish": "Castellà",
+          "english": "Anglès"
+        }
       }
     },
 
@@ -66,6 +88,11 @@
         "link_2": "La URL no és vàlida",
         "title": "El títol no pot contindre més de 100 caràcters",
         "description": "La descripció no pot contindre més de 1000 caracters"
+      },
+
+      "editCategory": {
+        "exist": "La categoria ja existeix",
+        "invalid": "Nom no vàlid"
       }
     },
 
@@ -99,18 +126,8 @@
       "unsort": " marcadors declassificats"
     },
 
-    "settings": {
-      "header": "Configuració",
-      "color": "Color de la barra lateral",
-      "notifications": "Mostrar notificacions",
-      "languages": {
-        "catalan": "Català",
-        "spanish": "Castellà",
-        "english": "Anglès"
-      }
-    },
-
     "sorting": {
+      "results": "RESULTATS",
       "unsorted": "SENSE CLASSIFICAR",
       "thisCategory": "AQUESTA CATEGORIA",
       "today": "AVUI",
@@ -127,7 +144,7 @@
          "AGOST",
          "SETEMBRE",
          "OCTUBRE",
-         "NOVOEMBRE",
+         "NOVEMBRE",
          "DECEMBRE"
       ]
     }

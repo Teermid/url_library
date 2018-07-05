@@ -1,0 +1,150 @@
+{
+    "sidebar": {
+
+      "all": "Todos",
+      "unsorted": "Sin Classificar",
+      "categories": "CATEGORIAS",
+      "menu": {
+        "edit": "Editar",
+        "delete": "Eliminar"
+      },
+      "buttons": {
+        "addCategory": "Añadir Categoria",
+        "addBookmark": "Añadir Marcador",
+        "settings": "Configuración"
+      }
+    },
+
+    "popups": {
+
+      "addCategory": {
+        "placeholder":"Nombre",
+        "select": "Categoria padre",
+        "add": "AÑADIR"
+      },
+
+      "addBookmark": {
+        "header": "Nuevo Marcador",
+        "url": "URL del sitio",
+        "category": "Categoria/s",
+        "title": "Título",
+        "description": "Descripción",
+        "add": "AÑADIR"
+      },
+
+      "editBookmark": {
+        "header": "Editar Marcador",
+        "url": "URL",
+        "category": "Categoria/s",
+        "title": "Título",
+        "description": "Descripción",
+        "edit": "AÑADIR"
+      },
+
+      "editCategory": {
+          "header": "Editar nombre",
+          "name": "Nombre",
+          "edit": "EDITAR"
+      },
+
+      "deleteBookmarks": {
+        "header": "Eliminar categoria con marcador/es?",
+        "y": "Vale",
+        "n": "No"
+      },
+
+      "deleteConfirmation": {
+        "header": "Eliminar marcador(es)?",
+        "y": "Eliminar",
+        "n": "Cancelar"
+      },
+
+      "settings": {
+        "header": "Configuración",
+        "color": "Color de la barra lateral",
+        "notifications": "Mostrar notificaciones",
+        "apply": "Aplicar",
+        "languages": {
+          "catalan": "Catalan",
+          "spanish": "Castellano",
+          "english": "Inglés"
+        }
+      }
+    },
+
+    "searchBar": {
+      "placeholder": "Búsqueda..",
+      "logout": {
+        "exit": "Salir de la aplicación?",
+        "y": "Salir",
+        "n": "Cancelar"
+      }
+    },
+
+    "errors": {
+
+      "addBookmark": {
+        "link": "Campo obligatori",
+        "link_2": "La URL no es válida",
+        "title": "El título no puede contenet mas de 100 carácteres",
+        "description": "La descripción no puede contener mas de 1000 carácteres"
+      },
+
+      "editCategory": {
+        "exist": "La categoria ya existe",
+        "invalid": "Nombre no válido"
+      }
+    },
+
+    "filters": {
+        "display": {
+          "card": "Tarjetas",
+          "grid": "Cuadrícula",
+          "list": "Lista"
+        },
+
+        "order": {
+          "title": "Título",
+          "date": "Data",
+          "category": "Categoria"
+        },
+
+        "multipleSelect": {
+          "all": "Todos",
+          "unsort": "Desclasificar",
+          "delete": "Eliminar"
+        }
+    },
+
+    "snackbars": {
+      "added": "Marcador añadido",
+      "edited": "Marcador editado",
+      "exist": "El marcador ja existe",
+      "nodata": "La url no es accesible",
+      "deleteOne": "Marcador eliminado",
+      "deleteMult": " marcador/es eliminado/s",
+      "unsort": " marcador/es declassificado/s"
+    },
+
+    "sorting": {
+      "unsorted": "SIN CLASIFICAR",
+      "thisCategory": "ESTA CATEGORIA",
+      "today": "HOY",
+      "thisWeek": "ESTA SETMANA",
+      "thisMonth": "ESTE MES",
+      "monthNames": [
+         "ENERO",
+         "FEBRERO",
+         "MARZO",
+         "ABRIL",
+         "MAYO",
+         "JUNIO",
+         "JULIO",
+         "AGOSTO",
+         "SEPTEMBRE",
+         "OCTUBRE",
+         "NOVIEMBRE",
+         "DICIEMBRE"
+      ]
+    }
+}

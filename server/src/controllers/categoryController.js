@@ -228,6 +228,12 @@ module.exports = {
         { $set: { kind: 'child' } }
       )
 
+      await Element.update(
+        {'categories._id': req.params.id },
+        { $set: { 'categories.$.parentCategory': null } },
+        { multi: true }
+      )
+
       res.send('success')
     } catch (e) {
       res.status(403).send({error: 'Error removing nested category'})

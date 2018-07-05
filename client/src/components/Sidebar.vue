@@ -63,11 +63,11 @@
               <v-list>
                 <v-list-tile @click="editCategory(ca._id)">
                   <v-icon color="grey" class="mr-2">edit</v-icon>
-                  <v-list-tile-title>Editar</v-list-tile-title>
+                  <v-list-tile-title>{{ text.menu.edit }}</v-list-tile-title>
                 </v-list-tile>
                 <v-list-tile @click="deleteCategory(ca._id)">
                   <v-icon color="grey" class="mr-2">delete</v-icon>
-                  <v-list-tile-title>Eliminar</v-list-tile-title>
+                  <v-list-tile-title>{{text.menu.delete }}</v-list-tile-title>
                 </v-list-tile>
               </v-list>
             </v-menu>
@@ -92,10 +92,12 @@
                 <v-icon slot="activator" v-bind:class="{ 'white--text':!$store.state.settings.color.light }" class="edit" size="medium"> more_vert </v-icon>
                 <v-list>
                   <v-list-tile @click="editCategory(nested._id)">
-                    <v-list-tile-title>Editar</v-list-tile-title>
+                    <v-icon color="grey" class="mr-2">edit</v-icon>
+                    <v-list-tile-title>{{ text.menu.edit }}</v-list-tile-title>
                   </v-list-tile>
                   <v-list-tile @click="deleteCategory(nested._id, false)">
-                    <v-list-tile-title>Eliminar</v-list-tile-title>
+                    <v-icon color="grey" class="mr-2">delete</v-icon>
+                    <v-list-tile-title>{{ text.menu.delete }}</v-list-tile-title>
                   </v-list-tile>
                 </v-list>
              </v-menu>
@@ -122,7 +124,7 @@
               ></v-text-field>
               <v-select
                 class="pa-2"
-                :items="categories"
+                :items="categoriesSidebar"
                 :placeholder="text.popups.addCategory.select"
                 clearable="true"
                 v-model="category.parentCategory"
@@ -155,6 +157,10 @@
       return {
         text: {
           CATEGORIES: null,
+          'menu': {
+            'edit': null,
+            'delete': null
+          },
           fixedCategories: [
             {
               name: null,
@@ -206,6 +212,8 @@
 
     async beforeMount () {
       this.text.CATEGORIES = this.$store.getters.getContent.sidebar.categories
+      this.text.menu.edit = this.$store.getters.getContent.sidebar.menu.edit
+      this.text.menu.delete = this.$store.getters.getContent.sidebar.menu.delete
       this.text.fixedCategories[0].name = this.$store.getters.getContent.sidebar.all
       this.text.fixedCategories[1].name = this.$store.getters.getContent.sidebar.unsorted
       this.text.buttons.addCategory = this.$store.getters.getContent.sidebar.buttons.addCategory

@@ -12,20 +12,20 @@ const alphabet = [
 ]
 
 module.exports = {
-  async query_1 (userID, searchValue) {
+  async query_1 (userID, searchValue, content) {
     console.log('QUERY 1');
     try {
       const elements = await Element.find({
         'owner': userID,
         'title': searchValue
       }).sort({ createdAt: -1 })
-      return this.finalList(elements, elements.length)
+      return this.finalList(elements, elements.length, content)
     } catch (e) {
       return ({error: 'error in query_1'})
     }
   },
 
-  async query_2 (userID, searchValue) {
+  async query_2 (userID, searchValue, content) {
     console.log('QUERY 2');
     try {
       const elements = await Element.find({
@@ -33,13 +33,13 @@ module.exports = {
         'categories': [],
         'title': searchValue
       }).sort({ createdAt: -1 })
-      return this.finalList(elements, elements.length)
+      return this.finalList(elements, elements.length, content)
     } catch (e) {
       return ({error: 'error in query_2'})
     }
   },
 
-  async query_3 (userID, category, searchValue) {
+  async query_3 (userID, category, searchValue, content) {
     console.log('QUERY 3');
     try {
       const elements = await Element.find({
@@ -54,7 +54,7 @@ module.exports = {
         }]
 
       }).sort({ createdAt: -1 })
-      return this.finalList(elements, elements.length)
+      return this.finalList(elements, elements.length, content)
     } catch (e) {
       return ({error: 'error in query_3'})
     }
@@ -443,9 +443,9 @@ module.exports = {
   },
 
   // ------------------------------------------
-  finalList (elements, count) {
+  finalList (elements, count, content) {
     if (count > 0) {
-      return [{'title': count + ' RESULTS', 'elements': elements}]
+      return [{'title': count + ' ' + content.results, 'elements': elements}]
     } else {
       return []
     }

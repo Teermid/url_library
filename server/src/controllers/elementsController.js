@@ -22,13 +22,13 @@ module.exports = {
     let response = null
 
     if (isSearch === 'true' && searchValue !== '' && category === 'all') {
-      response = await queries.query_1(_id, searchValue)
+      response = await queries.query_1(_id, searchValue, content)
     }
     if (isSearch === 'true' && searchValue !== '' && category === 'unsorted') {
-      response = await queries.query_2(_id, searchValue)
+      response = await queries.query_2(_id, searchValue, content)
     }
     if (isSearch === 'true' && searchValue !== '' && category !== 'all' && category !== 'unsorted') {
-      response = await queries.query_3(_id, category, searchValue)
+      response = await queries.query_3(_id, category, searchValue, content)
     }
     if (((isSearch === 'true' && searchValue === '') || isSearch === 'false') && category === 'all') {
       response = await queries.query_4(_id, sortBy, content)

@@ -1,7 +1,6 @@
 .colorContainer {
-  width:fit-content;
-  float:left;
-  margin-left: 20px;
+  width: calc(100% - 5px);
+  float: left;
 }
 
 .color {
@@ -30,10 +29,11 @@
   margin: 0px;
   height: 30px;
   line-height: 30px;
+  font-size: 16px;
 }
 
 .notificationsCheck {
-  margin-top:20px;
+  margin-top:10px;
   float:left;
   width:100%;
 }

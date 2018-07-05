@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title class="px-4">
         <img class="customIcon" src="../../css/svg/edit_icon.svg">
-        <span class="headline px-2">Editar nom</span>
+        <span class="headline px-2"> {{ text.header }} </span>
         <v-spacer></v-spacer>
           <v-btn icon slot="activator" @click="close">
             <v-icon color="grey lighten-2">close</v-icon>
@@ -12,7 +12,7 @@
        <v-card-text class="px-4">
          <v-form ref="form" lazy-validation>
            <v-text-field
-             label="Name"
+             :label="text.name"
              v-model="category.name"
              :error-messages="errorText"
              required
@@ -25,7 +25,7 @@
               color="blue darken-1"
               class="white--text"
             >
-              Submit
+              {{ text.edit }}
             </v-btn>
           </v-form>
 
@@ -40,12 +40,13 @@ export default {
   data () {
     return {
       text: {
-        deleteConfirmation: {
-          header: null,
-          y: null,
-          n: null
-        },
-        snackbar: null
+        header: null,
+        name: null,
+        edit: null,
+        errors: {
+          exist: null,
+          invalid: null
+        }
       },
       category: '',
       loader: false,
@@ -54,15 +55,24 @@ export default {
     }
   },
 
+  beforeMount () {
+    this.text.header = this.$store.getters.getContent.popups.editCategory.header
+    this.text.name = this.$store.getters.getContent.popups.editCategory.name
+    this.text.edit = this.$store.getters.getContent.popups.editCategory.edit
+    this.text.errors.exist = this.$store.getters.getContent.errors.editCategory.exist
+    this.text.errors.invalid = this.$store.getters.getContent.errors.editCategory.invalid
+  },
+
   methods: {
     async editCategory () {
-      if (this.category.name.length === 0) {
-        this.errorText = 'Nom no vàlid'
+      this.errorText = null
+      if (this.category.name === null) {
+        this.errorText = this.text.errors.invalid
       } else {
         this.loader = true
         let response = (await Category.editCategoryName(this.category)).data
         if (response.error) {
-          this.errorText = 'Category already exists'
+          this.errorText = this.text.errors.exist
           this.loader = false
         } else {
           this.$store.commit('setEditCategoryDisplay')

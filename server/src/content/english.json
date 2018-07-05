@@ -4,6 +4,10 @@
       "all": "All",
       "unsorted": "Unsorted",
       "categories": "CATEGORIES",
+      "menu": {
+        "edit": "Edit",
+        "delete": "Delete"
+      },
       "buttons": {
         "addCategory": "Add Category",
         "addBookmark": "Add Bookmark",
@@ -37,6 +41,12 @@
         "edit": "EDIT"
       },
 
+      "editCategory": {
+          "header": "Edit name",
+          "name": "Name",
+          "edit": "EDIT"
+      },
+
       "deleteBookmarks": {
         "header": "Delete category with bookmark(s)?",
         "y": "OK",
@@ -47,6 +57,18 @@
         "header": "Delete bookmark(s)?",
         "y": "Delete",
         "n": "Cancel"
+      },
+
+      "settings": {
+        "header": "Configuración",
+        "color": "Color de la barra lateral",
+        "notifications": "Mostrar notificaciones",
+        "apply": "Apply",
+        "languages": {
+          "catalan": "Catalan",
+          "spanish": "Castellano",
+          "english": "Inglés"
+        }
       }
     },
 
@@ -66,6 +88,11 @@
         "link_2": "Invalid URL",
         "title": "Title can't contain more than 100 characters",
         "description": "Description can't contain more than 1000 characters"
+      },
+
+      "editCategory": {
+        "exist": "Category already exists",
+        "invalid": "Invalid name"
       }
     },
 

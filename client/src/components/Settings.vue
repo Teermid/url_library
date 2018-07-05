@@ -10,13 +10,13 @@
         </v-btn>
       </v-card-title>
       <v-card-text class="appSettings pt-4">
-        <p>{{ text.app.color }}</p>
+        <p>{{ text.color }}</p>
         <div class="colorContainer">
           <div class="color" v-for="color in settings.colors" @click="setColor(color)" v-bind:style="{ 'background-color':color.hex }"></div>
         </div>
         <div class="notificationsCheck">
           <v-checkbox
-            :label="text.app.notifications"
+            :label="text.notifications"
             v-model="notifications"
           ></v-checkbox>
         </div>
@@ -28,7 +28,7 @@
           item-value="value"
           return-object
         ></v-select>
-        <v-btn @click="apply">APPLY</v-btn>
+        <v-btn @click="apply">{{ text.apply }}</v-btn>
       </v-card-text>
     </v-card>
   </v-dialog>
@@ -41,14 +41,9 @@ export default {
     return {
       text: {
         header: null,
-        app: {
-          title: null,
-          color: null,
-          notifications: null
-        },
-        user: {
-          title: null
-        }
+        color: null,
+        notifications: null,
+        apply: null
       },
       notifications: null,
       userSettings: {},
@@ -88,12 +83,13 @@ export default {
   },
 
   beforeMount () {
-    this.text.header = this.$store.getters.getContent.settings.header
-    this.text.app.color = this.$store.getters.getContent.settings.color
-    this.text.app.notifications = this.$store.getters.getContent.settings.notifications
-    this.settings.language[0].text = this.$store.getters.getContent.settings.languages.catalan
-    this.settings.language[1].text = this.$store.getters.getContent.settings.languages.spanish
-    this.settings.language[2].text = this.$store.getters.getContent.settings.languages.english
+    this.text.header = this.$store.getters.getContent.popups.settings.header
+    this.text.color = this.$store.getters.getContent.popups.settings.color
+    this.text.notifications = this.$store.getters.getContent.popups.settings.notifications
+    this.settings.language[0].text = this.$store.getters.getContent.popups.settings.languages.catalan
+    this.settings.language[1].text = this.$store.getters.getContent.popups.settings.languages.spanish
+    this.settings.language[2].text = this.$store.getters.getContent.popups.settings.languages.english
+    this.text.apply = this.$store.getters.getContent.popups.settings.apply
     this.notifications = this.$store.getters.getNotifications
   },
 
